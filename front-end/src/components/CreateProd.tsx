@@ -27,7 +27,7 @@ const CreateProd = () => {
     { color: "White", class: "whiteclass" },
     { color: "Yellow", class: "yellowclass" },
   ];
-  const pickedColors = useRef<string[]>([]);
+  const [pickedColor, setPickedColor] = useState<string | null>(null);
   const selectedSeason = useRef<string[]>();
   const selectedCategory = useRef<string[]>();
   const navigate = useNavigate();
@@ -69,9 +69,8 @@ const CreateProd = () => {
       //@ts-ignore
       data.append("sizes", pickedSizes.current[i]);
     }
-    for (let i = 0; i < pickedColors.current.length; i++) {
-      data.append("color", pickedColors.current[i]);
-    }
+    //@ts-ignore
+    data.append("color", pickedColor);
     //@ts-ignore
     data.append("season", selectedSeason.current.value);
     // data.append("key", localStorage.getItem('auth_token'))
@@ -91,15 +90,13 @@ const CreateProd = () => {
     console.log("sizes picked", pickedSizes.current);
   };
 
-  const handleColorChange = (color: string) => {
-    for (let i = 0; i < pickedColors.current.length; i++) {
-      if (pickedColors.current[i] == color)
-        return pickedColors.current.splice(i, 1);
-    }
-    pickedColors.current = [...pickedColors.current, color];
-    pickedColors.current.sort();
-    console.log("sizes picked", pickedColors.current);
-  };
+
+    
+  
+    const handleColorChange = (color: string) => {
+      setPickedColor(color);
+      console.log(pickedColor);
+    };
 
   return (
     <div>
@@ -108,14 +105,14 @@ const CreateProd = () => {
         <div className="card-body">
           <h2 className="card-title">Fill in the blanks</h2>
           <input
-          //@ts-ignore
+            //@ts-ignore
             ref={title}
             type="text"
             placeholder="Type Title here"
             className="input input-bordered w-full max-w-xs"
           />
           <input
-          //@ts-ignore
+            //@ts-ignore
             ref={description}
             type="text"
             placeholder="Type Description here"
@@ -127,7 +124,7 @@ const CreateProd = () => {
             multiple
           />
           <input
-          //@ts-ignore
+            //@ts-ignore
             ref={price}
             type="number"
             placeholder="Type Price here"
@@ -155,12 +152,13 @@ const CreateProd = () => {
             <p>Shoe Colours to put as stocked</p>
             <div className="sizes-subdiv">
               {colorsArr.map((color, index) => (
-                <div className="colors-choices">
+                <div className="colors-choices" key={index}>
                   <div className={color.class + " squares"}>{color.color}</div>
                   <input
-                    type="checkbox"
-                    defaultChecked={false}
+                    type="radio"
+                    name="color"
                     className="checkbox checkbox-sm"
+                    checked={pickedColor === color.color}
                     onChange={() => {
                       handleColorChange(color.color);
                     }}

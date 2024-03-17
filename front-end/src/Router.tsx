@@ -7,7 +7,6 @@ import Register from "./components/Register.tsx";
 import NotFound from "./components/NotFound.tsx";
 import Login from "./components/Login.tsx";
 import { Context }from "./components/Context.tsx";
-import Navigation from "./components/Navigation.tsx";
 import Product from "./components/Product.tsx";
 
 function App() {
@@ -19,7 +18,6 @@ function App() {
           <Route path="/Register" element={<Register />}></Route>
           <Route path="/Login" element={<Login />}></Route>
           <Route path="/CreateProd" element={<CreateProd />}></Route>
-          <Route path="/Nav" element={<Navigation />}></Route>
           <Route path="/DisplayProd" element={<DisplayProd />}></Route>
           <Route path="/Product" element={<Product />}></Route>
         </Routes>

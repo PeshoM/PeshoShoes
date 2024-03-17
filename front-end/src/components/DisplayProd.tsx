@@ -2,7 +2,6 @@ import "../styles/displayprod.css";
 import { useEffect, useState, useContext, useRef } from "react";
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-// import { ReactDOM } from "react-dom/client";
 import Footer from "./Footer.tsx";
 import Navigation from "./Navigation.tsx";
 import { ProductContext } from "./Context.tsx";
@@ -37,6 +36,7 @@ const DisplayProd = () => {
   const pickedColors = useRef<string[]>([]);
   const [selectedSeason, setSelectedSeason] = useState(null);
   const pickedSeasons = useRef<string[]>([]);
+
   const handleStartChange = (e) => {
     const newStartValue = parseInt(e.target.value, 10);
     if (newStartValue <= endValue) {
@@ -58,8 +58,8 @@ const DisplayProd = () => {
       }).then((res) => {
         return res.json();
       });
-      if(products.length == 0)setProduct(response.products);
-      if(searchedProds.length == 0)setSearchedProds(response.products);
+      if (products.length == 0) setProduct(response.products);
+      if (searchedProds.length == 0) setSearchedProds(response.products);
       setRange((prev) => {
         prev = [...range];
         prev[0] = response.minVal;
@@ -115,7 +115,7 @@ const DisplayProd = () => {
     console.log("sizes picked", pickedSizes.current);
   };
 
-  const handleColorChange = (color) => { 
+  const handleColorChange = (color) => {
     for (let i = 0; i < pickedColors.current.length; i++) {
       if (pickedColors.current[i] == color)
         return pickedColors.current.splice(i, 1);
@@ -134,8 +134,11 @@ const DisplayProd = () => {
     pickedSeasons.current.sort();
     console.log("seasons picked", pickedSeasons.current);
   }
-  const handleClickProduct = (prod) => {  
-    console.log('i was there', prod)
+  const handleClickProduct = (prod) => {
+    const queryParams = { title: prod.title };
+    const searchParams = new URLSearchParams(queryParams);
+    const url = `/Product?${searchParams.toString()}`;
+    window.location.href = url;
   }
   return (
     <div>

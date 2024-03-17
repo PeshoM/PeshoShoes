@@ -1,4 +1,4 @@
-const users = require("../../schemas/users.schema.js");
+const users = require("../../schemas/users.schema");
 const jwt = require("jsonwebtoken");
 
 const Post = async (req, res) => {

@@ -3,6 +3,7 @@ import '../styles/main.css'
 import image from './collaborators.jpeg';
 import React from 'react';
 import Navigation from './Navigation.tsx';
+import Footer from './Footer.tsx';
 import { useRef } from 'react';
 
 const Main = () => {
@@ -48,6 +49,7 @@ const Main = () => {
 
                 </div>
             </div>
+            <Footer />
         </div>
     )
 }

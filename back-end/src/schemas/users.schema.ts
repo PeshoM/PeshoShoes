@@ -1,6 +1,8 @@
+//@ts-ignore
 const mongoose = require('mongoose');
+//@ts-ignore
 const { Schema } = mongoose;
-
+//@ts-ignore
 const users = new Schema({
     username: {
         type: String,

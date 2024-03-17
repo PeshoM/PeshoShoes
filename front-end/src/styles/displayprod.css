@@ -48,6 +48,10 @@ body {
   /* border-radius: 15px; */
 }
 
+.midPart {
+  min-height: 80%;
+}
+
 .midPart-left {
   flex: 1;
   flex-grow: 1;
@@ -69,7 +73,7 @@ body {
   flex-wrap: wrap;
   align-content: flex-start;
 
-  li .products{
+  li .products {
     cursor: pointer
   }
 }
@@ -135,6 +139,7 @@ body {
     margin: 5px;
     border: none;
   }
+
   span {
     font-size: 12px;
     color: #000;
@@ -148,11 +153,15 @@ body {
 }
 
 .sizes-menu {
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
 }
+
 .sizes-menu::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+  display: none;
+  /* Safari and Chrome */
 }
 
 .single-size-option {
@@ -168,6 +177,7 @@ body {
 .colors-choices-display {
   display: flex;
   align-items: center;
+
   div {
     margin-left: 5px;
     width: 15px;
@@ -177,36 +187,47 @@ body {
   .beigeclass {
     background: rgb(255, 218, 116);
   }
+
   .blackclass {
     background: #000;
   }
+
   .blueclass {
     background: rgb(13, 118, 255);
   }
+
   .brownclass {
     background: rgb(89, 56, 18);
   }
+
   .grayclass {
     background: gray;
   }
+
   .greenclass {
     background: green;
   }
+
   .orangeclass {
     background: rgb(255, 129, 2);
   }
+
   .pinkclass {
     background: rgb(254, 103, 128);
   }
+
   .purpleclass {
     background: purple;
   }
+
   .redclass {
     background: red;
   }
+
   .whiteclass {
     background: #fff;
   }
+
   .yellowclass {
     background: yellow;
   }

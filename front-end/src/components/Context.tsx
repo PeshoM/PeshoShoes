@@ -1,4 +1,4 @@
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext, useEffect, useRef } from "react";
 import React from 'react';
 //@ts-ignore
 const ProductContext = createContext();
@@ -13,8 +13,8 @@ const Context = ({ children }) => {
         return res.json();
       });
       setAllProducts(response.products);
-      console.log(response);
-    }; // asd asddsa asd
+      // console.log(response);
+    };
 
     fetchData();
   }, []);
@@ -23,6 +23,7 @@ const Context = ({ children }) => {
   const [products, setProduct] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const [searchedProds, setSearchedProds] = useState([]);
+  const [currProd, setCurrProd] = useState(); 
   // ("children", children);
   return (
     <ProductContext.Provider value={{ options, setOption, products, setProduct, allProducts, searchedProds, setSearchedProds }}>
