@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sizes-div {
+  width: 100%;
+  height: 100px;
+  position: relative;
+  margin-bottom: 7%;
+  p {
+    font-size: 20px;
+    margin-bottom: 1%;
+  }
+}
+
+.sizes-subdiv {
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid gray;
+  border-radius: var(--rounded-btn, 0.5rem);
+}
+
+.sizes-choices {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 3%;
+  margin: 3px;
+}
+
+.size-quantity-choices {
+  max-width: 30px;
+  max-height: 50px;
+}
+
+.colors-div {
+  width: 100%;
+  height: 100px;
+  p {
+    font-size: 20px;
+    margin-bottom: 1%;
+  }
+}
+
+.colors-seasons-div {
+  display: flex;
+}
+
+.colors-choices {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 3%;
+  margin: 3px 20px;
+  div {
+    margin-left: 5px;
+    width: 15px;
+    height: 15px;
+  }
+
+  .beigeclass {
+    background: rgb(255, 218, 116);
+  }
+  .blackclass {
+    background: #000;
+  }
+  .blueclass {
+    background: rgb(13, 118, 255);
+  }
+  .brownclass {
+    background: rgb(89, 56, 18);
+  }
+  .grayclass {
+    background: gray;
+  }
+  .greenclass {
+    background: green;
+  }
+  .orangeclass {
+    background: rgb(255, 129, 2);
+  }
+  .pinkclass {
+    background: rgb(254, 103, 128);
+  }
+  .purpleclass {
+    background: purple;
+  }
+  .redclass {
+    background: red;
+  }
+  .whiteclass {
+    background: #fff;
+  }
+  .yellowclass {
+    background: yellow;
+  }
+}
+
+.squares {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.seasons-div select {
+  background: white;
+  color: black;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.colorVarContainer {
+}
+
+.colorVarButton {
+  width: 100px;
+  height: 50px;
+  background: white;
+  border-radius: 15px;
+  border: #000 solid 3px;
+  color: black;
+}
