@@ -32,6 +32,8 @@ const Product = () => {
   }
   let leaveForNow: undefined = undefined;
   const selectedSizes = useRef<number[]>();
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [imageIdx, setImageIdx] = useState<number>(-1)
 
   useEffect(() => {
     let fetchProduct = async () => {
@@ -54,12 +56,66 @@ const Product = () => {
     fetchProduct();
   }, []);
 
-  const handleImageClick = () => {
-    
+  const handleImageClick = (idx: number, ) => {
+    let newArr: ColorVariation[] = [];
+    product && newArr.push(product.colorVariations[idx]);
+    product && product.colorVariations.splice(idx, 1);
+    console.log("newArr", newArr);
+    console.log("product", product);
+    if (product)
+      for (let i: number = 0; i < product?.colorVariations.length; i++) {
+        console.log(i);
+        newArr.push(product?.colorVariations[i]);
+      }
+    console.log("post pushing", newArr);
+    let obj = {};
+    obj["title"] = product?.title;
+    obj["description"] = product?.description;
+    obj["colorVariations"] = newArr;
+    obj["season"] = product?.season;
+    setSizesSet(new Set<number>(newArr[0].sizes));
+    console.log("set", sizesSet);
+
+    const queryParams = {
+      title: product?.title,
+      color: newArr[0].color,
+    };
+    //@ts-ignore
+    const searchParams = new URLSearchParams(queryParams);
+    const url = `/Product?${searchParams.toString()}`;
+    window.location.href = url;
+    //@ts-ignore
+    setProduct(obj);
   }
+
+  useEffect(() => {
+    if (isClicked) {
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = "15px";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+      document.body.style.paddingRight = "0px";
+    };
+  }, [isClicked]);
 
   return (
     <div>
+      {isClicked && (
+        <div className="picture-modal-background">
+          <div className="picture-modal-btn" onClick={() => imageIdx > 0 ? setImageIdx(imageIdx - 1) : setImageIdx(5)}>prev</div>
+          <img
+            className="modal-picture"
+            src={
+              "http://localhost:8000/uploads/" +
+              product?.colorVariations[0].images[imageIdx]
+            }
+          />
+          <div className="picture-modal-btn" onClick={() => imageIdx <= 4 ? setImageIdx(imageIdx + 1) : setImageIdx(0)}>next</div>
+          <div className="picture-modal-btn picture-modal-cancel" onClick={() => setIsClicked(false)}>X</div>
+          <div className="picture-modal-info">{imageIdx+1}/{product?.colorVariations[0].images.length}</div>
+        </div>
+      )}
       <Navigation />
       <div className="product-info-and-options">
         <div className="product-pictures">
@@ -69,6 +125,11 @@ const Product = () => {
                 <img
                   className={"product-images pic" + index}
                   src={"http://localhost:8000/uploads/" + image}
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    setIsClicked(true);
+                    setImageIdx(index);
+                  }}
                 />
               ))}
           </div>
@@ -142,14 +203,25 @@ const Product = () => {
               </div>
             </div>
           </div>
-          <p className="color-options">{product?.colorVariations.length} Color Options</p>
-         <div className="shoe-variations-container">
-          {product?.colorVariations.map((colorVar, index: number) => (
-            <div className={"pic-choices pic-option"+index}>
-              <img className="product-variation-images" alt="" src={"http://localhost:8000/uploads/"+colorVar.images[2]}/>
-            </div>
-          ))}
-         </div>
+          <p className="color-options">
+            {product?.colorVariations.length} Color Options
+          </p>
+          <div className="shoe-variations-container">
+            {product?.colorVariations.map((colorVar, index: number) => (
+              <div
+                className={"pic-choices pic-option" + index}
+                onClick={() => {
+                  handleImageClick(index);
+                }}
+              >
+                <img
+                  className="product-variation-images"
+                  alt=""
+                  src={"http://localhost:8000/uploads/" + colorVar.images[2]}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <Footer />

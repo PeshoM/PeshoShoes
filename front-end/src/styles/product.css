@@ -37,11 +37,13 @@ body {
 }
 
 .pic0 {
+  cursor: pointer;
   grid-column: span 2;
   grid-row: span 2;
 }
 
 .pic1 {
+  cursor: pointer;
   grid-column: span 2;
   grid-row: span 2;
 }
@@ -50,6 +52,7 @@ body {
 .pic3,
 .pic4,
 .pic5 {
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -146,7 +149,7 @@ body {
 }
 
 .pic-choices:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .pic-option0 {
@@ -157,4 +160,43 @@ body {
   opacity: 1;
   width: 100%;
   height: 100%;
+}
+
+.picture-modal-background {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  z-index: 5;
+  position: absolute;
+  text-align: center;
+  align-items: center;
+}
+
+.modal-picture {
+    width: 60vw;
+    height: 100vh;
+    margin: auto;
+    opacity: 1;
+}
+
+.picture-modal-btn {
+  color: #000;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.picture-modal-cancel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 15px;
+}
+
+.picture-modal-info {
+  position: absolute;
+  color: #333333;
+  font-size: 2rem;
+  bottom: 0;
+  right: 0; 
 }
