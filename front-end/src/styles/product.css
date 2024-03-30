@@ -3,64 +3,158 @@
 @tailwind utilities;
 
 body {
-    background-color: rgb(188, 188, 188);
+  background-color: #fff;
+  /* background-color: rgb(188, 188, 188); */
 }
 
 .product-info-and-options {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .product-pictures {
-    flex-grow: 2;
+  flex-grow: 2;
 }
 
 .product-options {
-    flex-grow: 1;
-    min-width: 20%;
-    margin: 30px 15px 30px 40px;
+  flex-grow: 1.1;
+  min-width: 30%;
+  margin: 30px 15px 30px 40px;
 }
 
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    grid-gap: 3px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-gap: 3px;
 }
 
 .product-images {
-    opacity: 1;
-    margin: 30px 3px;
-    width: 100%;
-    height: 100%;
+  opacity: 1;
+  margin: 30px 3px;
+  width: 100%;
+  height: 100%;
 }
 
 .pic0 {
-    grid-column: span 2;
-    grid-row: span 2;
+  grid-column: span 2;
+  grid-row: span 2;
 }
 
 .pic1 {
-    grid-column: span 2;
-    grid-row: span 2;
+  grid-column: span 2;
+  grid-row: span 2;
 }
 
 .pic2,
 .pic3,
 .pic4,
 .pic5 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.product-title, .product-price {
-    color: #000;
-    font-size: 1.5rem;
-    font-weight: 500;
+.product-title,
+.product-price {
+  color: #000;
+  font-size: 1.5rem;
+  font-weight: 500;
 }
 
 .product-color {
-    color: rgb(75, 75, 75);
-    font-weight: 500;
+  color: rgb(75, 75, 75);
+  font-weight: 500;
+}
+
+.border-base-250 {
+  width: 250px;
+  background: rgb(192, 192, 192);
+  border-radius: 0;
+  border: solid #000 2px !important;
+  border: #000 solid 2px;
+  color: #000;
+  max-height: 350px;
+  overflow-y: scroll;
+}
+
+.border-base-250 {
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.border-base-250::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
+}
+
+.sizes-titles {
+  color: #000;
+  font-size: 1.5rem !important;
+}
+
+.sizes-paragraph {
+  color: #000;
+  margin: 0px 10px;
+  display: flex;
+}
+
+.sizes-out-of-stock {
+  color: gray;
+}
+
+.sold-out {
+  margin-left: 15px;
+}
+
+.collapse-content {
+  border-top: solid #000 2px;
+  padding: 0;
+}
+
+.sizes-nums {
+  min-width: 50px !important;
+}
+
+.paragraph-container {
+  cursor: pointer;
+}
+
+.paragraph-container-out-of-stock {
+  background: white;
+  border-bottom: 10px solid white;
+}
+
+.paragraph-container :hover {
+  background: rgb(183, 183, 183);
+}
+
+.color-options {
+  font-size: 1.1rem;
+}
+
+.shoe-variations-container {
+  display: flex;
+  gap: 10px;
+}
+
+.pic-choices {
+  width: 70px;
+  height: 70px;
+}
+
+.pic-choices:hover {
+    cursor: pointer;
+}
+
+.pic-option0 {
+  border: solid #000 2px;
+}
+
+.product-variation-images {
+  opacity: 1;
+  width: 100%;
+  height: 100%;
 }

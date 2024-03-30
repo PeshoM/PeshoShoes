@@ -122,7 +122,7 @@ const DisplayProd = () => {
     setProduct(response.filteredData);
   };
 
-  const handleSizeChanges = (size) => {
+  const handleSizeChanges = (size: number) => {
     for (let i = 0; i < pickedSizes.current.length; i++) {
       if (pickedSizes.current[i] == size)
         return pickedSizes.current.splice(i, 1);
@@ -151,8 +151,8 @@ const DisplayProd = () => {
     pickedSeasons.current.sort();
     console.log("seasons picked", pickedSeasons.current);
   };
-  const handleClickProduct = (prod) => {
-    const queryParams = { title: prod.title };
+  const handleClickProduct = (title: string, color: string) => {
+    const queryParams = { title, color};
     const searchParams = new URLSearchParams(queryParams);
     const url = `/Product?${searchParams.toString()}`;
     window.location.href = url;
@@ -311,13 +311,13 @@ const DisplayProd = () => {
           <div className="midPart-right">
             <div className="Container">
               <ul className="items-section">
-                {products.map((product, index) => (
+                {products.map((product, index: number) => (
                   <>
-                    {product.colorVariations.map((colorVar, index) => (
+                    {product.colorVariations.map((colorVar, idx: number) => (
                       <li className="a" key={index}>
                         <div
                           className="products"
-                          onClick={() => handleClickProduct(product)}
+                          onClick={() => handleClickProduct(product.title, colorVar.color)}
                         >
                           <img
                             className="displayed_images"

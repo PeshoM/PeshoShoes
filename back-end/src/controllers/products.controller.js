@@ -18,7 +18,7 @@ const Post = async (req, res) => {
         sizesArr[rowIndex] = [];
       }
 
-      sizesArr[rowIndex][colIndex] = parseInt(req.body[key]);
+      sizesArr[rowIndex][colIndex] = parseFloat(req.body[key]);
     }
     if (key.startsWith("quantity_")) {
       const indices = key.slice(9).split("_");
@@ -57,7 +57,7 @@ const Post = async (req, res) => {
     colorVariations[i]["sizes"] = sizesArr[i];
     colorVariations[i]["color"] = req.body.color[i];
   }
-
+  
   const product = new products({
     title: req.body.title,
     description: req.body.description,

@@ -269,7 +269,7 @@ const Navigation = () => {
                   {inputText.length > 0 &&
                     options.map((product, index: number) => (
                       <>
-                      {product.colorVariations.map((colorVar, idx) => (
+                      {product.colorVariations.map((colorVar, idx: number) => (
                         <div className="product" key={index}>
                           <img
                             className="searchBarImages"
@@ -298,11 +298,11 @@ const Navigation = () => {
             }}
           >
             {isShown >= 0 &&
-              categories[isShown].map((category, idx) => {
+              categories[isShown].map((category, idx: number) => {
                 return (
                   <div className="columns_Hovered_Children">
                     <div className="columns_Elements_Hovered_Children">
-                      {Object.keys(category).map((titles, idx) => {
+                      {Object.keys(category).map((titles, idx: number) => {
                         // {}[i] -> titles
                         return (
                           <div>
