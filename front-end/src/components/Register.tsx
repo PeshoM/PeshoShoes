@@ -22,7 +22,7 @@ const Register = () => {
         role: "user",
       }),
     });
-    response = await response.json(); // checknah JWT Testing kudeto imam wokring jwt code
+    response = await response.json(); 
     //@ts-ignore
     localStorage.setItem("auth_token", response.token);
     return false;

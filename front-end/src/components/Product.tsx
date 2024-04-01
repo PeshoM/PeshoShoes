@@ -33,7 +33,8 @@ const Product = () => {
   let leaveForNow: undefined = undefined;
   const selectedSizes = useRef<number[]>();
   const [isClicked, setIsClicked] = useState<boolean>(false);
-  const [imageIdx, setImageIdx] = useState<number>(-1)
+  const [imageIdx, setImageIdx] = useState<number>(-1);
+  const [zoomed, setZoomed] = useState(false);
 
   useEffect(() => {
     let fetchProduct = async () => {
@@ -56,7 +57,7 @@ const Product = () => {
     fetchProduct();
   }, []);
 
-  const handleImageClick = (idx: number, ) => {
+  const handleImageClick = (idx: number) => {
     let newArr: ColorVariation[] = [];
     product && newArr.push(product.colorVariations[idx]);
     product && product.colorVariations.splice(idx, 1);
@@ -86,7 +87,7 @@ const Product = () => {
     window.location.href = url;
     //@ts-ignore
     setProduct(obj);
-  }
+  };
 
   useEffect(() => {
     if (isClicked) {
@@ -103,17 +104,44 @@ const Product = () => {
     <div>
       {isClicked && (
         <div className="picture-modal-background">
-          <div className="picture-modal-btn" onClick={() => imageIdx > 0 ? setImageIdx(imageIdx - 1) : setImageIdx(5)}>prev</div>
-          <img
-            className="modal-picture"
-            src={
-              "http://localhost:8000/uploads/" +
-              product?.colorVariations[0].images[imageIdx]
+          <div
+            className="picture-modal-btn"
+            onClick={() =>{
+              imageIdx > 0 ? setImageIdx(imageIdx - 1) : setImageIdx(5)
+              setZoomed(false);
             }
-          />
-          <div className="picture-modal-btn" onClick={() => imageIdx <= 4 ? setImageIdx(imageIdx + 1) : setImageIdx(0)}>next</div>
-          <div className="picture-modal-btn picture-modal-cancel" onClick={() => setIsClicked(false)}>X</div>
-          <div className="picture-modal-info">{imageIdx+1}/{product?.colorVariations[0].images.length}</div>
+            }
+          >
+            prev
+          </div>
+            <img
+              src={
+                "http://localhost:8000/uploads/" +
+                product?.colorVariations[0].images[imageIdx]
+              }
+              alt="Your Image"
+              className={`modal-picture ${zoomed ? 'zoomed' : ''}`}
+              onClick={() => setZoomed(!zoomed)}
+            />
+          <div
+            className="picture-modal-btn"
+            onClick={() =>{
+              imageIdx <= 4 ? setImageIdx(imageIdx + 1) : setImageIdx(0)
+              setZoomed(false);
+            }
+            }
+          >
+            next
+          </div>
+          <div
+            className="picture-modal-btn picture-modal-cancel"
+            onClick={() => setIsClicked(false)}
+          >
+            X
+          </div>
+          <div className="picture-modal-info">
+            {imageIdx + 1}/{product?.colorVariations[0].images.length}
+          </div>
         </div>
       )}
       <Navigation />
@@ -126,7 +154,7 @@ const Product = () => {
                   className={"product-images pic" + index}
                   src={"http://localhost:8000/uploads/" + image}
                   onClick={() => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                     setIsClicked(true);
                     setImageIdx(index);
                   }}
