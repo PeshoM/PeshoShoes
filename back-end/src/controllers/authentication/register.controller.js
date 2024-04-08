@@ -4,11 +4,13 @@ const jwt = require("jsonwebtoken");
 const Post = async (req, res) => {
   
   const user = new users({
-    username: req.body.user,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
     password: req.body.pass,
     role: req.body.role,
   });
-  let key = { username: req.body.user };
+  let key = { firstName: req.body.firstName };
   const token = await jwt.sign(
     { key },
     "fdsafewt34aqrt43rtq23dsad",

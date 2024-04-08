@@ -3,8 +3,8 @@ import React from 'react';
 import { useRef } from "react";
 
 const Login = () => {
-  const username = useRef<string | null | undefined>();
-  const password = useRef<string | null | undefined>();
+  const username = useRef<string>();
+  const password = useRef<string>();
 
   async function HandleSubmit(event) {
     event.preventDefault();

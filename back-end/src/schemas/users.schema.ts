@@ -1,13 +1,27 @@
-//@ts-ignore
-const mongoose = require('mongoose');
-//@ts-ignore
-const { Schema } = mongoose;
-//@ts-ignore
-const users = new Schema({
-    username: {
+import { Schema, model, Document } from "mongoose";
+
+interface User {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    role: string;
+}
+
+const userSchema = new Schema<User>({
+    firstName: {
         type: String,
         required: true,
         unique: true
+    },
+    lastName: {
+        type: String,
+        required: true,
+        unique: false
+    },
+    email: {
+        type: String,
+        required: true
     },
     password: {
         type: String,
@@ -19,4 +33,4 @@ const users = new Schema({
     }
 });
 
-module.exports = mongoose.model("users", users);
+module.exports = model<User>("users", userSchema);

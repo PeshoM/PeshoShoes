@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import categories from "../categories.js";
 import { ProductContext } from "./Context.tsx";
+import Auth from "./Auth.tsx";
 
 const Navigation = () => {
   // console.log("hereeee");
@@ -31,6 +32,9 @@ const Navigation = () => {
     setSearchedProds,
   } = useContext(ProductContext);
   const navigate = useNavigate();
+  const [userIconHovered, setUserIconHovered] = useState<boolean>(false);
+  const [showInputMenu, setShowInputMenu] = useState<boolean>(false);
+  const [authModal, setAuthModal] = useState<boolean>(false);
 
   const handleHover = (setter: Function, index: number) => {
     setter((prev) => {
@@ -102,6 +106,18 @@ const Navigation = () => {
     return navigate("/");
   };
 
+  useEffect(() => {
+    console.log("log", userIconHovered);
+  }, [userIconHovered]);
+
+  function openModal() {
+    document.body.classList.add("modal-open");
+  }
+
+  function closeModal() {
+    document.body.classList.remove("modal-open");
+  }
+  
   return (
     <div>
       <div className="Ultranav">
@@ -137,7 +153,15 @@ const Navigation = () => {
             </a>
           </div>
           <div className="nav_icons">
-            <button className="UserIcon_userButton">
+            <button
+              onClick={() => {
+                openModal();
+                setAuthModal(true);
+              }}
+              onMouseOver={() => setUserIconHovered(true)}
+              onMouseLeave={() => setUserIconHovered(false)}
+              className="UserIcon_userButton"
+            >
               <img className="icons" src="/icons8-manager-96.png"></img>
             </button>
             <button className="NotificationIcon_notificationIcon"> </button>
@@ -238,14 +262,65 @@ const Navigation = () => {
             </li>
           </ul>
           <div className="nav_right">
+            {userIconHovered && (
+              <div
+                className="userHoverMenu"
+                onMouseOver={() => setUserIconHovered(true)}
+                onMouseLeave={() => setUserIconHovered(false)}
+                onClick={() => {
+                  setAuthModal(true);
+                  setUserIconHovered(false);
+                  openModal();
+                }}
+              >
+                <div className="register-login-container">
+                  <button
+                    className="login-button"
+                    onClick={() => {
+                      setAuthModal(true);
+                      setUserIconHovered(false);
+                      openModal();
+                    }}
+                  >
+                    LOG IN
+                  </button>
+                  <div className="register-text-paragraph">
+                    <span>New customer?</span>
+                    <button
+                      className="register-button"
+                      onClick={() => setAuthModal(true)}
+                    >
+                      Register
+                    </button>
+                  </div>
+                </div>
+                <div className="personal-options-container">
+                  <div className="personalized-option-div">
+                    <div className="personalized-option">My accout</div>
+                  </div>
+                  <div className="personalized-option-div">
+                    <div className="personalized-option">My orders</div>
+                  </div>
+                  <div className="personalized-option-div">
+                    <div className="personalized-option">Discount codes</div>
+                  </div>
+                  <div className="personalized-option-div">
+                    <div className="personalized-option">My benefits</div>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="wrap">
               <div className="search">
                 <input
                   onChange={(e) => {
+                    setShowInputMenu(true);
                     setInputText(e.target.value);
                     handleChange(e);
                     // console.log(inputText);
                   }}
+                  onFocus={() => setShowInputMenu(true)}
+                  onBlur={() => setShowInputMenu(false)}
                   onKeyDown={handleKeyDown}
                   type="text"
                   className="searchTerm"
@@ -267,22 +342,25 @@ const Navigation = () => {
               <div className="searchProducts">
                 <ul>
                   {inputText.length > 0 &&
+                    showInputMenu &&
                     options.map((product, index: number) => (
                       <>
-                      {product.colorVariations.map((colorVar, idx: number) => (
-                        <div className="product" key={index}>
-                          <img
-                            className="searchBarImages"
-                            src={
-                              "http://localhost:8000/uploads/" +
-                              colorVar.images[0]
-                            }
-                            alt={product.title}
-                          />
-                          <p className="resTitles">{product.title}</p>
-                          <p className="resPrices">{colorVar.price}</p>
-                        </div>
-                      ))}
+                        {product.colorVariations.map(
+                          (colorVar, idx: number) => (
+                            <div className="product" key={index}>
+                              <img
+                                className="searchBarImages"
+                                src={
+                                  "http://localhost:8000/uploads/" +
+                                  colorVar.images[0]
+                                }
+                                alt={product.title}
+                              />
+                              <p className="resTitles">{product.title}</p>
+                              <p className="resPrices">{colorVar.price}</p>
+                            </div>
+                          )
+                        )}
                       </>
                     ))}
                 </ul>
@@ -336,6 +414,19 @@ const Navigation = () => {
           </div>
         )}
       </div>
+
+      {authModal && (
+        <>
+          <Auth />
+          <div
+            className="authentication-modal-container"
+            onClick={() => {
+              setAuthModal(false);
+              closeModal();
+            }}
+          ></div>
+        </>
+      )}
     </div>
   );
 };

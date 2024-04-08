@@ -112,7 +112,7 @@ const Product = () => {
             }
             }
           >
-            prev
+            {"<"}
           </div>
             <img
               src={
@@ -131,10 +131,10 @@ const Product = () => {
             }
             }
           >
-            next
+            {">"}
           </div>
           <div
-            className="picture-modal-btn picture-modal-cancel"
+            className="picture-modal-cancel"
             onClick={() => setIsClicked(false)}
           >
             X

@@ -1,11 +1,44 @@
 import "../styles/register.css";
-import { useRef } from "react";
-import React from 'react';
+import {
+  useRef,
+  useEffect,
+  useState,
+  LegacyRef,
+  MutableRefObject,
+} from "react";
+import React from "react";
 
 const Register = () => {
-  const username = useRef<string>();
+  const firstName = useRef<string>();
+  const lastName = useRef<string>();
   const password = useRef<string>();
-
+  const confirmPassword = useRef<string>();
+  const email = useRef<string>();
+  const [isEmpty, setIsEmpty] = useState<boolean[]>([
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
+  const [emptyField, setEmptyField] = useState<string[]>([
+    "valid",
+    "valid",
+    "valid",
+    "valid",
+    "valid",
+  ]);
+  let registerData: Array<{
+    name: string;
+    ref: LegacyRef<string | undefined>;
+    type: string;
+  }> = [
+    { name: "First Name", ref: firstName, type: "text" },
+    { name: "Last Name", ref: lastName, type: "text" },
+    { name: "Email", ref: email, type: "email" },
+    { name: "Password", ref: password, type: "password" },
+    { name: "Confirm Password", ref: confirmPassword, type: "password" },
+  ];
   async function HandleSubmit(event) {
     // token: JWT(username) -> hash -> hashed_username
     event.preventDefault();
@@ -16,18 +49,44 @@ const Register = () => {
       },
       body: JSON.stringify({
         //@ts-ignore
-        user: username.current.value,
+        firstName: firstName.current.value,
+        //@ts-ignore
+        lastName: lastName.current.value,
         //@ts-ignore
         pass: password.current.value,
+        //@ts-ignore
+        email: email.current.value,
         role: "user",
       }),
     });
-    response = await response.json(); 
+    response = await response.json();
     //@ts-ignore
     localStorage.setItem("auth_token", response.token);
     return false;
   }
 
+  const handleEmptyField = (field: string, idx: number) => {
+    setIsEmpty((prev) => {
+      const newEmpty = [...prev];
+      newEmpty[idx] = field == "";
+      return newEmpty;
+    });
+  };
+
+  useEffect(() => {
+    setEmptyField((prev) => {
+      const updatedEmptyField = [...prev]; // Create a copy of the previous state
+      for (let i = 0; i < isEmpty.length; i++) {
+        if (isEmpty[i]) {
+          updatedEmptyField[i] = "invalid";
+        } else {
+          updatedEmptyField[i] = "valid";
+        }
+      }
+      console.log("Updated emptyField", updatedEmptyField);
+      return updatedEmptyField; // Return the updated state
+    });
+  }, [isEmpty]);
   return (
     <div>
       <form
@@ -36,28 +95,44 @@ const Register = () => {
           return event.preventDefault();
         }}
       >
-        <div className="card glass">
-          <div className="card-body">
-            <h2 className="card-title">Register Here!</h2>
-            <input
-              //@ts-ignore
-              ref={username}
-              type="text"
-              placeholder="username"
-              className="input input-bordered w-full max-w-xs"
-            />
-            <input
-              //@ts-ignore
-              ref={password}
-              type="password"
-              placeholder="password"
-              className="input input-bordered w-full max-w-xs"
-            />
-            <div className="card-actions justify-end">
+        <div className="register-main">
+          <div className="register-container">
+            <label className="register-title">Register</label>
+            {registerData.map(
+              (
+                field: {
+                  name: string;
+                  ref: LegacyRef<string | undefined>;
+                  type: string;
+                },
+                index: number
+              ) => (
+                <div className="register-data">
+
+                  <label>{field.name}</label>
+                  <input
+                    ref={field.ref as LegacyRef<HTMLInputElement>}
+                    type={field.type}
+                    className={"register-fields-" + emptyField[index]}
+                    onBlur={() => {
+                      (field.ref! as any).current &&
+                        handleEmptyField(
+                          (field.ref! as any).current.value,
+                          index
+                        );
+                    }}
+                  />
+                  {emptyField[index] == "invalid" && (
+                    <label className="invalid-field">Field is required</label>
+                  )}
+                </div>
+              )
+            )}
+            <div className="register-data">
               <input
                 type="submit"
-                className="btn btn-primary"
-                value="Submit"
+                className="register-fields-valid register-data-submit"
+                value="CREATE ACCOUNT"
               ></input>
             </div>
           </div>

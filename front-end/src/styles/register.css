@@ -1,3 +1,65 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+body {
+  background: black !important;
+}
+
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 500px;
+
+  background: #fff;
+  color: #000;
+  margin-left: 50%;
+  transform: translate(-50%, 0%);
+  border: solid gray 2px;
+  padding: 25px;
+}
+
+.register-title {
+  font-weight: 500;
+  font-size: 35pt;
+}
+
+.register-fields-valid {
+  width: 400px;
+  height: 50px;
+  background: #fff;
+  border: solid #7c7575 1px;
+  transition: border 0.35s ease;
+}
+
+.register-fields-invalid {
+  width: 400px;
+  height: 50px;
+  background: #fff;
+  border: solid red 1px;
+  transition: border 0.35s ease;
+}
+
+.register-fields-invalid:active {
+  width: 400px;
+  height: 50px;
+  background: #fff;
+  border: solid red 1px !important;
+  transition: border 0.35s ease;
+}
+
+.invalid-field {
+  color: red;
+}
+
+.register-data {
+  display: flex;
+  flex-direction: column;
+  color: #5a5a5a;
+}
+
+.register-data-submit {
+  margin-top: 15px;
+  color: #fff;
+  font-weight: 500;
+  background-color: #141414 !important;
+  border: 0;
+}
