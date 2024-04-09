@@ -1,13 +1,25 @@
 .authentication-wrapper {
     background-color: #fff;
     width: 40vw;
-    height: 80vh;
+    min-height: 80vh;
     z-index: 3;
     top: 50px;
     left: 50%;
     transform:translate(-50%,0);
     position: absolute;
     padding: 60px;
+    max-height: -webkit-fill-available;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+    border: solid #141414 1px;
+}
+
+.authentication-wrapper::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
 }
 
 .close-authentication-modal {
@@ -24,16 +36,29 @@
 
 .authentication-options {
     display: flex;
+    margin-bottom: 60px;
 }
 
 .authentication-option {
-    height: 50px;
-    width: 60%;
-    color:#141414;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 100%;
+    color:#AAAAAA;
     text-align: center;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    border-bottom: #AAAAAA 2px solid;
+}
+
+.authentication-option:hover {
+    transition: 0.2s ease;
+    color: #141414;
+    cursor: pointer;
 }
 
 .authentication-option-underlined {
-    text-decoration: underline black 2px solid;
+    border-bottom: #141414 2px solid;
+    color: #141414;
 }

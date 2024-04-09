@@ -1,5 +1,5 @@
-import { useState, createContext, useEffect, useRef } from "react";
-import React from 'react';
+import React, { useState, createContext, useEffect, useRef } from "react";
+
 //@ts-ignore
 const ProductContext = createContext({} as Product);
 
@@ -38,9 +38,11 @@ const Context = ({ children }) => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [searchedProds, setSearchedProds] = useState<Product[]>([]);
   const [currProd, setCurrProd] = useState<Product>(); 
+  const [loginOrRegister, setLoginOrRegister] = useState<boolean>();
+  const [authModal, setAuthModal] = useState<boolean>(false);
   // ("children", children);
   return (
-    <ProductContext.Provider value={{ options, setOption, products, setProduct, allProducts, searchedProds, setSearchedProds }}>
+    <ProductContext.Provider value={{ options, setOption, products, setProduct, allProducts, searchedProds, setSearchedProds, loginOrRegister, setLoginOrRegister, authModal, setAuthModal }}>
       {children}
     </ProductContext.Provider>
   );

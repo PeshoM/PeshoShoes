@@ -1,10 +1,41 @@
 import "../styles/login.css";
-import React from 'react';
-import { useRef } from "react";
+import React, { useRef, useState, useEffect, LegacyRef } from "react";
 
 const Login = () => {
-  const username = useRef<string>();
+  const email = useRef<string>();
   const password = useRef<string>();
+  const [emptyField, setEmptyField] = useState<string[]>(["valid", "valid"]);
+  const [isEmpty, setIsEmpty] = useState<boolean[]>([false, false]);
+  let loginData: Array<{
+    name: string;
+    ref: LegacyRef<string | undefined>;
+    type: string;
+  }> = [
+    { name: "Email", ref: email, type: "text" },
+    { name: "Password", ref: password, type: "password" },
+  ];
+  useEffect(() => {
+    setEmptyField((prev) => {
+      const updatedEmptyField = [...prev]; // Create a copy of the previous state
+      for (let i = 0; i < isEmpty.length; i++) {
+        if (isEmpty[i]) {
+          updatedEmptyField[i] = "invalid";
+        } else {
+          updatedEmptyField[i] = "valid";
+        }
+      }
+      console.log("Updated emptyField", updatedEmptyField);
+      return updatedEmptyField; // Return the updated state
+    });
+  }, [isEmpty]);
+
+  const handleEmptyField = (field: string, idx: number) => {
+    setIsEmpty((prev) => {
+      const newEmpty = [...prev];
+      newEmpty[idx] = field == "";
+      return newEmpty;
+    });
+  };
 
   async function HandleSubmit(event) {
     event.preventDefault();
@@ -15,13 +46,13 @@ const Login = () => {
       },
       body: JSON.stringify({
         //@ts-ignore
-        username: username.current.value,
+        firstName: firstName.current.value,
         //@ts-ignore
         password: password.current.value,
       }),
     });
     response = await response.json();
-    console.log(response)
+    console.log(response);
     //@ts-ignore
     localStorage.setItem("auth_token", response.token.token); // make an if incase the login is wrong
     return false;
@@ -35,29 +66,50 @@ const Login = () => {
           return event.preventDefault();
         }}
       >
-        <div className="card glass">
-          <div className="card-body">
-            <h2 className="card-title">Log In</h2>
-            <input
-            //@ts-ignore
-              ref={username}
-              type="text"
-              placeholder="username"
-              className="input input-bordered w-full max-w-xs"
-            />
-            <input
-            //@ts-ignore
-              ref={password}
-              type="password"
-              placeholder="password"
-              className="input input-bordered w-full max-w-xs"
-            />
-            <div className="card-actions justify-end">
+        <div className="">
+          <div className="register-container">
+            {loginData.map(
+              (
+                field: {
+                  name: string;
+                  ref: LegacyRef<string | undefined>;
+                  type: string;
+                },
+                index: number
+              ) => (
+                <div className="register-data">
+                  <label>{field.name}</label>
+                  <input
+                    ref={field.ref as LegacyRef<HTMLInputElement>}
+                    type={field.type}
+                    className={"register-fields-" + emptyField[index]}
+                    onBlur={() => {
+                      (field.ref! as any).current &&
+                        handleEmptyField(
+                          (field.ref! as any).current.value,
+                          index
+                        );
+                    }}
+                  />
+                  {emptyField[index] == "invalid" && (
+                    <label className="invalid-field">Field is required</label>
+                  )}
+                </div>
+              )
+            )}
+            <div className="register-data">
               <input
                 type="submit"
-                className="btn btn-primary"
-                value="Submit"
+                className="register-fields-valid register-data-submit"
+                value="CREATE ACCOUNT"
               ></input>
+            </div>
+            <div className="forgotten-password">
+              <span>Forgotten your password?</span>
+            </div>
+            <div className="already-member-paragraph">
+              <span>New customer?</span>
+              <button className="already-member-button">Register</button>
             </div>
           </div>
         </div>

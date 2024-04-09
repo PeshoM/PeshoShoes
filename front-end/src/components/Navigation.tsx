@@ -30,11 +30,14 @@ const Navigation = () => {
     allProducts,
     searchedProds,
     setSearchedProds,
+    setLoginOrRegister,
+    authModal,
+    setAuthModal
   } = useContext(ProductContext);
   const navigate = useNavigate();
   const [userIconHovered, setUserIconHovered] = useState<boolean>(false);
   const [showInputMenu, setShowInputMenu] = useState<boolean>(false);
-  const [authModal, setAuthModal] = useState<boolean>(false);
+  
 
   const handleHover = (setter: Function, index: number) => {
     setter((prev) => {
@@ -155,6 +158,7 @@ const Navigation = () => {
           <div className="nav_icons">
             <button
               onClick={() => {
+                setLoginOrRegister(true);
                 openModal();
                 setAuthModal(true);
               }}
@@ -280,6 +284,7 @@ const Navigation = () => {
                       setAuthModal(true);
                       setUserIconHovered(false);
                       openModal();
+                      setLoginOrRegister(true);
                     }}
                   >
                     LOG IN
@@ -288,23 +293,38 @@ const Navigation = () => {
                     <span>New customer?</span>
                     <button
                       className="register-button"
-                      onClick={() => setAuthModal(true)}
+                      onClick={() => {
+                        setAuthModal(true);
+                        setLoginOrRegister(false);
+                      }}
                     >
                       Register
                     </button>
                   </div>
                 </div>
                 <div className="personal-options-container">
-                  <div className="personalized-option-div">
+                  <div
+                    className="personalized-option-div"
+                    onClick={setLoginOrRegister(true)}
+                  >
                     <div className="personalized-option">My accout</div>
                   </div>
-                  <div className="personalized-option-div">
+                  <div
+                    className="personalized-option-div"
+                    onClick={setLoginOrRegister(true)}
+                  >
                     <div className="personalized-option">My orders</div>
                   </div>
-                  <div className="personalized-option-div">
+                  <div
+                    className="personalized-option-div"
+                    onClick={setLoginOrRegister(true)}
+                  >
                     <div className="personalized-option">Discount codes</div>
                   </div>
-                  <div className="personalized-option-div">
+                  <div
+                    className="personalized-option-div"
+                    onClick={setLoginOrRegister(true)}
+                  >
                     <div className="personalized-option">My benefits</div>
                   </div>
                 </div>

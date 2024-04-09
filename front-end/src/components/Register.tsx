@@ -97,7 +97,7 @@ const Register = () => {
       >
         <div className="register-main">
           <div className="register-container">
-            <label className="register-title">Register</label>
+            {/**naprei register i login-container za margin-bottom za da mahnesh texta  */}
             {registerData.map(
               (
                 field: {
@@ -108,7 +108,6 @@ const Register = () => {
                 index: number
               ) => (
                 <div className="register-data">
-
                   <label>{field.name}</label>
                   <input
                     ref={field.ref as LegacyRef<HTMLInputElement>}
@@ -134,6 +133,10 @@ const Register = () => {
                 className="register-fields-valid register-data-submit"
                 value="CREATE ACCOUNT"
               ></input>
+            </div>
+            <div className="already-member-paragraph">
+              <span>Already a member?</span>
+              <button className="already-member-button">Log in</button>
             </div>
           </div>
         </div>

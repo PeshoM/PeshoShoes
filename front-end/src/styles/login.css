@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+
+  background: #fff;
+  color: #000;
+  margin-left: 50%;
+  transform: translate(-50%, 0%);
+  /* border: solid gray 2px; */
+}
+
+.already-member-paragraph {
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+  color: #5a5a5a;
+  span {
+    margin-right: 10px;
+  }
+  .already-member-button {
+    text-decoration: underline;
+  }
+  .already-member-button:hover {
+    text-decoration: none;
+  }
+}
+
+.forgotten-password {
+    font-size: 1.2rem;
+    margin: 15px 0px;
+    cursor: pointer;
+    color: #141414;
+    span {
+        text-decoration: underline;
+    }
+    span:hover {
+        text-decoration: none;
+    }
+}
