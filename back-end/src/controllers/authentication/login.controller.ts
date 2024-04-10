@@ -1,7 +1,10 @@
+import { Request, Response } from "express";
 const users = require("../../schemas/users.schema");
 const jwt = require("jsonwebtoken");
+import env from "dotenv";
+env.config();
 
-const Post = async (req, res) => {
+const Post = async (req: Request, res: Response) => {
   const user = await users.findOne({ username: req.body.username });
   if (user) {
     const result = req.body.password === user.password;
@@ -9,9 +12,9 @@ const Post = async (req, res) => {
       let key = { username: req.body.user, role: req.body.role };
       const token = await jwt.sign(
         { key },
-        "fdsafewt34aqrt43rtq23dsad",
-        { algorithm: "HS256" },
-        { expiresIn: "24h" }
+        process.env.SECRET_KEY,
+        { algorithm: process.env.HASH_ALGORITHM },
+        { expiresIn: process.env.EXPIRATION }
       );
       res.status(200).json({
         status: "success",
@@ -25,5 +28,5 @@ const Post = async (req, res) => {
 };
 
 module.exports = {
-    Post
-}
+  Post,
+};

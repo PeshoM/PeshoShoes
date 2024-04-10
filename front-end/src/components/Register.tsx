@@ -41,8 +41,9 @@ const Register = () => {
   ];
   async function HandleSubmit(event) {
     // token: JWT(username) -> hash -> hashed_username
+    const url: string = process.env.REACT_APP_REGISTER_URL || "";
     event.preventDefault();
-    let response = await fetch("http://localhost:8000/register", {
+    let response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

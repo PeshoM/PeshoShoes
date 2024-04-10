@@ -1,14 +1,20 @@
+import { NextFunction, Request, Response } from 'express';
 const jwt = require("jsonwebtoken");
 const users = require("../schemas/users.schema");
+import env from "dotenv";
+env.config();
 
-const handleAdminReq = async (req, res, next) => {
+interface adminValidation extends Request {
+  role: string;
+}
+const handleAdminReq = async (req: adminValidation, res: Response, next: NextFunction) => {
   let decoded = null;
   let doc = null;
   let arr = [];
   if (req.body.key) {
     console.log('here', req.body.key);
-    decoded = await jwt.verify(req.body.key, "fdsafewt34aqrt43rtq23dsad", {
-      algorithms: ["HS256"]
+    decoded = await jwt.verify(req.body.key, process.env.SECRET_KEY, {
+      algorithms: [process.env.HASH_ALGORITHM]
     });
     console.log(decoded.key, "name");
     doc = await users.findOne({ username: decoded.key.username });

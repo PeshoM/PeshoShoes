@@ -5,9 +5,13 @@ import { ProductContext } from "./Context.tsx";
 import "../styles/auth.css";
 
 const Auth = () => {
-  const { loginOrRegister, setLoginOrRegister, setAuthModal } = useContext(ProductContext);
+  const { loginOrRegister, setLoginOrRegister, setAuthModal } =
+    useContext(ProductContext);
   const [underline, setUnderline] = useState<string[]>(["", ""]);
 
+  function closeModal() {
+    document.body.classList.remove("modal-open");
+  }
 
   useEffect(() => {
     loginOrRegister
@@ -26,7 +30,15 @@ const Auth = () => {
   return (
     <div className="authentication-background">
       <div className="authentication-wrapper">
-        <button className="close-authentication-modal" onClick={() => setAuthModal(false)}>x</button>
+        <button
+          className="close-authentication-modal"
+    onClick={() => {
+      setAuthModal(false);
+      closeModal();
+    }}
+        >
+          x
+        </button>
         <div className="authentication-content-frame">
           <div className="authentication-options">
             <div

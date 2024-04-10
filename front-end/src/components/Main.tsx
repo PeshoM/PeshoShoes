@@ -8,7 +8,6 @@ import { useRef } from 'react';
 
 const Main = () => {
     const itemsRef = useRef<any>();
-
     return (
         <div>
             <Navigation />

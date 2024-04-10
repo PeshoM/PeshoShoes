@@ -1,6 +1,7 @@
 const products = require("../schemas/products.schema");
+import { Request, Response } from "express";
 
-const Post = async (req, res) => {
+const Post = async (req: Request, res: Response) => {
   const { title, color } = req.body;
   let newArr = [],
     arrRest = [];

@@ -11,6 +11,9 @@ const filteredDataRouter = require("./routers/filteredData.router");
 const fetchProductRouter = require("./routers/fetchProduct.router");
 const bodyParser = require("body-parser");
 
+import env from "dotenv";
+env.config();
+
 // server.use(bodyParser.json()); // get the body in the request
 server.use(express.json());
 server.use(cors({ origin: "*" })); // Policy -> Secure Policy which specifies our client, so others can't send requests ( DDOS )
@@ -25,14 +28,14 @@ server.use(filteredDataRouter);
 server.use(fetchProductRouter);
 
 server.use("/uploads", express.static("uploads"));
-
-mongoose.connect("mongodb://localhost:27017/PeshoShoes");
+process.env.DATABASE_CONNECTION &&
+  mongoose.connect(process.env.DATABASE_CONNECTION);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
 db.once("open", function () {
   ("Connected successfully");
 });
 
-server.listen(8000, () => {
-  console.log("Server is  on");
+server.listen(process.env.PORT, () => {
+  console.log("Server is  on", process.env.PORT);
 });

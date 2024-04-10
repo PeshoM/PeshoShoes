@@ -38,15 +38,16 @@ const Login = () => {
   };
 
   async function HandleSubmit(event) {
+    const url: string = process.env.REACT_APP_LOGIN_URL || "";
     event.preventDefault();
-    let response = await fetch("http://localhost:8000/login", {
+    let response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         //@ts-ignore
-        firstName: firstName.current.value,
+        email: email.current.value,
         //@ts-ignore
         password: password.current.value,
       }),

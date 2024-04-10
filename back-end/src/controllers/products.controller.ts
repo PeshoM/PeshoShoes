@@ -1,12 +1,25 @@
 const products = require("../schemas/products.schema");
-const multer = require("multer");
 const path = require("path");
+import { Response } from "express";
+import type { Request } from "express";
 
-const Post = async (req, res) => {
-  let colorVariations = [];
-  const sizesArr = [];
-  const quantityArr = [];
-  let imagesArr = [];
+interface ColorVariation {
+  images: string[];
+  price: number;
+  quantity: number[];
+  sizes: number[];
+  color: string;
+  rating?: number[];
+}
+interface RequestFiles extends Request {
+  files: Express.Multer.File[];
+}
+
+const Post = async (req: RequestFiles, res: Response) => {
+  let colorVariations: ColorVariation[] = [];
+  const sizesArr: number[][] = [];
+  const quantityArr: number[][] = [];
+  let imagesArr: string[][] = [];
 
   for (const key in req.body) {
     if (key.startsWith("sizes_")) {
@@ -50,14 +63,14 @@ const Post = async (req, res) => {
   }
   let variations = req.body.price.length;
   for (let i = 0; i < variations; i++) {
-    colorVariations[i] = {};
+    colorVariations[i] = {images: [], price: 0, quantity: [], sizes: [], color: ""};
     colorVariations[i]["images"] = imagesArr[i];
     colorVariations[i]["price"] = req.body.price[i];
     colorVariations[i]["quantity"] = quantityArr[i];
     colorVariations[i]["sizes"] = sizesArr[i];
     colorVariations[i]["color"] = req.body.color[i];
   }
-  
+
   const product = new products({
     title: req.body.title,
     description: req.body.description,
@@ -70,7 +83,7 @@ const Post = async (req, res) => {
   res.json({ message: "success" });
 };
 
-const Get = async (req, res) => {
+const Get = async (req: Request, res: Response) => {
   const doc = await products.find({});
   let prods = [],
     min = 0,

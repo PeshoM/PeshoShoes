@@ -32,12 +32,12 @@ const Navigation = () => {
     setSearchedProds,
     setLoginOrRegister,
     authModal,
-    setAuthModal
+    setAuthModal,
   } = useContext(ProductContext);
   const navigate = useNavigate();
   const [userIconHovered, setUserIconHovered] = useState<boolean>(false);
   const [showInputMenu, setShowInputMenu] = useState<boolean>(false);
-  
+  const imagepath: string = process.env.REACT_APP_PRODUCT_IMAGES_PATH || "";
 
   const handleHover = (setter: Function, index: number) => {
     setter((prev) => {
@@ -69,8 +69,8 @@ const Navigation = () => {
       return e.target.value;
     });
     console.log("typed:", lowerCase);
-
-    const response = await fetch("http://localhost:8000/searchInput", {
+    const url: string = process.env.REACT_APP_NAVIGATION_SEARCH_INPUT_URL || "";
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -120,7 +120,7 @@ const Navigation = () => {
   function closeModal() {
     document.body.classList.remove("modal-open");
   }
-  
+
   return (
     <div>
       <div className="Ultranav">
@@ -370,10 +370,7 @@ const Navigation = () => {
                             <div className="product" key={index}>
                               <img
                                 className="searchBarImages"
-                                src={
-                                  "http://localhost:8000/uploads/" +
-                                  colorVar.images[0]
-                                }
+                                src={imagepath + colorVar.images[0]}
                                 alt={product.title}
                               />
                               <p className="resTitles">{product.title}</p>

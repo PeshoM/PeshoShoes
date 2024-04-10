@@ -43,10 +43,10 @@ const CreateProd = () => {
   const [numOfColors, setNumOfColors] = useState<number[]>([]);
   const imagesRef = useRef<any>([]);
   const [imgFile, setImgFile] = useState<any>([]);
-
   useEffect(() => {
     const fetchData = async () => {
-      let response = await fetch("http://localhost:8000/role", {
+      const url: string = process.env.REACT_APP_DISPLAY_PROD_ROLE_URL || "";
+      let response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -108,7 +108,8 @@ const CreateProd = () => {
       }
     }
     // data.append("key", localStorage.getItem('auth_token'))
-    const response = await fetch("http://localhost:8000/products", {
+    const url: string = process.env.REACT_APP_PRODUCTS_URL || "";
+    const response = await fetch(url, {
       method: "POST",
       body: data,
     });

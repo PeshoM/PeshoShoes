@@ -2,12 +2,13 @@ import React, { useState, createContext, useEffect, useRef } from "react";
 
 //@ts-ignore
 const ProductContext = createContext({} as Product);
+const url: string = process.env.REACT_APP_PRODUCTS_URL || "";
 
 const Context = ({ children }) => {
-
   useEffect(() => {
+    
     const fetchData = async () => {
-      const response = await fetch("http://localhost:8000/products", {
+      const response = await fetch(url, {
         method: "GET",
       }).then((res) => {
         return res.json();

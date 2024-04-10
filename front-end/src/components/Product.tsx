@@ -35,11 +35,13 @@ const Product = () => {
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [imageIdx, setImageIdx] = useState<number>(-1);
   const [zoomed, setZoomed] = useState(false);
+  const imagepath: string = process.env.REACT_APP_PRODUCT_IMAGES_PATH || "";
 
   useEffect(() => {
     let fetchProduct = async () => {
+      const url: string = process.env.REACT_APP_PRODUCT_FETCH_PRODUCT_URL || "";
       console.log(searchParams.toString());
-      let response = await fetch("http://localhost:8000/fetchProduct", {
+      let response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -116,7 +118,7 @@ const Product = () => {
           </div>
             <img
               src={
-                "http://localhost:8000/uploads/" +
+                imagepath +
                 product?.colorVariations[0].images[imageIdx]
               }
               alt="Your Image"
@@ -152,7 +154,7 @@ const Product = () => {
               product.colorVariations[0].images.map((image, index) => (
                 <img
                   className={"product-images pic" + index}
-                  src={"http://localhost:8000/uploads/" + image}
+                  src={imagepath + image}
                   onClick={() => {
                     window.scrollTo({ top: 0, behavior: "smooth" });
                     setIsClicked(true);
@@ -245,7 +247,7 @@ const Product = () => {
                 <img
                   className="product-variation-images"
                   alt=""
-                  src={"http://localhost:8000/uploads/" + colorVar.images[2]}
+                  src={imagepath + colorVar.images[2]}
                 />
               </div>
             ))}

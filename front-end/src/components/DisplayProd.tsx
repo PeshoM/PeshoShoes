@@ -47,6 +47,7 @@ const DisplayProd = () => {
   const pickedColors = useRef<string[]>([]);
   const [selectedSeason, setSelectedSeason] = useState(null);
   const pickedSeasons = useRef<string[]>([]);
+  const imagepath: string = process.env.REACT_APP_PRODUCT_IMAGES_PATH || "";
 
   const handleStartChange = (e) => {
     const newStartValue = parseInt(e.target.value, 10);
@@ -64,7 +65,8 @@ const DisplayProd = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:8000/products", {
+      const url: string = process.env.REACT_APP_PRODUCTS_URL || "";
+      const response = await fetch(url, {
         method: "GET",
       }).then((res) => {
         return res.json();
@@ -103,7 +105,9 @@ const DisplayProd = () => {
       selectedColor,
       searchedProducts.current
     );
-    let response = await fetch("http://localhost:8000/filteredData", {
+    const url: string =
+      process.env.REACT_APP_DISPLAY_PROD_FILTERED_DATA_URL || "";
+    let response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -152,7 +156,7 @@ const DisplayProd = () => {
     console.log("seasons picked", pickedSeasons.current);
   };
   const handleClickProduct = (title: string, color: string) => {
-    const queryParams = { title, color};
+    const queryParams = { title, color };
     const searchParams = new URLSearchParams(queryParams);
     const url = `/Product?${searchParams.toString()}`;
     window.location.href = url;
@@ -317,12 +321,14 @@ const DisplayProd = () => {
                       <li className="a" key={index}>
                         <div
                           className="products"
-                          onClick={() => handleClickProduct(product.title, colorVar.color)}
+                          onClick={() =>
+                            handleClickProduct(product.title, colorVar.color)
+                          }
                         >
                           <img
                             className="displayed_images"
                             src={
-                              "http://localhost:8000/uploads/" +
+                              imagepath +
                               colorVar.images[0]
                             }
                             alt={product.title}

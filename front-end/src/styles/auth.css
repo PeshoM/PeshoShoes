@@ -1,20 +1,20 @@
 .authentication-wrapper {
-    background-color: #fff;
-    width: 40vw;
-    min-height: 80vh;
-    z-index: 3;
-    top: 50px;
-    left: 50%;
-    transform:translate(-50%,0);
-    position: absolute;
-    padding: 60px;
-    max-height: -webkit-fill-available;
+  background-color: #fff;
+  width: 500px;
+  min-height: 80vh;
+  z-index: 3;
+  top: 50px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  position: absolute;
+  padding: 60px;
+  max-height: -webkit-fill-available;
   overflow-y: scroll;
   -ms-overflow-style: none;
   /* Internet Explorer 10+ */
   scrollbar-width: none;
   /* Firefox */
-    border: solid #141414 1px;
+  border: solid #141414 1px;
 }
 
 .authentication-wrapper::-webkit-scrollbar {
@@ -23,42 +23,42 @@
 }
 
 .close-authentication-modal {
-    color: #141414;
-    width: 45px;
-    height: 45px;
-    font-size: 1.5rem;
-    font-weight: 500;
-    align-self: center;
-    position: absolute;
-    top: 10px;
-    right: 10px;
+  color: #141414;
+  width: 45px;
+  height: 45px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  align-self: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 .authentication-options {
-    display: flex;
-    margin-bottom: 60px;
+  display: flex;
+  margin-bottom: 60px;
 }
 
 .authentication-option {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
-    width: 100%;
-    color:#AAAAAA;
-    text-align: center;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    border-bottom: #AAAAAA 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 100%;
+  color: #aaaaaa;
+  text-align: center;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  border-bottom: #aaaaaa 2px solid;
 }
 
 .authentication-option:hover {
-    transition: 0.2s ease;
-    color: #141414;
-    cursor: pointer;
+  transition: 0.2s ease;
+  color: #141414;
+  cursor: pointer;
 }
 
 .authentication-option-underlined {
-    border-bottom: #141414 2px solid;
-    color: #141414;
+  border-bottom: #141414 2px solid;
+  color: #141414;
 }

@@ -3,9 +3,7 @@ import React from 'react';
 import Main from "./components/Main.tsx";
 import CreateProd from "./components/CreateProd.tsx";
 import DisplayProd from "./components/DisplayProd.tsx";
-import Register from "./components/Register.tsx";
 import NotFound from "./components/NotFound.tsx";
-import Login from "./components/Login.tsx";
 import { Context }from "./components/Context.tsx";
 import Product from "./components/Product.tsx";
 
@@ -15,8 +13,6 @@ function App() {
       <Context>
         <Routes>
           <Route path="/" element={<Main />}></Route>
-          <Route path="/Register" element={<Register />}></Route>
-          <Route path="/Login" element={<Login />}></Route>
           <Route path="/CreateProd" element={<CreateProd />}></Route>
           <Route path="/DisplayProd" element={<DisplayProd />}></Route>
           <Route path="/Product" element={<Product />}></Route>
