@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
-import Register from "./Register.tsx";
-import Login from "./Login.tsx";
+import Register from "./Register/Register.tsx";
+import Login from "./Login/Login.tsx";
 import { ProductContext } from "./Context.tsx";
 import "../styles/auth.css";
 

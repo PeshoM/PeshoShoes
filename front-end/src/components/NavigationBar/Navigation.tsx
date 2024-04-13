@@ -1,12 +1,26 @@
-import "../styles/navigation.css";
-import React, { useState, useEffect, useContext } from "react";
+import "../../styles/navigation.css";
+import React, { useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import categories from "../categories.js";
-import { ProductContext } from "./Context.tsx";
-import Auth from "./Auth.tsx";
+import categories from "../../categories.js";
+import { ProductContext } from "../Context.tsx";
+import Auth from "../Auth.tsx";
+import { useNavigation } from "./useNavigation.ts";
 
 const Navigation = () => {
   // console.log("hereeee");
+  let {
+    inputText,
+    setInputText,
+    getRegisteredUser,
+    handleUnderline,
+    handleLeaveUnderline,
+    handleChange,
+    handleSearch,
+    handleKeyDown,
+    handleHome,
+    openModal,
+    closeModal,
+  } = useNavigation();
   let location = useLocation();
   const [hovered, setHovered] = useState<string[]>([
     "",
@@ -19,107 +33,12 @@ const Navigation = () => {
     "",
   ]);
   const [isShown, setIsShown] = useState<number>(-1);
-  const [isShown1, setIsShown1] = useState<boolean>(false);
-  const [inputText, setInputText] = useState<string>("");
-  //@ts-ignore
-  const {
-    options,
-    setOption,
-    products,
-    setProduct,
-    allProducts,
-    searchedProds,
-    setSearchedProds,
-    setLoginOrRegister,
-    authModal,
-    setAuthModal,
-  } = useContext(ProductContext);
+  const { options, setLoginOrRegister, authModal, setAuthModal } =
+    useContext(ProductContext);
   const navigate = useNavigate();
   const [userIconHovered, setUserIconHovered] = useState<boolean>(false);
   const [showInputMenu, setShowInputMenu] = useState<boolean>(false);
   const imagepath: string = process.env.REACT_APP_PRODUCT_IMAGES_PATH || "";
-
-  const handleHover = (setter: Function, index: number) => {
-    setter((prev) => {
-      const arr = [...prev];
-      arr[index] = !arr[index];
-      return arr;
-    });
-  };
-
-  const handleUnderline = (setter, index) => {
-    setter((prev) => {
-      const arr = [...prev];
-      arr[index] = "_Hovered";
-      return arr;
-    });
-  };
-
-  const handleLeaveUnderline = (setter, index) => {
-    setter((prev) => {
-      const arr = [...prev];
-      arr[index] = "";
-      return arr;
-    });
-  };
-
-  let handleChange = async (e) => {
-    var lowerCase = e.target.value.toLowerCase();
-    setInputText(() => {
-      return e.target.value;
-    });
-    console.log("typed:", lowerCase);
-    const url: string = process.env.REACT_APP_NAVIGATION_SEARCH_INPUT_URL || "";
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        input: lowerCase,
-      }),
-    }).then((res) => {
-      return res.json();
-    });
-    setOption(response);
-    // console.log(options, response)
-  };
-
-  let handleSearch = async () => {
-    console.log("curr options", options);
-    options.length > 0
-      ? (() => {
-          setProduct(options);
-          setSearchedProds(options);
-        }).call(null)
-      : setProduct(allProducts);
-    // setProduct(response.results)
-  };
-
-  const handleKeyDown = async (event) => {
-    if (event.key === "Enter") {
-      options == "" || !options ? setProduct(allProducts) : handleSearch();
-      console.log(location.pathname);
-      setInputText("");
-      location.pathname != "/DisplayProd" && navigate("/DisplayProd");
-    }
-  };
-
-  const handleHome = () => {
-    return navigate("/");
-  };
-
-  useEffect(() => {
-    console.log("log", userIconHovered);
-  }, [userIconHovered]);
-
-  function openModal() {
-    document.body.classList.add("modal-open");
-  }
-
-  function closeModal() {
-    document.body.classList.remove("modal-open");
-  }
 
   return (
     <div>

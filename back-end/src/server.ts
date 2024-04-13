@@ -1,15 +1,15 @@
 import express from "express";
-const server = express();
 import mongoose from "mongoose";
-const cors = require("cors");
-const registerRouter = require("./routers/authentication/register.router");
-const loginRouter = require("./routers/authentication/login.router");
-const productsRouter = require("./routers/products.router");
-const roleRouter = require("./routers/role.router");
-const searchInputRouter = require("./routers/searchInput.router");
-const filteredDataRouter = require("./routers/filteredData.router");
-const fetchProductRouter = require("./routers/fetchProduct.router");
-const bodyParser = require("body-parser");
+import cors from 'cors';
+import registerRouter from "./routers/authentication/register.router";
+import loginRouter from "./routers/authentication/login.router";
+import productsRouter from "./routers/products.router";
+import roleRouter from "./routers/role.router";
+import searchInputRouter from "./routers/searchInput.router";
+import filteredDataRouter from "./routers/filteredData.router";
+import fetchProductRouter from "./routers/fetchProduct.router";
+import bodyParser from 'body-parser';
+const server = express();
 
 import env from "dotenv";
 env.config();

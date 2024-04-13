@@ -5,4 +5,4 @@ const registerController = require("../../controllers/authentication/register.co
 
 router.post("/register", registerController.Post);
 
-module.exports = router;
+export default router;

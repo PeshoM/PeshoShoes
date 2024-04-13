@@ -5,4 +5,4 @@ const loginController = require("../../controllers/authentication/login.controll
 
 router.post("/login", loginController.Post);
 
-module.exports = router;
+export default router;

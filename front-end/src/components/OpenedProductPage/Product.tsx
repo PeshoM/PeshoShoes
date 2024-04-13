@@ -1,13 +1,14 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import Navigation from "./Navigation.tsx";
-import Footer from "./Footer.tsx";
-import "../styles/product.css";
+import Navigation from "../NavigationBar/Navigation.tsx";
+import Footer from "../Footer.tsx";
+import "../../styles/product.css";
 import { useSearchParams } from "react-router-dom";
+import { useProduct } from "./useProduct.ts";
 
 const Product = () => {
+  const { product, setProduct, handleImageClick } = useProduct();
   const [searchParams] = useSearchParams();
-  const [product, setProduct] = useState<Prod>();
   const title = searchParams.get("title");
   const color = searchParams.get("color");
   let sizesArr: number[] = [
@@ -31,7 +32,6 @@ const Product = () => {
     season: string;
   }
   let leaveForNow: undefined = undefined;
-  const selectedSizes = useRef<number[]>();
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [imageIdx, setImageIdx] = useState<number>(-1);
   const [zoomed, setZoomed] = useState(false);
@@ -58,38 +58,6 @@ const Product = () => {
     };
     fetchProduct();
   }, []);
-
-  const handleImageClick = (idx: number) => {
-    let newArr: ColorVariation[] = [];
-    product && newArr.push(product.colorVariations[idx]);
-    product && product.colorVariations.splice(idx, 1);
-    console.log("newArr", newArr);
-    console.log("product", product);
-    if (product)
-      for (let i: number = 0; i < product?.colorVariations.length; i++) {
-        console.log(i);
-        newArr.push(product?.colorVariations[i]);
-      }
-    console.log("post pushing", newArr);
-    let obj = {};
-    obj["title"] = product?.title;
-    obj["description"] = product?.description;
-    obj["colorVariations"] = newArr;
-    obj["season"] = product?.season;
-    setSizesSet(new Set<number>(newArr[0].sizes));
-    console.log("set", sizesSet);
-
-    const queryParams = {
-      title: product?.title,
-      color: newArr[0].color,
-    };
-    //@ts-ignore
-    const searchParams = new URLSearchParams(queryParams);
-    const url = `/Product?${searchParams.toString()}`;
-    window.location.href = url;
-    //@ts-ignore
-    setProduct(obj);
-  };
 
   useEffect(() => {
     if (isClicked) {

@@ -83,6 +83,4 @@ const Post = async (req: Request, res: Response) => {
   res.json({ filteredData: arr });
 };
 
-module.exports = {
-  Post,
-};
+export default { Post }

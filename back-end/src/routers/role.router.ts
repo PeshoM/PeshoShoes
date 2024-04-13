@@ -1,9 +1,8 @@
 import express from "express";
 const router = express.Router();
-const users = require("../schemas/users.schema");
 const roleController = require("../controllers/role.controller");
-const handleAdminMiddleware = require("../middlewares/handeAdmin.middleware");
+import { handleAdminReq } from "../middlewares/handleAdmin.middleware";
+//@ts-ignore
+router.post("/role", handleAdminReq, roleController.Post);
 
-router.post("/role", handleAdminMiddleware.handleAdminReq, roleController.Post);
-
-module.exports = router;
+export default router;

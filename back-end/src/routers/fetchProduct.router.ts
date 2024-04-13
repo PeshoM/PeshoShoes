@@ -5,4 +5,4 @@ const fetchProductController = require("../controllers/fetchProduct.controller")
 
 router.post( "/fetchProduct", fetchProductController.Post);
 
-module.exports = router;
+export default router;

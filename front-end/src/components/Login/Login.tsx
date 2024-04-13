@@ -1,11 +1,12 @@
-import "../styles/login.css";
+import "../../styles/login.css";
 import React, { useRef, useState, useEffect, LegacyRef } from "react";
+import { useLogin } from "./useLogin.ts";
 
 const Login = () => {
+  const { isEmpty, handleEmptyField, HandleSubmit } = useLogin();
   const email = useRef<string>();
   const password = useRef<string>();
   const [emptyField, setEmptyField] = useState<string[]>(["valid", "valid"]);
-  const [isEmpty, setIsEmpty] = useState<boolean[]>([false, false]);
   let loginData: Array<{
     name: string;
     ref: LegacyRef<string | undefined>;
@@ -14,6 +15,7 @@ const Login = () => {
     { name: "Email", ref: email, type: "text" },
     { name: "Password", ref: password, type: "password" },
   ];
+
   useEffect(() => {
     setEmptyField((prev) => {
       const updatedEmptyField = [...prev]; // Create a copy of the previous state
@@ -28,36 +30,6 @@ const Login = () => {
       return updatedEmptyField; // Return the updated state
     });
   }, [isEmpty]);
-
-  const handleEmptyField = (field: string, idx: number) => {
-    setIsEmpty((prev) => {
-      const newEmpty = [...prev];
-      newEmpty[idx] = field == "";
-      return newEmpty;
-    });
-  };
-
-  async function HandleSubmit(event) {
-    const url: string = process.env.REACT_APP_LOGIN_URL || "";
-    event.preventDefault();
-    let response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        //@ts-ignore
-        email: email.current.value,
-        //@ts-ignore
-        password: password.current.value,
-      }),
-    });
-    response = await response.json();
-    console.log(response);
-    //@ts-ignore
-    localStorage.setItem("auth_token", response.token.token); // make an if incase the login is wrong
-    return false;
-  }
 
   return (
     <div>

@@ -2,7 +2,7 @@ import '../styles/main.css'
 //@ts-ignore
 import image from './collaborators.jpeg';
 import React from 'react';
-import Navigation from './Navigation.tsx';
+import Navigation from './NavigationBar/Navigation.tsx';
 import Footer from './Footer.tsx';
 import { useRef } from 'react';
 

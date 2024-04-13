@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from 'react';
 import Main from "./components/Main.tsx";
-import CreateProd from "./components/CreateProd.tsx";
-import DisplayProd from "./components/DisplayProd.tsx";
+import CreateProd from "./components/ProductCreation/CreateProd.tsx";
+import DisplayProd from "./components/DisplayProducts/DisplayProd.tsx";
 import NotFound from "./components/NotFound.tsx";
 import { Context }from "./components/Context.tsx";
-import Product from "./components/Product.tsx";
+import Product from "./components/OpenedProductPage/Product.tsx";
 
 function App() {
   return (

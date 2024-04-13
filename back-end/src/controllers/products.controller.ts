@@ -11,11 +11,8 @@ interface ColorVariation {
   color: string;
   rating?: number[];
 }
-interface RequestFiles extends Request {
-  files: Express.Multer.File[];
-}
 
-const Post = async (req: RequestFiles, res: Response) => {
+const Post = async (req: Request, res: Response) => {
   let colorVariations: ColorVariation[] = [];
   const sizesArr: number[][] = [];
   const quantityArr: number[][] = [];
@@ -44,18 +41,19 @@ const Post = async (req: RequestFiles, res: Response) => {
       quantityArr[rowIndex].push(parseInt(req.body[key]));
     }
   }
-  for (let i = 0; i < req.files.length; i++) {
+  for (let i = 0; i < (req?.files as Express.Multer.File[]).length; i++) {
+    //@ts-ignore
     const fieldName = req.files[i].fieldname;
 
     if (fieldName.startsWith("images_")) {
       const indices = fieldName.slice(7).split("_");
       const rowIndex = parseInt(indices[0]);
       const colIndex = parseInt(indices[1]);
-
+      
       if (!imagesArr[rowIndex]) {
         imagesArr[rowIndex] = [];
       }
-
+      //@ts-ignore
       const filename = req.files[i].filename;
 
       imagesArr[rowIndex][colIndex] = filename;
@@ -63,7 +61,13 @@ const Post = async (req: RequestFiles, res: Response) => {
   }
   let variations = req.body.price.length;
   for (let i = 0; i < variations; i++) {
-    colorVariations[i] = {images: [], price: 0, quantity: [], sizes: [], color: ""};
+    colorVariations[i] = {
+      images: [],
+      price: 0,
+      quantity: [],
+      sizes: [],
+      color: "",
+    };
     colorVariations[i]["images"] = imagesArr[i];
     colorVariations[i]["price"] = req.body.price[i];
     colorVariations[i]["quantity"] = quantityArr[i];
@@ -105,7 +109,4 @@ const Get = async (req: Request, res: Response) => {
   res.json({ products: prods, minVal: min, maxVal: max });
 };
 
-module.exports = {
-  Post,
-  Get,
-};
+export default { Post, Get}

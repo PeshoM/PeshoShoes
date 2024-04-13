@@ -1,26 +1,13 @@
-import "../styles/register.css";
-import {
-  useRef,
-  useEffect,
-  useState,
-  LegacyRef,
-  MutableRefObject,
-} from "react";
-import React from "react";
-
+import "../../styles/register.css";
+import React, { useRef, useEffect, useState, LegacyRef } from "react";
+import { useRegister } from "./useRegister.ts";
 const Register = () => {
+  const { isEmpty, HandleSubmit, handleEmptyField } = useRegister();
   const firstName = useRef<string>();
   const lastName = useRef<string>();
   const password = useRef<string>();
   const confirmPassword = useRef<string>();
   const email = useRef<string>();
-  const [isEmpty, setIsEmpty] = useState<boolean[]>([
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
   const [emptyField, setEmptyField] = useState<string[]>([
     "valid",
     "valid",
@@ -39,44 +26,10 @@ const Register = () => {
     { name: "Password", ref: password, type: "password" },
     { name: "Confirm Password", ref: confirmPassword, type: "password" },
   ];
-  async function HandleSubmit(event) {
-    // token: JWT(username) -> hash -> hashed_username
-    const url: string = process.env.REACT_APP_REGISTER_URL || "";
-    event.preventDefault();
-    let response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        //@ts-ignore
-        firstName: firstName.current.value,
-        //@ts-ignore
-        lastName: lastName.current.value,
-        //@ts-ignore
-        pass: password.current.value,
-        //@ts-ignore
-        email: email.current.value,
-        role: "user",
-      }),
-    });
-    response = await response.json();
-    //@ts-ignore
-    localStorage.setItem("auth_token", response.token);
-    return false;
-  }
-
-  const handleEmptyField = (field: string, idx: number) => {
-    setIsEmpty((prev) => {
-      const newEmpty = [...prev];
-      newEmpty[idx] = field == "";
-      return newEmpty;
-    });
-  };
 
   useEffect(() => {
     setEmptyField((prev) => {
-      const updatedEmptyField = [...prev]; // Create a copy of the previous state
+      const updatedEmptyField = [...prev];
       for (let i = 0; i < isEmpty.length; i++) {
         if (isEmpty[i]) {
           updatedEmptyField[i] = "invalid";
@@ -85,7 +38,7 @@ const Register = () => {
         }
       }
       console.log("Updated emptyField", updatedEmptyField);
-      return updatedEmptyField; // Return the updated state
+      return updatedEmptyField;
     });
   }, [isEmpty]);
   return (
@@ -98,7 +51,6 @@ const Register = () => {
       >
         <div className="register-main">
           <div className="register-container">
-            {/**naprei register i login-container za margin-bottom za da mahnesh texta  */}
             {registerData.map(
               (
                 field: {

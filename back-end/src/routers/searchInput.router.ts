@@ -5,4 +5,4 @@ const searchInputController = require("../controllers/searchInput.controller");
 
 router.post("/searchInput", searchInputController.Post);
 
-module.exports = router;
+export default router;

@@ -1,17 +1,3 @@
-// categories = [ [ [ { [ a:[{},{}], b[{},{}] ] } ] ] ]
-// category = [ [ { [ a:[{},{}], b[{},{}] ] } ] ]
-// miniCategory = [ { [ a:[{},{}], b[{},{}] ] } ]
-// miniCategory[idx] = { [ a:[{},{}], b[{},{}] ] }
-// miniCategory[idx].obj = [ a:[{}.{}]. b[{}.{}] ]
-// miniCategory[idx].obj[idx1] = a: [ {}, {} ]
-
-// categories = [ [ [ { [ a:[{},{}], b[{},{}] ] } ] ] ]
-// category = [ [ { [ a:[{},{}], b[{},{}] ] } ] ]
-// miniCategory = [ { [ a:[{},{}], b[{},{}] ] } ]
-// miniCategory[idx] = { [ a:[{},{}], b[{},{}] ] }
-// miniCategory[idx].obj = [ a:[{}.{}]. b[{}.{}] ]
-// miniCategory[idx].obj[idx1] = a: [ {}, {} ]
-
 let obj = [
   [
     {
