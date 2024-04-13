@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-const users = require("../../schemas/users.schema");
+import { User } from "../../schemas/users.schema";
 const jwt = require("jsonwebtoken");
 import env from "dotenv";
 
@@ -7,7 +7,7 @@ env.config();
 
 const Post = async (req: Request, res: Response) => {
   const secretKey: string = process.env.SECRET_KEY || "";
-  const user = new users({
+  const user = new User({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
@@ -25,6 +25,4 @@ const Post = async (req: Request, res: Response) => {
   res.json({ token });
 };
 
-module.exports = {
-  Post,
-};
+export default { Post };

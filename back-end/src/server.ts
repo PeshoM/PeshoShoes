@@ -8,10 +8,12 @@ import roleRouter from "./routers/role.router";
 import searchInputRouter from "./routers/searchInput.router";
 import filteredDataRouter from "./routers/filteredData.router";
 import fetchProductRouter from "./routers/fetchProduct.router";
+import getRegisteredUserRouter from "./routers/getRegisteredUser.router";
 import bodyParser from 'body-parser';
+import env from "dotenv";
+
 const server = express();
 
-import env from "dotenv";
 env.config();
 
 // server.use(bodyParser.json()); // get the body in the request
@@ -26,6 +28,7 @@ server.use(roleRouter);
 server.use(searchInputRouter);
 server.use(filteredDataRouter);
 server.use(fetchProductRouter);
+server.use(getRegisteredUserRouter);
 
 server.use("/uploads", express.static("uploads"));
 process.env.DATABASE_CONNECTION &&

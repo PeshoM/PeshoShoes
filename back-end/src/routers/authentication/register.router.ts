@@ -1,7 +1,7 @@
-import express from "express";
-const router = express.Router();
-const users = require("../../schemas/users.schema");
-const registerController = require("../../controllers/authentication/register.controller");
+import { Router } from "express";
+import registerController from "../../controllers/authentication/register.controller";
+
+const router: Router = Router();
 
 router.post("/register", registerController.Post);
 

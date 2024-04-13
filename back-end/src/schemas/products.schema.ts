@@ -6,7 +6,7 @@ import { Schema, model, Document } from "mongoose";
 //   sold: number;
 // }
 
-interface ColorVariation {
+export interface ColorVariation {
   images: string[];
   price: number;
   quantity: number[];
@@ -15,14 +15,14 @@ interface ColorVariation {
   rating?: number[];
 }
 
-export interface Product extends Document {
+export interface product extends Document {
   title: string;
   description: string;
   colorVariations: ColorVariation[];
   season: string;
 }
 
-const productSchema = new Schema<Product>({
+const productSchema = new Schema<product>({
   title: String,
   description: String,
   colorVariations: [
@@ -38,4 +38,4 @@ const productSchema = new Schema<Product>({
   season: String,
 });
 //need categories soon
-module.exports = model<Product>("products", productSchema);
+export const Product = model<product>("Product", productSchema);

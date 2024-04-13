@@ -1,7 +1,7 @@
-import express from "express";
-const router = express.Router();
-const products = require("../schemas/products.schema");
-const searchInputController = require("../controllers/searchInput.controller");
+import { Router } from "express";
+import searchInputController from "../controllers/searchInput.controller";
+
+const router: Router = Router();
 
 router.post("/searchInput", searchInputController.Post);
 

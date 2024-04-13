@@ -2,12 +2,7 @@ import "../../styles/register.css";
 import React, { useRef, useEffect, useState, LegacyRef } from "react";
 import { useRegister } from "./useRegister.ts";
 const Register = () => {
-  const { isEmpty, HandleSubmit, handleEmptyField } = useRegister();
-  const firstName = useRef<string>();
-  const lastName = useRef<string>();
-  const password = useRef<string>();
-  const confirmPassword = useRef<string>();
-  const email = useRef<string>();
+  const { firstName, lastName, email, password, confirmPassword, isEmpty, HandleSubmit, handleEmptyField } = useRegister();
   const [emptyField, setEmptyField] = useState<string[]>([
     "valid",
     "valid",

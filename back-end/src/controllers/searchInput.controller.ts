@@ -32,6 +32,4 @@ const Post = async (req: Request, res: Response) => {
   }
 };
 
-module.exports = {
-  Post,
-};
+export default { Post };

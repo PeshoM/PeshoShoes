@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import { Router } from "express";
 import productsController from "../controllers/products.controller";
 import upload from "../middlewares/handlePicUploads.middleware";
 

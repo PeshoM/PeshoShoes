@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
-const users = require("../../schemas/users.schema");
+import { User } from "../../schemas/users.schema";
 const jwt = require("jsonwebtoken");
 import env from "dotenv";
+
 env.config();
 
 const Post = async (req: Request, res: Response) => {
-  const user = await users.findOne({ username: req.body.username });
+  const user = await User.findOne({ username: req.body.username });
   if (user) {
     const result = req.body.password === user.password;
     if (result) {
@@ -27,6 +28,4 @@ const Post = async (req: Request, res: Response) => {
   res.status;
 };
 
-module.exports = {
-  Post,
-};
+export default { Post };

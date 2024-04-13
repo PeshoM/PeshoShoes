@@ -1,16 +1,5 @@
-const products = require("../schemas/products.schema");
-const path = require("path");
-import { Response } from "express";
-import type { Request } from "express";
-
-interface ColorVariation {
-  images: string[];
-  price: number;
-  quantity: number[];
-  sizes: number[];
-  color: string;
-  rating?: number[];
-}
+import { Product, ColorVariation } from "../schemas/products.schema";
+import { Request, Response } from "express";
 
 const Post = async (req: Request, res: Response) => {
   let colorVariations: ColorVariation[] = [];
@@ -75,7 +64,7 @@ const Post = async (req: Request, res: Response) => {
     colorVariations[i]["color"] = req.body.color[i];
   }
 
-  const product = new products({
+  const product = new Product({
     title: req.body.title,
     description: req.body.description,
     colorVariations,
@@ -88,7 +77,7 @@ const Post = async (req: Request, res: Response) => {
 };
 
 const Get = async (req: Request, res: Response) => {
-  const doc = await products.find({});
+  const doc = await Product.find({});
   let prods = [],
     min = 0,
     max = 0;

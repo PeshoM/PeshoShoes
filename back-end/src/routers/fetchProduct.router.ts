@@ -1,7 +1,7 @@
-import express from "express";
-const router = express.Router();
-const products = require("../schemas/products.schema");
-const fetchProductController = require("../controllers/fetchProduct.controller");
+import { Router } from "express";
+import fetchProductController from "../controllers/fetchProduct.controller";
+
+const router: Router = Router();
 
 router.post( "/fetchProduct", fetchProductController.Post);
 

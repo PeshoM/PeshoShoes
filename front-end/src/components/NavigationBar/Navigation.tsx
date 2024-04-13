@@ -1,5 +1,5 @@
 import "../../styles/navigation.css";
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import categories from "../../categories.js";
 import { ProductContext } from "../Context.tsx";
@@ -39,6 +39,12 @@ const Navigation = () => {
   const [userIconHovered, setUserIconHovered] = useState<boolean>(false);
   const [showInputMenu, setShowInputMenu] = useState<boolean>(false);
   const imagepath: string = process.env.REACT_APP_PRODUCT_IMAGES_PATH || "";
+
+  useEffect(() => {
+    console.log(localStorage.getItem("auth_token"));
+    //no register request was sent
+    getRegisteredUser(localStorage.getItem("auth_token"));
+  }, [])
 
   return (
     <div>

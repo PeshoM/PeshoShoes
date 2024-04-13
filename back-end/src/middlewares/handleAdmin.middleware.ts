@@ -31,4 +31,4 @@ const handleAdminReq = async (
   next();
 };
 
-export { handleAdminReq };
+export default handleAdminReq;

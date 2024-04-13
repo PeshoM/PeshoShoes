@@ -1,36 +1,20 @@
-const products = require("../schemas/products.schema");
+import { ColorVariation, product } from "../schemas/products.schema";
 import { Request, Response } from "express";
-
-interface ColorVariation {
-  images: string[];
-  price: number;
-  quantity: number[];
-  sizes: number[];
-  color: string;
-  rating?: number[];
-}
-
-interface Product {
-  title: string;
-  description: string;
-  colorVariations: ColorVariation[];
-  season: string;
-}
 
 type params = "sizes" | "color";
 
 const Post = async (req: Request, res: Response) => {
-  let products: Product[] = req.body.products,
+  let products: product[] = req.body.products,
     min: number = req.body.minPrice,
     max: number = req.body.maxPrice,
-    arr: Product[] = [],
+    arr: product[] = [],
     sizesSet = new Set(req.body.pickedSizes),
     colorsSet = new Set(req.body.pickedColor),
     seasonsSet = new Set(req.body.pickedSeason);
 
   console.log(products.length, "asd");
-  const filterArray = (set: Set<any>, arr: Product[], param: params) => {
-    let filteredArr: Product[] = [];
+  const filterArray = (set: Set<any>, arr: product[], param: params) => {
+    let filteredArr: product[] = [];
     let hashSet = new Set();
     if (set.size == 0) return arr;
     for (let i = 0; i < arr.length; i++) {
@@ -73,7 +57,7 @@ const Post = async (req: Request, res: Response) => {
           description: products[i].description,
           colorVariations: [colorVar],
           season: products[i].season,
-        });
+        } as product);
       } else continue;
     }
   }
@@ -83,4 +67,4 @@ const Post = async (req: Request, res: Response) => {
   res.json({ filteredData: arr });
 };
 
-export default { Post }
+export default { Post };

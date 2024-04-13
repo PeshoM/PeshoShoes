@@ -13,7 +13,7 @@ const useNavigation = () => {
   } = useContext(ProductContext);
   const navigate = useNavigate();
   
-  const getRegisteredUser = async (token: string | undefined) => {
+  const getRegisteredUser = async (token: string | null) => {
     const url: string =
       process.env.REACT_APP_NAVIGATION_GET_REGISTERED_USER_URL || "";
     const response = await fetch(url, {
@@ -22,7 +22,7 @@ const useNavigation = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        key: localStorage.getItem("auth_token"),
+        key: token,
       }),
     });
   };

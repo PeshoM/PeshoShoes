@@ -4,6 +4,7 @@ const useRegister = () => {
     const firstName = useRef<string>();
     const lastName = useRef<string>();
     const password = useRef<string>();
+    const confirmPassword = useRef<string>();
     const email = useRef<string>();
     const [isEmpty, setIsEmpty] = useState<boolean[]>([
       false,
@@ -49,6 +50,11 @@ const useRegister = () => {
 
     return {
         isEmpty,
+        firstName,
+        lastName,
+        password,
+        confirmPassword,
+        email,
         HandleSubmit,
         handleEmptyField
     }
