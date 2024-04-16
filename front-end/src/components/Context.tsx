@@ -1,12 +1,11 @@
-import React, { useState, createContext, useEffect, useRef } from "react";
+import React, { useState, createContext, useEffect } from "react";
 
 //@ts-ignore
-const ProductContext = createContext({} as Product);
+const ProductContext = createContext({} as any);
 const url: string = process.env.REACT_APP_PRODUCTS_URL || "";
 
 const Context = ({ children }) => {
   useEffect(() => {
-    
     const fetchData = async () => {
       const response = await fetch(url, {
         method: "GET",
@@ -38,12 +37,26 @@ const Context = ({ children }) => {
   const [products, setProduct] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [searchedProds, setSearchedProds] = useState<Product[]>([]);
-  const [currProd, setCurrProd] = useState<Product>(); 
+  const [currProd, setCurrProd] = useState<Product>();
   const [loginOrRegister, setLoginOrRegister] = useState<boolean>();
   const [authModal, setAuthModal] = useState<boolean>(false);
   // ("children", children);
   return (
-    <ProductContext.Provider value={{ options, setOption, products, setProduct, allProducts, searchedProds, setSearchedProds, loginOrRegister, setLoginOrRegister, authModal, setAuthModal }}>
+    <ProductContext.Provider
+      value={{
+        options,
+        setOption,
+        products,
+        setProduct,
+        allProducts,
+        searchedProds,
+        setSearchedProds,
+        loginOrRegister,
+        setLoginOrRegister,
+        authModal,
+        setAuthModal,
+      }}
+    >
       {children}
     </ProductContext.Provider>
   );

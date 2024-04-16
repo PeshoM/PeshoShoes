@@ -1,7 +1,7 @@
 import '../styles/notfound.css'
 import React from 'react';
 
-const NotFound = () => {
+const NotFound: React.FC = () => {
     return (
         <div>
             <div className="card w-96 bg-base-100 shadow-xl">

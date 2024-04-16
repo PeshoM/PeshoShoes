@@ -1,18 +1,23 @@
 import { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProductContext } from "../Context.tsx";
+import { user } from "../../../../back-end/src/schemas/users.schema.ts";
 const useNavigation = () => {
   let location = useLocation();
   const [inputText, setInputText] = useState<string>("");
+  const [registeredUser, setRegisteredUser] = useState<user | null>();
+  const [userIconHovered, setUserIconHovered] = useState<boolean>(false);
   const {
     options,
     setOption,
     setProduct,
     allProducts,
     setSearchedProds,
+    setLoginOrRegister,
+    setAuthModal,
   } = useContext(ProductContext);
   const navigate = useNavigate();
-  
+
   const getRegisteredUser = async (token: string | null) => {
     const url: string =
       process.env.REACT_APP_NAVIGATION_GET_REGISTERED_USER_URL || "";
@@ -24,7 +29,9 @@ const useNavigation = () => {
       body: JSON.stringify({
         key: token,
       }),
-    });
+    }).then((res) => res.json());
+    setRegisteredUser(() => response.registeredUser);
+    console.log(response.registeredUser);
   };
 
   const handleUnderline = (setter: Function, index: number) => {
@@ -97,8 +104,27 @@ const useNavigation = () => {
     document.body.classList.remove("modal-open");
   }
 
+  const handleOpenLogin = () => {
+    setUserIconHovered(false);
+    setAuthModal(true);
+    openModal();
+    setLoginOrRegister(true);
+  };
+
+  const handleOpenRegister = () => {
+    setUserIconHovered(false);
+    setAuthModal(true);
+    openModal();
+    setLoginOrRegister(false);
+  };
+
+  const handleLogOut = () => {
+    localStorage.removeItem("auto_token");
+    setRegisteredUser(null);
+  }
   return {
     inputText,
+    registeredUser,
     setInputText,
     getRegisteredUser,
     handleUnderline,
@@ -109,6 +135,9 @@ const useNavigation = () => {
     handleHome,
     openModal,
     closeModal,
+    handleOpenLogin,
+    handleOpenRegister,
+    handleLogOut
   };
 };
 

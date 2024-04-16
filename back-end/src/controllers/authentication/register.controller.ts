@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "../../schemas/users.schema";
+import { User, user } from "../../schemas/users.schema";
 const jwt = require("jsonwebtoken");
 import env from "dotenv";
 

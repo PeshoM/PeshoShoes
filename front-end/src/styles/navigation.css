@@ -248,9 +248,10 @@ li a {
 }
 
 .userHoverMenu {
-  border: solid rgb(169, 169, 169) 2px;
-  width: 80%;
+  border: solid rgb(169, 169, 169) 1px;
+  width: 90%;
   height: 280px;
+  max-height: 320px;
   top: -22px;
   right: 0;
   z-index: 3;
@@ -258,7 +259,7 @@ li a {
   position: absolute;
   display: flex;
   flex-direction: column;
-  color: #5A5A5A
+  color: #5a5a5a;
 }
 
 .register-login-container {
@@ -287,7 +288,7 @@ li a {
 
 .login-button:hover {
   transition: 0.15s ease;
-  background-color: #2F2F2F;
+  background-color: #2f2f2f;
 }
 
 .register-text-paragraph {
@@ -307,19 +308,19 @@ li a {
 
 .personalized-option-div {
   width: 100%;
-  height:25%;
+  height: 25%;
   cursor: pointer;
 }
 
 .personalized-option {
-  width: 100%; 
+  width: 100%;
   height: 100%;
   margin-bottom: 5px;
   margin-inline: 15px;
 }
 
-.personalized-option-div:hover{
-  background-color: rgb(108, 108, 108, 0.2)
+.personalized-option-div:hover {
+  background-color: rgb(108, 108, 108, 0.2);
 }
 
 body.modal-open {
@@ -327,11 +328,45 @@ body.modal-open {
 }
 
 .authentication-modal-container {
-  background-color: #000000CC;
-    position: absolute;
+  background-color: #000000cc;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 2;
+}
+
+.authorized-user-name-container {
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  border-bottom: solid rgb(169, 169, 169) 2px;
+  height: 20%;
+  width: 100%;
+  p span {
+    font-size: 1.4rem;
+    display: inline-block;
+    width: 80%;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
+}
+
+.registered-log-out-button {
+  border-top: solid rgb(169, 169, 169) 2px;
+  width: 100%;
+  height: 15%;
+  bottom: 5px;
+  display: flex;
+  align-items: center;
+  padding: 0px 5px;
+  p {
+    margin: 5px 15px;
+  }
+}
+
+.registered-log-out-button:hover {
+  background-color: rgb(108, 108, 108, 0.2);
 }

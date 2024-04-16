@@ -2,7 +2,7 @@ import "../../styles/login.css";
 import React, { useRef, useState, useEffect, LegacyRef } from "react";
 import { useLogin } from "./useLogin.ts";
 
-const Login = () => {
+const Login: React.FC = () => {
   const { isEmpty, handleEmptyField, HandleSubmit } = useLogin();
   const email = useRef<string>();
   const password = useRef<string>();

@@ -1,9 +1,9 @@
 import "../../styles/register.css";
-import React, { useRef, useEffect, useState, LegacyRef } from "react";
+import React, { useEffect, useState, LegacyRef } from "react";
 import { useRegister } from "./useRegister.ts";
-const Register = () => {
-  const { firstName, lastName, email, password, confirmPassword, isEmpty, HandleSubmit, handleEmptyField } = useRegister();
-  const [emptyField, setEmptyField] = useState<string[]>([
+const Register: React.FC = () => {
+  const { firstName, lastName, email, password, confirmPassword, isEmpty, isTooLong, isValidEmail, passwordTooShort, HandleSubmit, handleIncorrectField } = useRegister();
+  const [incorrectField, setIncorrectField] = useState<string[]>([
     "valid",
     "valid",
     "valid",
@@ -23,17 +23,18 @@ const Register = () => {
   ];
 
   useEffect(() => {
-    setEmptyField((prev) => {
-      const updatedEmptyField = [...prev];
+    setIncorrectField((prev) => {
+      const updatedIncorrectField = [...prev];
       for (let i = 0; i < isEmpty.length; i++) {
-        if (isEmpty[i]) {
-          updatedEmptyField[i] = "invalid";
+        if (isEmpty[i] || isTooLong[i] || (i == 2 && !isValidEmail) || (i >= 3 && passwordTooShort[i-3])) {
+          updatedIncorrectField[i] = "invalid";
         } else {
-          updatedEmptyField[i] = "valid";
+          updatedIncorrectField[i] = "valid";
         }
+        
       }
-      console.log("Updated emptyField", updatedEmptyField);
-      return updatedEmptyField;
+      console.log("Updated incorrectField", updatedIncorrectField);
+      return updatedIncorrectField;
     });
   }, [isEmpty]);
   return (
@@ -60,17 +61,32 @@ const Register = () => {
                   <input
                     ref={field.ref as LegacyRef<HTMLInputElement>}
                     type={field.type}
-                    className={"register-fields-" + emptyField[index]}
+                    className={"register-fields-" + incorrectField[index]}
                     onBlur={() => {
                       (field.ref! as any).current &&
-                        handleEmptyField(
+                        handleIncorrectField(
                           (field.ref! as any).current.value,
                           index
                         );
                     }}
                   />
-                  {emptyField[index] == "invalid" && (
+                  {isEmpty[index] && (
                     <label className="invalid-field">Field is required</label>
+                  )}
+                  {isTooLong[index] && (
+                    <label className="invalid-field">
+                      Maximum is 32 characters
+                    </label>
+                  )}
+                  {!isValidEmail && !isEmpty[index] && index == 2 && (
+                    <label className="invalid-field">
+                      Please enter a valid email address
+                    </label>
+                  )}
+                  {passwordTooShort[index-3] && index >= 3 && !isEmpty[index] && (
+                    <label className="invalid-field">
+                      Minimum is 5 characters
+                    </label>
                   )}
                 </div>
               )

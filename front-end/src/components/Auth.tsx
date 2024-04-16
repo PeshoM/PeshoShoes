@@ -4,7 +4,7 @@ import Login from "./Login/Login.tsx";
 import { ProductContext } from "./Context.tsx";
 import "../styles/auth.css";
 
-const Auth = () => {
+const Auth: React.FC = () => {
   const { loginOrRegister, setLoginOrRegister, setAuthModal } =
     useContext(ProductContext);
   const [underline, setUnderline] = useState<string[]>(["", ""]);
@@ -32,10 +32,10 @@ const Auth = () => {
       <div className="authentication-wrapper">
         <button
           className="close-authentication-modal"
-    onClick={() => {
-      setAuthModal(false);
-      closeModal();
-    }}
+          onClick={() => {
+            setAuthModal(false);
+            closeModal();
+          }}
         >
           x
         </button>

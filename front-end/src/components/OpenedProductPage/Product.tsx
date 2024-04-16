@@ -5,17 +5,14 @@ import Footer from "../Footer.tsx";
 import "../../styles/product.css";
 import { useSearchParams } from "react-router-dom";
 import { useProduct } from "./useProduct.ts";
+import Dropdown from "../Dropdown.tsx";
 
-const Product = () => {
+const Product: React.FC = () => {
   const { product, setProduct, handleImageClick } = useProduct();
   const [searchParams] = useSearchParams();
   const title = searchParams.get("title");
   const color = searchParams.get("color");
-  let sizesArr: number[] = [
-    34, 34.5, 35, 35.5, 36, 36.5, 37, 37.5, 38, 38.5, 39, 39.5, 40, 40.5, 41,
-    41.5, 42, 42.5, 43, 43.5, 44, 44.5, 45, 45.5, 46, 46.5, 47, 47.5, 48, 48.5,
-    49,
-  ];
+
   const [sizesSet, setSizesSet] = useState<Set<number>>(new Set<number>());
   interface ColorVariation {
     images: string[];
@@ -76,30 +73,25 @@ const Product = () => {
         <div className="picture-modal-background">
           <div
             className="picture-modal-btn"
-            onClick={() =>{
-              imageIdx > 0 ? setImageIdx(imageIdx - 1) : setImageIdx(5)
+            onClick={() => {
+              imageIdx > 0 ? setImageIdx(imageIdx - 1) : setImageIdx(5);
               setZoomed(false);
-            }
-            }
+            }}
           >
             {"<"}
           </div>
-            <img
-              src={
-                imagepath +
-                product?.colorVariations[0].images[imageIdx]
-              }
-              alt="Your Image"
-              className={`modal-picture ${zoomed ? 'zoomed' : ''}`}
-              onClick={() => setZoomed(!zoomed)}
-            />
+          <img
+            src={imagepath + product?.colorVariations[0].images[imageIdx]}
+            alt="Your Image"
+            className={`modal-picture ${zoomed ? "zoomed" : ""}`}
+            onClick={() => setZoomed(!zoomed)}
+          />
           <div
             className="picture-modal-btn"
-            onClick={() =>{
-              imageIdx <= 4 ? setImageIdx(imageIdx + 1) : setImageIdx(0)
+            onClick={() => {
+              imageIdx <= 4 ? setImageIdx(imageIdx + 1) : setImageIdx(0);
               setZoomed(false);
-            }
-            }
+            }}
           >
             {">"}
           </div>
@@ -177,27 +169,7 @@ const Product = () => {
                 tabIndex={0}
                 className="collapse collapse-arrow border border-base-250 bg-base-200"
               >
-                <div className="collapse-title text-xl font-medium">Sizes</div>
-                <div className="collapse-content">
-                  {sizesArr.map((size, index) => (
-                    <>
-                      {sizesSet.has(size) ? (
-                        <div className="paragraph-container">
-                          <p className="sizes-paragraph">
-                            <div className="sizes-nums">{size}</div>
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="paragraph-container paragraph-container-out-of-stock">
-                          <p className="sizes-paragraph sizes-out-of-stock">
-                            <div className="sizes-nums">{size}</div>{" "}
-                            <span className="sold-out">Sold out</span>
-                          </p>
-                        </div>
-                      )}
-                    </>
-                  ))}
-                </div>
+                <Dropdown></Dropdown>
               </div>
             </div>
           </div>

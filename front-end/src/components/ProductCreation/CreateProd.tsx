@@ -3,7 +3,7 @@ import React from "react";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateProd } from "./useCreateProd.ts"
-const CreateProd = () => {
+const CreateProd: React.FC = () => {
   const {
     pickedColor,
     numOfColors,
@@ -65,7 +65,6 @@ const CreateProd = () => {
     fetchData();
   }, []);
 
-  
   return (
     <div>
       <div className="card card-compact w-96 bg-base-100 shadow-xl">

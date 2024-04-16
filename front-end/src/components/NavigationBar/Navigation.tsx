@@ -6,10 +6,11 @@ import { ProductContext } from "../Context.tsx";
 import Auth from "../Auth.tsx";
 import { useNavigation } from "./useNavigation.ts";
 
-const Navigation = () => {
+const Navigation: React.FC = () => {
   // console.log("hereeee");
   let {
     inputText,
+    registeredUser,
     setInputText,
     getRegisteredUser,
     handleUnderline,
@@ -20,7 +21,11 @@ const Navigation = () => {
     handleHome,
     openModal,
     closeModal,
+    handleOpenLogin,
+    handleOpenRegister,
+    handleLogOut,
   } = useNavigation();
+  //2 funcs above do not work bc of useContext Product type
   let location = useLocation();
   const [hovered, setHovered] = useState<string[]>([
     "",
@@ -39,12 +44,24 @@ const Navigation = () => {
   const [userIconHovered, setUserIconHovered] = useState<boolean>(false);
   const [showInputMenu, setShowInputMenu] = useState<boolean>(false);
   const imagepath: string = process.env.REACT_APP_PRODUCT_IMAGES_PATH || "";
-
+  let userOptionsArr: string[] = [
+    "My account",
+    "My orders",
+    "Discount codes",
+    "My benefits",
+  ];
+  let navBarOptionsArr: string[] = [
+    "New arrivals",
+    "Shoes",
+    "Clothing",
+    "Accessories",
+    "Brands",
+    "Sale",
+  ];
   useEffect(() => {
     console.log(localStorage.getItem("auth_token"));
-    //no register request was sent
     getRegisteredUser(localStorage.getItem("auth_token"));
-  }, [])
+  }, []);
 
   return (
     <div>
@@ -82,11 +99,7 @@ const Navigation = () => {
           </div>
           <div className="nav_icons">
             <button
-              onClick={() => {
-                setLoginOrRegister(true);
-                openModal();
-                setAuthModal(true);
-              }}
+              onClick={() => !registeredUser && handleOpenLogin()}
               onMouseOver={() => setUserIconHovered(true)}
               onMouseLeave={() => setUserIconHovered(false)}
               className="UserIcon_userButton"
@@ -104,91 +117,22 @@ const Navigation = () => {
         </div>
         <div className="navigation navbar">
           <ul className="nav_left">
-            <li
-              className={"MainItem_mainItem" + hovered[0]}
-              onMouseEnter={() => {
-                ("here on mouse enter");
-                setIsShown(0);
-                handleUnderline(setHovered, 0);
-              }}
-              onMouseLeave={() => {
-                handleLeaveUnderline(setHovered, 0);
-              }}
-            >
-              <a href="" className="MainItem_mainLink">
-                New arrivals
-              </a>
-            </li>
-            <li
-              className={"MainItem_mainItem" + hovered[1]}
-              onMouseEnter={() => {
-                setIsShown(1);
-                handleUnderline(setHovered, 1);
-              }}
-              onMouseLeave={() => {
-                handleLeaveUnderline(setHovered, 1);
-              }}
-            >
-              <a href="" className="MainItem_mainLink">
-                Shoes
-              </a>
-            </li>
-            <li
-              className={"MainItem_mainItem" + hovered[2]}
-              onMouseEnter={() => {
-                setIsShown(2);
-                handleUnderline(setHovered, 2);
-              }}
-              onMouseLeave={() => {
-                handleLeaveUnderline(setHovered, 2);
-              }}
-            >
-              <a href="" className="MainItem_mainLink">
-                Clothing
-              </a>
-            </li>
-            <li
-              className={"MainItem_mainItem" + hovered[3]}
-              onMouseEnter={() => {
-                setIsShown(3);
-                handleUnderline(setHovered, 3);
-              }}
-              onMouseLeave={() => {
-                handleLeaveUnderline(setHovered, 3);
-              }}
-            >
-              <a href="" className="MainItem_mainLink">
-                Accessories
-              </a>
-            </li>
-            <li
-              className={"MainItem_mainItem" + hovered[4]}
-              onMouseEnter={() => {
-                setIsShown(4);
-                handleUnderline(setHovered, 4);
-              }}
-              onMouseLeave={() => {
-                handleLeaveUnderline(setHovered, 4);
-              }}
-            >
-              <a href="" className="MainItem_mainLink">
-                Brands
-              </a>
-            </li>
-            <li
-              className={"MainItem_mainItem" + hovered[5]}
-              onMouseEnter={() => {
-                setIsShown(5);
-                handleUnderline(setHovered, 5);
-              }}
-              onMouseLeave={() => {
-                handleLeaveUnderline(setHovered, 5);
-              }}
-            >
-              <a href="" className="MainItem_mainLink">
-                Sale
-              </a>
-            </li>
+            {navBarOptionsArr.map((navBarOption: string, idx: number) => (
+              <li
+                className={"MainItem_mainItem" + hovered[idx]}
+                onMouseEnter={() => {
+                  setIsShown(idx);
+                  handleUnderline(setHovered, idx);
+                }}
+                onMouseLeave={() => {
+                  handleLeaveUnderline(setHovered, idx);
+                }}
+              >
+                <a href="" className="MainItem_mainLink">
+                  {navBarOption}
+                </a>
+              </li>
+            ))}
           </ul>
           <div className="nav_right">
             {userIconHovered && (
@@ -196,63 +140,54 @@ const Navigation = () => {
                 className="userHoverMenu"
                 onMouseOver={() => setUserIconHovered(true)}
                 onMouseLeave={() => setUserIconHovered(false)}
-                onClick={() => {
-                  setAuthModal(true);
-                  setUserIconHovered(false);
-                  openModal();
-                }}
               >
-                <div className="register-login-container">
-                  <button
-                    className="login-button"
-                    onClick={() => {
-                      setAuthModal(true);
-                      setUserIconHovered(false);
-                      openModal();
-                      setLoginOrRegister(true);
-                    }}
-                  >
-                    LOG IN
-                  </button>
-                  <div className="register-text-paragraph">
-                    <span>New customer?</span>
+                {registeredUser ? (
+                  <div className="authorized-user-name-container">
+                    <p>
+                      <span>
+                        {registeredUser.firstName +
+                          " " +
+                          registeredUser!.lastName}
+                      </span>
+                    </p>
+                  </div>
+                ) : (
+                  <div className="register-login-container">
                     <button
-                      className="register-button"
-                      onClick={() => {
-                        setAuthModal(true);
-                        setLoginOrRegister(false);
-                      }}
+                      className="login-button"
+                      onClick={() => handleOpenLogin()}
                     >
-                      Register
+                      LOG IN
                     </button>
+                    <div className="register-text-paragraph">
+                      <span>New customer?</span>
+                      <button
+                        className="register-button"
+                        onClick={() => handleOpenRegister()}
+                      >
+                        Register
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className="personal-options-container">
-                  <div
-                    className="personalized-option-div"
-                    onClick={setLoginOrRegister(true)}
-                  >
-                    <div className="personalized-option">My accout</div>
-                  </div>
-                  <div
-                    className="personalized-option-div"
-                    onClick={setLoginOrRegister(true)}
-                  >
-                    <div className="personalized-option">My orders</div>
-                  </div>
-                  <div
-                    className="personalized-option-div"
-                    onClick={setLoginOrRegister(true)}
-                  >
-                    <div className="personalized-option">Discount codes</div>
-                  </div>
-                  <div
-                    className="personalized-option-div"
-                    onClick={setLoginOrRegister(true)}
-                  >
-                    <div className="personalized-option">My benefits</div>
-                  </div>
+                  {userOptionsArr.map((option: string, index: number) => (
+                    <div
+                      className="personalized-option-div"
+                      onClick={() => !registeredUser && handleOpenLogin()}
+                    >
+                      <div className="personalized-option">{option}</div>
+                    </div>
+                  ))}
                 </div>
+                {registeredUser && (
+                  <div
+                    className="registered-log-out-button"
+                    onClick={() => handleLogOut()}
+                  >
+                    <p>Log out</p>
+                  </div>
+                )}
               </div>
             )}
             <div className="wrap">
