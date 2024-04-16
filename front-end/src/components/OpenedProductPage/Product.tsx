@@ -32,11 +32,11 @@ const Product: React.FC = () => {
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [imageIdx, setImageIdx] = useState<number>(-1);
   const [zoomed, setZoomed] = useState(false);
-  const imagepath: string = process.env.REACT_APP_PRODUCT_IMAGES_PATH || "";
+  const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
 
   useEffect(() => {
     let fetchProduct = async () => {
-      const url: string = process.env.REACT_APP_PRODUCT_FETCH_PRODUCT_URL || "";
+      const url: string = process.env.REACT_APP_URL + "/fetchProduct";
       console.log(searchParams.toString());
       let response = await fetch(url, {
         method: "POST",

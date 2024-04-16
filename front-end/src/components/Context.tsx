@@ -1,4 +1,5 @@
 import React, { useState, createContext, useEffect } from "react";
+import { user } from "../../../back-end/src/schemas/users.schema";
 
 //@ts-ignore
 const ProductContext = createContext({} as any);
@@ -40,6 +41,7 @@ const Context = ({ children }) => {
   const [currProd, setCurrProd] = useState<Product>();
   const [loginOrRegister, setLoginOrRegister] = useState<boolean>();
   const [authModal, setAuthModal] = useState<boolean>(false);
+  const [registeredUser, setRegisteredUser] = useState<user | null>();
   // ("children", children);
   return (
     <ProductContext.Provider
@@ -55,6 +57,8 @@ const Context = ({ children }) => {
         setLoginOrRegister,
         authModal,
         setAuthModal,
+        registeredUser,
+        setRegisteredUser
       }}
     >
       {children}

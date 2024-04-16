@@ -2,21 +2,24 @@ import "../../styles/createprod.css";
 import React from "react";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCreateProd } from "./useCreateProd.ts"
+import { useCreateProd } from "./useCreateProd.ts";
 const CreateProd: React.FC = () => {
   const {
+    title,
+    description,
     pickedColor,
     numOfColors,
+    pickedQuantity,
+    selectedSeason,
+    imagesRef,
+    setPickedQuantity,
     HandleRequest,
     updateSizeOptions,
     handleColorChange,
     handleColorVar,
     handleImageChanges,
   } = useCreateProd();
-  const title = useRef<string>();
-  const description = useRef<string>();
   const [pickedPrice, setPickedPrice] = useState<number[]>([]);
-  const [pickedQuantity, setPickedQuantity] = useState<number[][]>([]);
   let sizesArr: number[] = [
     34, 34.5, 35, 35.5, 36, 36.5, 37, 37.5, 38, 38.5, 39, 39.5, 40, 40.5, 41,
     41.5, 42, 42.5, 43, 43.5, 44, 44.5, 45, 45.5, 46, 46.5, 47, 47.5, 48, 48.5,
@@ -41,14 +44,12 @@ const CreateProd: React.FC = () => {
     { color: "White", class: "whiteclass" },
     { color: "Yellow", class: "yellowclass" },
   ];
-  const selectedSeason = useRef<string[]>();
   const selectedCategory = useRef<string[]>();
   const navigate = useNavigate();
-  const imagesRef = useRef<any>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const url: string = process.env.REACT_APP_DISPLAY_PROD_ROLE_URL || "";
+      const url: string = process.env.REACT_APP_URL + "/role";
       const response = await fetch(url, {
         method: "POST",
         headers: {

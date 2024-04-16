@@ -1,15 +1,30 @@
 import "../../styles/login.css";
-import React, { useRef, useState, useEffect, LegacyRef } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  LegacyRef,
+  MutableRefObject,
+} from "react";
 import { useLogin } from "./useLogin.ts";
 
 const Login: React.FC = () => {
-  const { isEmpty, handleEmptyField, HandleSubmit } = useLogin();
-  const email = useRef<string>();
-  const password = useRef<string>();
-  const [emptyField, setEmptyField] = useState<string[]>(["valid", "valid"]);
+  const {
+    password,
+    email,
+    isEmpty,
+    isValidEmail,
+    passwordTooShort,
+    handleIncorrectField,
+    HandleSubmit,
+  } = useLogin();
+  const [incorrectField, setIncorrectField] = useState<string[]>([
+    "valid",
+    "valid",
+  ]);
   let loginData: Array<{
     name: string;
-    ref: LegacyRef<string | undefined>;
+    ref: MutableRefObject<HTMLInputElement | undefined>;
     type: string;
   }> = [
     { name: "Email", ref: email, type: "text" },
@@ -17,17 +32,21 @@ const Login: React.FC = () => {
   ];
 
   useEffect(() => {
-    setEmptyField((prev) => {
-      const updatedEmptyField = [...prev]; // Create a copy of the previous state
+    setIncorrectField((prev) => {
+      const updatedIncorrectField = [...prev];
       for (let i = 0; i < isEmpty.length; i++) {
-        if (isEmpty[i]) {
-          updatedEmptyField[i] = "invalid";
+        if (
+          isEmpty[i] ||
+          (i == 0 && !isValidEmail) ||
+          (i == 1 && passwordTooShort)
+        ) {
+          updatedIncorrectField[i] = "invalid";
         } else {
-          updatedEmptyField[i] = "valid";
+          updatedIncorrectField[i] = "valid";
         }
       }
-      console.log("Updated emptyField", updatedEmptyField);
-      return updatedEmptyField; // Return the updated state
+      console.log("Updated incorrectField", updatedIncorrectField);
+      return updatedIncorrectField;
     });
   }, [isEmpty]);
 
@@ -45,7 +64,7 @@ const Login: React.FC = () => {
               (
                 field: {
                   name: string;
-                  ref: LegacyRef<string | undefined>;
+                  ref: MutableRefObject<HTMLInputElement | undefined>;
                   type: string;
                 },
                 index: number
@@ -55,17 +74,27 @@ const Login: React.FC = () => {
                   <input
                     ref={field.ref as LegacyRef<HTMLInputElement>}
                     type={field.type}
-                    className={"register-fields-" + emptyField[index]}
+                    className={"register-fields-" + incorrectField[index]}
                     onBlur={() => {
                       (field.ref! as any).current &&
-                        handleEmptyField(
+                        handleIncorrectField(
                           (field.ref! as any).current.value,
                           index
                         );
                     }}
                   />
-                  {emptyField[index] == "invalid" && (
+                  {isEmpty[index] && (
                     <label className="invalid-field">Field is required</label>
+                  )}
+                  {!isValidEmail && !isEmpty[index] && index == 0 && (
+                    <label className="invalid-field">
+                      Please enter a valid email address
+                    </label>
+                  )}
+                  {passwordTooShort && index >= 1 && !isEmpty[index] && (
+                    <label className="invalid-field">
+                      Minimum is 5 characters
+                    </label>
                   )}
                 </div>
               )

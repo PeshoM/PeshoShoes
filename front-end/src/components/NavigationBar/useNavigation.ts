@@ -5,7 +5,6 @@ import { user } from "../../../../back-end/src/schemas/users.schema.ts";
 const useNavigation = () => {
   let location = useLocation();
   const [inputText, setInputText] = useState<string>("");
-  const [registeredUser, setRegisteredUser] = useState<user | null>();
   const [userIconHovered, setUserIconHovered] = useState<boolean>(false);
   const {
     options,
@@ -15,12 +14,13 @@ const useNavigation = () => {
     setSearchedProds,
     setLoginOrRegister,
     setAuthModal,
+    registeredUser,
+    setRegisteredUser,
   } = useContext(ProductContext);
   const navigate = useNavigate();
 
   const getRegisteredUser = async (token: string | null) => {
-    const url: string =
-      process.env.REACT_APP_NAVIGATION_GET_REGISTERED_USER_URL || "";
+    const url: string = process.env.REACT_APP_URL + "/getRegisteredUser";
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -30,7 +30,8 @@ const useNavigation = () => {
         key: token,
       }),
     }).then((res) => res.json());
-    setRegisteredUser(() => response.registeredUser);
+    console.log("registeredUser", response);
+    response.registeredUser && setRegisteredUser(() => response.registeredUser);
     console.log(response.registeredUser);
   };
 
@@ -56,7 +57,7 @@ const useNavigation = () => {
       return e.target.value;
     });
     console.log("typed:", lowerCase);
-    const url: string = process.env.REACT_APP_NAVIGATION_SEARCH_INPUT_URL || "";
+    const url: string = process.env.REACT_APP_URL + "/searchInput";
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -69,7 +70,6 @@ const useNavigation = () => {
       return res.json();
     });
     setOption(response);
-    // console.log(options, response)
   };
 
   let handleSearch = async () => {
@@ -119,14 +119,13 @@ const useNavigation = () => {
   };
 
   const handleLogOut = () => {
-    localStorage.removeItem("auto_token");
+    localStorage.setItem("auth_token", "");
     setRegisteredUser(null);
-  }
+  };
+
   return {
     inputText,
-    registeredUser,
     setInputText,
-    getRegisteredUser,
     handleUnderline,
     handleLeaveUnderline,
     handleChange,
@@ -137,7 +136,8 @@ const useNavigation = () => {
     closeModal,
     handleOpenLogin,
     handleOpenRegister,
-    handleLogOut
+    handleLogOut,
+    getRegisteredUser,
   };
 };
 

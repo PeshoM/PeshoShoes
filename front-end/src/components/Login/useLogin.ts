@@ -1,44 +1,71 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
+import { ProductContext } from "../Context.tsx";
+import { useNavigation } from "../NavigationBar/useNavigation.ts";
 
 const useLogin = () => {
-    const email = useRef<string>();
-    const password = useRef<string>();
-    const [isEmpty, setIsEmpty] = useState<boolean[]>([false, false]);
-    
-    const handleEmptyField = (field: string, idx: number) => {
-      setIsEmpty((prev) => {
-        const newEmpty = [...prev];
-        newEmpty[idx] = field == "";
-        return newEmpty;
-      });
-    };
+  const email = useRef<HTMLInputElement>();
+  const password = useRef<HTMLInputElement>();
+  const [isEmpty, setIsEmpty] = useState<boolean[]>([false, false]);
+  const [passwordTooShort, setPasswordTooShort] = useState<boolean>();
+  const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
+  const { setAuthModal } = useContext(ProductContext);
+  const { getRegisteredUser } = useNavigation();
+  interface token extends Response {
+    token: string;
+  }
 
-    async function HandleSubmit(event) {
-      const url: string = process.env.REACT_APP_LOGIN_URL || "";
-      event.preventDefault();
-      let response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          //@ts-ignore
-          email: email.current.value,
-          //@ts-ignore
-          password: password.current.value,
-        }),
-      });
-      response = await response.json();
-      console.log(response);
-      //@ts-ignore
-      localStorage.setItem("auth_token", response.token.token); // make an if incase the login is wrong
-      return false;
+  async function HandleSubmit(event) {
+    for (let i: number = 0; i < 1; i++) {
+      if (isEmpty[i] || passwordTooShort || !isValidEmail) return;
     }
-    return {
-      isEmpty,
-      handleEmptyField,
-      HandleSubmit,
-    };
-}
+    const url: string = process.env.REACT_APP_URL + "/login";
+    event.preventDefault();
+    let response: token = (await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email.current?.value,
+        password: password.current?.value,
+      }),
+    })) as token;
+    response = await response.json();
+    console.log(response);
+    if (response)
+      (() => {
+        closeModal();
+        setAuthModal(false);
+
+        localStorage.setItem("auth_token", response.token);
+        getRegisteredUser(localStorage.getItem("auth_token"))
+      })();
+  }
+
+  const handleIncorrectField = (field: string, idx: number) => {
+    setIsEmpty((prev) => {
+      const newEmpty = [...prev];
+      newEmpty[idx] = field == "";
+      return newEmpty;
+    });
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    idx == 0 && setIsValidEmail(emailRegex.test(field));
+    if (idx == 1) setPasswordTooShort(field.length < 5);
+  };
+
+  function closeModal() {
+    document.body.classList.remove("modal-open");
+  }
+
+  return {
+    password,
+    email,
+    isEmpty,
+    isValidEmail,
+    passwordTooShort,
+    handleIncorrectField,
+    HandleSubmit,
+  };
+};
 
 export { useLogin };

@@ -51,8 +51,7 @@ const handleFiltering = async () => {
     selectedColor,
     searchedProducts.current
   );
-  const url: string =
-    process.env.REACT_APP_DISPLAY_PROD_FILTERED_DATA_URL || "";
+  const url: string = process.env.REACT_APP_URL + "/filteredData";
   let response = await fetch(url, {
     method: "POST",
     headers: {

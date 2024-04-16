@@ -1,10 +1,13 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
+import { ProductContext } from "../Context.tsx";
+import { useNavigation } from "../NavigationBar/useNavigation.ts";
+
 const useRegister = () => {
-  const firstName = useRef<string>();
-  const lastName = useRef<string>();
-  const password = useRef<string>();
-  const confirmPassword = useRef<string>();
-  const email = useRef<string>();
+  const firstName = useRef<HTMLInputElement>();
+  const lastName = useRef<HTMLInputElement>();
+  const password = useRef<HTMLInputElement>();
+  const confirmPassword = useRef<HTMLInputElement>();
+  const email = useRef<HTMLInputElement>();
   const [isEmpty, setIsEmpty] = useState<boolean[]>([
     false,
     false,
@@ -18,12 +21,24 @@ const useRegister = () => {
     false,
     false,
   ]);
+  const { setAuthModal } = useContext(ProductContext);
+  const { getRegisteredUser } = useNavigation();
   interface token extends Response {
     token?: string;
   }
 
   async function HandleSubmit(event) {
-    const url: string = process.env.REACT_APP_REGISTER_URL || "";
+    for (let i: number = 0; i < 4; i++) {
+      if (
+        isEmpty[i] ||
+        isTooLong[i] ||
+        passwordTooShort[i] ||
+        !isValidEmail ||
+        password.current!.value != confirmPassword.current!.value
+      )
+        return;
+    }
+    const url: string = process.env.REACT_APP_URL + "/register";
     event.preventDefault();
     let response: token = await fetch(url, {
       method: "POST",
@@ -31,20 +46,23 @@ const useRegister = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        //@ts-ignore
-        firstName: firstName.current.value,
-        //@ts-ignore
-        lastName: lastName.current.value,
-        //@ts-ignore
-        pass: password.current.value,
-        //@ts-ignore
-        email: email.current.value,
+        firstName: firstName.current?.value,
+        lastName: lastName.current?.value,
+        pass: password.current?.value,
+        email: email.current?.value,
         role: "user",
       }),
     });
     response = await response.json();
-    localStorage.setItem("auth_token", response.token!);
-    return false;
+    if (response) {
+      (() => {
+        closeModal();
+        setAuthModal(false);
+
+        localStorage.setItem("auth_token", response.token!);
+        getRegisteredUser(localStorage.getItem("auth_token"));
+      })();
+    }
   }
 
   const handleIncorrectField = (field: string, idx: number) => {
@@ -65,11 +83,15 @@ const useRegister = () => {
     if (idx >= 3) {
       setPasswordTooShort((prev) => {
         const newTooShort = [...prev];
-        newTooShort[idx-3] = field.length < 5;
+        newTooShort[idx - 3] = field.length < 5;
         return newTooShort;
       });
     }
   };
+
+  function closeModal() {
+    document.body.classList.remove("modal-open");
+  }
 
   return {
     isEmpty,

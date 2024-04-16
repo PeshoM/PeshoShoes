@@ -14,7 +14,7 @@ const Post = async (req: Request, res: Response) => {
     password: req.body.pass,
     role: req.body.role,
   });
-  let key = { firstName: req.body.firstName };
+  let key = { email: req.body.email };
   const token = await jwt.sign(
     { key },
     secretKey,

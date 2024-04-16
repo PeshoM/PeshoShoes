@@ -1,5 +1,5 @@
 import "../../styles/register.css";
-import React, { useEffect, useState, LegacyRef } from "react";
+import React, { useEffect, useState, LegacyRef, MutableRefObject } from "react";
 import { useRegister } from "./useRegister.ts";
 const Register: React.FC = () => {
   const { firstName, lastName, email, password, confirmPassword, isEmpty, isTooLong, isValidEmail, passwordTooShort, HandleSubmit, handleIncorrectField } = useRegister();
@@ -12,7 +12,7 @@ const Register: React.FC = () => {
   ]);
   let registerData: Array<{
     name: string;
-    ref: LegacyRef<string | undefined>;
+    ref: MutableRefObject<HTMLInputElement | undefined>;
     type: string;
   }> = [
     { name: "First Name", ref: firstName, type: "text" },
@@ -31,7 +31,6 @@ const Register: React.FC = () => {
         } else {
           updatedIncorrectField[i] = "valid";
         }
-        
       }
       console.log("Updated incorrectField", updatedIncorrectField);
       return updatedIncorrectField;
@@ -51,7 +50,7 @@ const Register: React.FC = () => {
               (
                 field: {
                   name: string;
-                  ref: LegacyRef<string | undefined>;
+                  ref: MutableRefObject<HTMLInputElement | undefined>;
                   type: string;
                 },
                 index: number
@@ -83,11 +82,13 @@ const Register: React.FC = () => {
                       Please enter a valid email address
                     </label>
                   )}
-                  {passwordTooShort[index-3] && index >= 3 && !isEmpty[index] && (
-                    <label className="invalid-field">
-                      Minimum is 5 characters
-                    </label>
-                  )}
+                  {passwordTooShort[index - 3] &&
+                    index >= 3 &&
+                    !isEmpty[index] && (
+                      <label className="invalid-field">
+                        Minimum is 5 characters
+                      </label>
+                    )}
                 </div>
               )
             )}

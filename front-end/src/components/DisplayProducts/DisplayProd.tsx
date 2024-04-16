@@ -42,11 +42,11 @@ const DisplayProd = () => {
     { color: "White", class: "whiteclass" },
     { color: "Yellow", class: "yellowclass" },
   ];
-  const imagepath: string = process.env.REACT_APP_PRODUCT_IMAGES_PATH || "";
+  const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
 
   useEffect(() => {
     const fetchData = async () => {
-      const url: string = process.env.REACT_APP_PRODUCTS_URL || "";
+      const url: string = process.env.REACT_APP_URL + "/products";
       const response = await fetch(url, {
         method: "GET",
       }).then((res) => {

@@ -21,7 +21,7 @@ const handleAdminReq = async (
     decoded = await jwt.verify(req.body.key, process.env.SECRET_KEY, {
       algorithms: [process.env.HASH_ALGORITHM],
     });
-    doc = await User.findOne({ username: decoded.key.username });
+    doc = await User.findOne({ email: decoded.key.email });
     console.log(req.body.key);
   } else return res.json({ role: "user" });
   console.log("else here");

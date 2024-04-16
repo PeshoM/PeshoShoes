@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 
 const useCreateProd = () => {
-  const title = useRef<string>();
-  const description = useRef<string>();
+  const title = useRef<HTMLInputElement>();
+  const description = useRef<HTMLInputElement>();
   const [pickedPrice, setPickedPrice] = useState<number[]>([]);
   const [pickedQuantity, setPickedQuantity] = useState<number[][]>([]);
   let quantityArr: number[] = [
@@ -18,10 +18,8 @@ const useCreateProd = () => {
 
   async function HandleRequest() {
     let data = new FormData();
-    //@ts-ignore
-    console.log("picked title", title.current.value);
-    //@ts-ignore
-    console.log("picked desc", description.current.value);
+    console.log("picked title", title.current?.value);
+    console.log("picked desc", description.current?.value);
     console.log("picked color", pickedColor);
     console.log("picked price", pickedPrice);
     console.log("picked quantity", pickedQuantity);
@@ -63,7 +61,7 @@ const useCreateProd = () => {
       }
     }
     // data.append("key", localStorage.getItem('auth_token'))
-    const url: string = process.env.REACT_APP_PRODUCTS_URL || "";
+    const url: string = process.env.REACT_APP_URL + "/products";
     const response = await fetch(url, {
       method: "POST",
       body: data,
@@ -114,8 +112,14 @@ const useCreateProd = () => {
   };
 
   return {
+    title,
+    description,
     pickedColor,
     numOfColors,
+    pickedQuantity,
+    selectedSeason,
+    imagesRef,
+    setPickedQuantity,
     HandleRequest,
     updateSizeOptions,
     handleColorChange,

@@ -10,22 +10,19 @@ const Navigation: React.FC = () => {
   // console.log("hereeee");
   let {
     inputText,
-    registeredUser,
     setInputText,
-    getRegisteredUser,
     handleUnderline,
     handleLeaveUnderline,
     handleChange,
     handleSearch,
     handleKeyDown,
     handleHome,
-    openModal,
     closeModal,
     handleOpenLogin,
     handleOpenRegister,
     handleLogOut,
+    getRegisteredUser
   } = useNavigation();
-  //2 funcs above do not work bc of useContext Product type
   let location = useLocation();
   const [hovered, setHovered] = useState<string[]>([
     "",
@@ -38,12 +35,11 @@ const Navigation: React.FC = () => {
     "",
   ]);
   const [isShown, setIsShown] = useState<number>(-1);
-  const { options, setLoginOrRegister, authModal, setAuthModal } =
-    useContext(ProductContext);
+  const { options, authModal, setAuthModal, registeredUser, setRegisteredUser } = useContext(ProductContext);
   const navigate = useNavigate();
   const [userIconHovered, setUserIconHovered] = useState<boolean>(false);
   const [showInputMenu, setShowInputMenu] = useState<boolean>(false);
-  const imagepath: string = process.env.REACT_APP_PRODUCT_IMAGES_PATH || "";
+  const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
   let userOptionsArr: string[] = [
     "My account",
     "My orders",
@@ -58,10 +54,10 @@ const Navigation: React.FC = () => {
     "Brands",
     "Sale",
   ];
+
   useEffect(() => {
-    console.log(localStorage.getItem("auth_token"));
     getRegisteredUser(localStorage.getItem("auth_token"));
-  }, []);
+  }, [])
 
   return (
     <div>
@@ -138,7 +134,7 @@ const Navigation: React.FC = () => {
             {userIconHovered && (
               <div
                 className="userHoverMenu"
-                onMouseOver={() => setUserIconHovered(true)}
+                onMouseOver={() => !authModal && setUserIconHovered(true)}
                 onMouseLeave={() => setUserIconHovered(false)}
               >
                 {registeredUser ? (
