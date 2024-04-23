@@ -9,6 +9,10 @@ import { useDisplayProd } from "./useDisplayProd.ts";
 const DisplayProd = () => {
   const {
     activeTabs,
+    startValue,
+    setStartValue,
+    endValue,
+    setEndValue,
     handleStartChange,
     handleEndChange,
     handleTabClick,
@@ -24,8 +28,6 @@ const DisplayProd = () => {
     searchedProds,
     setSearchedProds,
   } = useContext(ProductContext)
-  const [startValue, setStartValue] = useState(0);
-  const [endValue, setEndValue] = useState(100);
   const [range, setRange] = useState([null, null]);
   let colorsArr = [
     { color: "Beige", class: "beigeclass" },
@@ -45,6 +47,11 @@ const DisplayProd = () => {
   const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
 
   useEffect(() => {
+    console.log('range log', range);
+    console.log('log',range[1]);
+  }, [range]);
+
+  useEffect(() => {
     const fetchData = async () => {
       const url: string = process.env.REACT_APP_URL + "/products";
       const response = await fetch(url, {
@@ -52,6 +59,7 @@ const DisplayProd = () => {
       }).then((res) => {
         return res.json();
       });
+      console.log(response);
       if (products.length == 0) setProduct(response.products);
       if (searchedProds.length == 0) setSearchedProds(response.products);
       setRange((prev) => {
@@ -69,6 +77,8 @@ const DisplayProd = () => {
 
     fetchData();
   }, []);
+
+
 
   return (
     <div>
@@ -93,7 +103,7 @@ const DisplayProd = () => {
                     34, 34.5, 35, 35.5, 36, 36.5, 37, 37.5, 38, 38.5, 39, 39.5,
                     40, 40.5, 41, 41.5, 42, 42.5, 43, 43.5, 44, 44.5, 45, 45.5,
                     46, 46.5, 47, 47.5, 48, 48.5, 49,
-                  ].map((size, index) => (
+                  ].map((size: number, index: number) => (
                     <div className="single-size-option">
                       <input
                         type="checkbox"
@@ -114,20 +124,18 @@ const DisplayProd = () => {
             <div className="double-range-slider">
               <input
                 type="range"
-                //@ts-ignore
-                min={range[0]}
-                //@ts-ignore
-                max={range[1]}
+                min={range[0]!}
+                max={range[1]!}
+                step={0.1}
                 value={startValue}
                 onChange={handleStartChange}
                 onMouseUp={handleFiltering}
               />
               <input
                 type="range"
-                //@ts-ignore
-                min={range[0]}
-                //@ts-ignore
-                max={range[1]}
+                step={0.1}
+                min={range[0]!}
+                max={range[1]!}
                 value={endValue}
                 onChange={handleEndChange}
                 onMouseUp={handleFiltering}

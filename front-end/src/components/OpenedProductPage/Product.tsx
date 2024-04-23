@@ -1,38 +1,33 @@
 import React from "react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import Navigation from "../NavigationBar/Navigation.tsx";
 import Footer from "../Footer.tsx";
 import "../../styles/product.css";
 import { useSearchParams } from "react-router-dom";
 import { useProduct } from "./useProduct.ts";
 import Dropdown from "../Dropdown.tsx";
+import { ProductContext } from "../Context.tsx";
+import EditProd from "../EditProduct/EditProd.tsx";
+import { ColorVariation } from "../../interfaces/productInterfaces.ts";
 
 const Product: React.FC = () => {
   const { product, setProduct, handleImageClick } = useProduct();
+  const { registeredUser } = useContext(ProductContext);
   const [searchParams] = useSearchParams();
   const title = searchParams.get("title");
   const color = searchParams.get("color");
 
   const [sizesSet, setSizesSet] = useState<Set<number>>(new Set<number>());
-  interface ColorVariation {
-    images: string[];
-    price: number;
-    quantity: number[];
-    sizes: number[];
-    color: string;
-    rating: number[];
-  }
-  interface Prod {
-    title: string;
-    description: string;
-    colorVariations: ColorVariation[];
-    season: string;
-  }
+  const [quantityArr, setQuantityArr] = useState<number[][]>([]);
+  
   let leaveForNow: undefined = undefined;
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [imageIdx, setImageIdx] = useState<number>(-1);
   const [zoomed, setZoomed] = useState(false);
   const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const sizesRef = useRef();
+  const [editModal, setEditModal] = useState<boolean>(false);
 
   useEffect(() => {
     let fetchProduct = async () => {
@@ -52,6 +47,7 @@ const Product: React.FC = () => {
       });
       setProduct(response.product);
       setSizesSet(new Set<number>(response.product.colorVariations[0].sizes));
+      setQuantityArr(response.product.colorVariations[0].quantity);
     };
     fetchProduct();
   }, []);
@@ -68,7 +64,16 @@ const Product: React.FC = () => {
   }, [isClicked]);
 
   return (
-    <div>
+    <div
+      onClick={(event) => {
+        console.log('sizesRef', sizesRef?.current, event.target)
+        //@ts-ignore
+       if(sizesRef.current && !sizesRef.current.contains(event.target)) setIsOpen(false);
+       //@ts-ignore
+       else if (sizesRef.current && sizesRef.current.contains(event.target)) setIsOpen(true);
+       
+      }}
+    >
       {isClicked && (
         <div className="picture-modal-background">
           <div
@@ -85,7 +90,7 @@ const Product: React.FC = () => {
             alt="Your Image"
             className={`modal-picture ${zoomed ? "zoomed" : ""}`}
             onClick={() => setZoomed(!zoomed)}
-          />
+            />
           <div
             className="picture-modal-btn"
             onClick={() => {
@@ -106,6 +111,7 @@ const Product: React.FC = () => {
           </div>
         </div>
       )}
+      { editModal && <div className="edit-product-modal"><EditProd product={product!}/></div>}
       <Navigation />
       <div className="product-info-and-options">
         <div className="product-pictures">
@@ -125,6 +131,7 @@ const Product: React.FC = () => {
           </div>
         </div>
         <div className="product-options">
+          {registeredUser && <button className="edit-product-option" onClick={() => setEditModal(true)}>Edit product</button>}
           <div className="product-title">{product?.title}</div>
           <div className="product-color">
             {product?.colorVariations[0].color}
@@ -162,22 +169,11 @@ const Product: React.FC = () => {
           <div className="product-price">
             {product?.colorVariations[0].price}лв.
           </div>
-          <div className="product-sizes">
-            <div className="sizes-div">
-              <p className="sizes-titles">Avaiable sizes</p>
-              <div
-                tabIndex={0}
-                className="collapse collapse-arrow border border-base-250 bg-base-200"
-              >
-                <Dropdown></Dropdown>
-              </div>
-            </div>
-          </div>
           <p className="color-options">
             {product?.colorVariations.length} Color Options
           </p>
           <div className="shoe-variations-container">
-            {product?.colorVariations.map((colorVar, index: number) => (
+            {product?.colorVariations.map((colorVar: ColorVariation, index: number) => (
               <div
                 className={"pic-choices pic-option" + index}
                 onClick={() => {
@@ -191,6 +187,23 @@ const Product: React.FC = () => {
                 />
               </div>
             ))}
+          </div>
+          <div className="product-sizes">
+            <div className="sizes-div">
+              <p className="sizes-titles">Avaiable sizes</p>
+              <div
+                tabIndex={0}
+                className="product-sizes-menu collapse collapse-arrow border border-base-250 bg-base-200"
+              >
+                <Dropdown
+                  sizesRef={sizesRef}
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                  sizesSet={sizesSet}
+                  quantityArr={quantityArr}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

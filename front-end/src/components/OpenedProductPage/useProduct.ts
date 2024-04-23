@@ -1,22 +1,8 @@
 import { useState } from "react";
-
+import { ColorVariation, Prod } from "../../interfaces/productInterfaces";
 const useProduct = () => {
     const [product, setProduct] = useState<Prod>();
     const [sizesSet, setSizesSet] = useState<Set<number>>(new Set<number>());
-    interface ColorVariation {
-      images: string[];
-      price: number;
-      quantity: number[];
-      sizes: number[];
-      color: string;
-      rating: number[];
-    }
-    interface Prod {
-      title: string;
-      description: string;
-      colorVariations: ColorVariation[];
-      season: string;
-    }
 
     const handleImageClick = (idx: number) => {
       let newArr: ColorVariation[] = [];

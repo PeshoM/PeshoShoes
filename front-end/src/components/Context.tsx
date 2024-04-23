@@ -38,7 +38,6 @@ const Context = ({ children }) => {
   const [products, setProduct] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [searchedProds, setSearchedProds] = useState<Product[]>([]);
-  const [currProd, setCurrProd] = useState<Product>();
   const [loginOrRegister, setLoginOrRegister] = useState<boolean>();
   const [authModal, setAuthModal] = useState<boolean>(false);
   const [registeredUser, setRegisteredUser] = useState<user | null>();

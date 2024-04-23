@@ -17,8 +17,12 @@ const Post = async (req: Request, res: Response) => {
     let filteredArr: product[] = [];
     let hashSet = new Set();
     if (set.size == 0) return arr;
-    for (let i = 0; i < arr.length; i++) {
-      for (let j = 0; j < arr[i].colorVariations[0][param].length; j++) {
+    for (let i: number = 0; i < arr.length; i++) {
+      for (
+        let j: number = 0;
+        j < arr[i].colorVariations[0][param].length;
+        j++
+      ) {
         if (
           set.has(arr[i].colorVariations[0][param][j]) &&
           !hashSet.has(arr[i])
@@ -31,8 +35,8 @@ const Post = async (req: Request, res: Response) => {
     return filteredArr;
   };
 
-  for (let i = 0; i < products.length; i++) {
-    for (let j = 0; j < products[i].colorVariations.length; j++) {
+  for (let i: number = 0; i < products.length; i++) {
+    for (let j: number = 0; j < products[i].colorVariations.length; j++) {
       if (
         products[i].colorVariations[j].price <= max &&
         products[i].colorVariations[j].price >= min &&

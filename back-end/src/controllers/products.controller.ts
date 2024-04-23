@@ -1,4 +1,4 @@
-import { Product, ColorVariation } from "../schemas/products.schema";
+import { Product, ColorVariation, product } from "../schemas/products.schema";
 import { Request, Response } from "express";
 
 const Post = async (req: Request, res: Response) => {
@@ -38,7 +38,7 @@ const Post = async (req: Request, res: Response) => {
       const indices = fieldName.slice(7).split("_");
       const rowIndex = parseInt(indices[0]);
       const colIndex = parseInt(indices[1]);
-      
+
       if (!imagesArr[rowIndex]) {
         imagesArr[rowIndex] = [];
       }
@@ -48,7 +48,7 @@ const Post = async (req: Request, res: Response) => {
       imagesArr[rowIndex][colIndex] = filename;
     }
   }
-  let variations = req.body.price.length;
+  let variations: number = imagesArr.length;
   for (let i = 0; i < variations; i++) {
     colorVariations[i] = {
       images: [],
@@ -58,10 +58,10 @@ const Post = async (req: Request, res: Response) => {
       color: "",
     };
     colorVariations[i]["images"] = imagesArr[i];
-    colorVariations[i]["price"] = req.body.price[i];
+    colorVariations[i]["price"] = typeof req.body.price === "string" ? req.body.price : req.body.price[i];
     colorVariations[i]["quantity"] = quantityArr[i];
     colorVariations[i]["sizes"] = sizesArr[i];
-    colorVariations[i]["color"] = req.body.color[i];
+    colorVariations[i]["color"] = typeof req.body.color === "string" ? req.body.color : req.body.color[i];
   }
 
   const product = new Product({
@@ -78,9 +78,9 @@ const Post = async (req: Request, res: Response) => {
 
 const Get = async (req: Request, res: Response) => {
   const doc = await Product.find({});
-  let prods = [],
-    min = 0,
-    max = 0;
+  let prods: product[] = [],
+    min: number = Number.MAX_VALUE,
+    max: number = 0;
   for (let i = 0; i < doc.length; i++) {
     for (let j = 0; j < doc[i].colorVariations.length; j++) {
       if (doc[i].colorVariations[j].price <= min)
@@ -93,9 +93,9 @@ const Get = async (req: Request, res: Response) => {
       description: doc[i].description,
       colorVariations: doc[i].colorVariations,
       season: doc[i].season,
-    });
+    } as product);
   }
   res.json({ products: prods, minVal: min, maxVal: max });
 };
 
-export default { Post, Get}
+export default { Post, Get };

@@ -1,20 +1,81 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { ColorVariation, Prod } from "../../interfaces/productInterfaces";
 
-const useCreateProd = () => {
+const useEditProd = (product: Prod) => {
   const title = useRef<HTMLInputElement>();
   const description = useRef<HTMLInputElement>();
   const [pickedPrice, setPickedPrice] = useState<number[]>([]);
   const [pickedQuantity, setPickedQuantity] = useState<number[][]>([]);
-  let quantityArr: number[] = [
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-  ];
+  let quantityArr: number[] = Array.from({ length: 31 }, (_, i) => 0);
+  console.log(quantityArr);
   const [pickedSizes, setPickedSizes] = useState<number[][]>([]);
   const [pickedColor, setPickedColor] = useState<string[]>([]);
-  const selectedSeason = useRef<HTMLInputElement>();
-  const [numOfColors, setNumOfColors] = useState<number[]>([]);
+  const selectedSeason = useRef<HTMLSelectElement>();
+  const [numOfColors, setNumOfColors] = useState<any[]>([]);
   const imagesRef = useRef<any>([]);
-  const [imgFile, setImgFile] = useState<any>([]);
+  const [imgFile, setImgFile] = useState<FileList[] | any[]>([]);
+
+  useEffect(() => {
+    if (title.current) title.current.value = product.title;
+    if (description.current) description.current.value = product.description;
+    if (selectedSeason.current) selectedSeason.current.value = product.season;
+
+    // Initialize state arrays based on product color variations
+    const initialPickedPrice: number[] = [];
+    const initialPickedQuantity: number[][] = [];
+    const initialPickedSizes: number[][] = [];
+    const initialPickedColor: string[] = [];
+    const initialNumOfColors: number[] = [];
+    const initialImgFile: File[][] = [];
+
+    for (let i = 0; i < product.colorVariations.length; i++) {
+      const colorVariation = product.colorVariations[i];
+      const newRef = React.createRef();
+      imagesRef.current.push(newRef);
+
+      // Populate imgFile with image data for each color variation
+      initialImgFile.push(
+        colorVariation.images.map((image) => new File([image], image))
+      );
+
+      initialPickedPrice.push(colorVariation.price);
+      initialPickedQuantity.push([...colorVariation.quantity]);
+      initialPickedSizes.push([...colorVariation.sizes]);
+      initialPickedColor.push(colorVariation.color);
+      initialNumOfColors.push(0);
+    }
+
+    // Set the initial state values
+    setImgFile(initialImgFile);
+    setPickedPrice(initialPickedPrice);
+    setPickedQuantity(initialPickedQuantity);
+    setPickedSizes(initialPickedSizes);
+    setPickedColor(initialPickedColor);
+    setNumOfColors(initialNumOfColors);
+  }, []);
+
+  const handleColorVar = () => {
+    const newRef = React.createRef();
+    imagesRef.current.push(newRef);
+    // Set The Values
+    setNumOfColors([...numOfColors, 0]);
+    setImgFile([...imgFile, []]);
+    setPickedPrice([...pickedPrice, 0]);
+    setPickedQuantity([...pickedQuantity, quantityArr]);
+    setPickedSizes([...pickedSizes, []]);
+    setPickedColor([...pickedColor, ""]);
+
+    // console.log("num of colors", numOfColors);
+    // console.log("picked color", pickedColor);
+    // console.log("picked price", pickedPrice);
+    // console.log("picked quantity", pickedQuantity);
+    // console.log("picked sizes", pickedSizes);
+    // console.log("picked images", imgFile);
+    console.log(imagesRef.current);
+    for (let i = 0; i < imagesRef.current.length; i++) {
+      console.log("picked images ref", i, imagesRef.current[i].current?.files);
+    }
+  };
 
   async function HandleRequest() {
     let data = new FormData();
@@ -34,9 +95,9 @@ const useCreateProd = () => {
       //@ts-ignore
       data.append("price", pickedPrice[i]);
     }
-    for (let rowIndex: number = 0; rowIndex < pickedSizes.length; rowIndex++) {
+    for (let rowIndex = 0; rowIndex < pickedSizes.length; rowIndex++) {
       const row = pickedSizes[rowIndex];
-      for (let colIndex: number = 0; colIndex < row.length; colIndex++) {
+      for (let colIndex = 0; colIndex < row.length; colIndex++) {
         const value = row[colIndex];
         data.append(`sizes_${rowIndex}_${colIndex}`, String(value));
       }
@@ -53,8 +114,8 @@ const useCreateProd = () => {
           data.append(`quantity_${rowIndex}_${colIndex}`, String(value));
       }
     }
-
-    data.append("season", selectedSeason.current!.value);
+    //@ts-ignore
+    data.append("season", selectedSeason.current.value);
 
     for (let i: number = 0; i < imgFile.length; i++) {
       const fileList = imgFile[i];
@@ -89,32 +150,9 @@ const useCreateProd = () => {
     // console.log(pickedColor);
   };
 
-  const handleColorVar = () => {
-    // Create a new ref and add it to the existing array of refs
-    const newRef = React.createRef();
-    imagesRef.current.push(newRef);
-    // setImagesRef([...imagesRef, newRef])
-
-    // Update state as needed
-    setNumOfColors([...numOfColors, 0]);
-    setImgFile([...imgFile, []]);
-    setPickedPrice([...pickedPrice, 0]);
-    setPickedQuantity([...pickedQuantity, quantityArr]);
-    setPickedSizes([...pickedSizes, []]);
-    setPickedColor([...pickedColor, ""]);
-
-    // Logging for debugging
-    // console.log("num of colors", numOfColors);
-    // console.log("picked color", pickedColor);
-    // console.log("picked price", pickedPrice);
-    // console.log("picked quantity", pickedQuantity);
-    // console.log("picked sizes", pickedSizes);
-    console.log("picked images", imgFile);
-    console.log(imagesRef.current);
-    for (let i = 0; i < imagesRef.current.length; i++) {
-      console.log("line115 images ref", i, imagesRef.current[i].current?.files);
-    }
-  };
+  useEffect(() => {
+    console.log(imgFile);
+  }, [imgFile]);
 
   const handleImageChanges = (idx: number) => {
     setImgFile((prev) => {
@@ -123,6 +161,7 @@ const useCreateProd = () => {
         prev[idx] = imagesRef.current[idx].current.files;
       return prev;
     });
+    console.log(imgFile);
   };
 
   return {
@@ -134,6 +173,7 @@ const useCreateProd = () => {
     selectedSeason,
     imagesRef,
     pickedPrice,
+    imgFile,
     setPickedPrice,
     setPickedQuantity,
     HandleRequest,
@@ -144,4 +184,4 @@ const useCreateProd = () => {
   };
 };
 
-export { useCreateProd };
+export { useEditProd };

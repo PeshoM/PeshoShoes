@@ -1,0 +1,9 @@
+.pic-edit-choices {
+    width: 70px;
+    height: 70px;
+}
+
+.pic-edit-choices:hover {
+    cursor: pointer;
+}
+

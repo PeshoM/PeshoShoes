@@ -22,14 +22,14 @@ const pickedColors = useRef<string[]>([]);
 const pickedSeasons = useRef<string[]>([]);
 
 const handleStartChange = (e) => {
-  const newStartValue = parseInt(e.target.value, 10);
+  const newStartValue = parseFloat(e.target.value);
   if (newStartValue <= endValue) {
     setStartValue(newStartValue);
   }
 };
 
 const handleEndChange = (e) => {
-  const newEndValue = parseInt(e.target.value, 10);
+  const newEndValue = parseFloat(e.target.value);
   if (newEndValue >= startValue) {
     setEndValue(newEndValue);
   }
@@ -109,6 +109,10 @@ const handleClickProduct = (title: string, color: string) => {
 return {
   activeTabs,
   selectedColor,
+  startValue,
+  setStartValue,
+  endValue,
+  setEndValue,
   handleStartChange,
   handleEndChange,
   handleTabClick,

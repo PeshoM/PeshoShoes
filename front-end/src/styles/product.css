@@ -71,13 +71,13 @@ body {
 }
 
 .border-base-250 {
-  width: 250px;
+  width: 300px;
   background: rgb(192, 192, 192);
   border-radius: 0;
   border: solid #000 2px !important;
   border: #000 solid 2px;
   color: #000;
-  max-height: 350px;
+  max-height: 250px;
   overflow-y: scroll;
 }
 
@@ -223,4 +223,28 @@ body {
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
+}
+
+.product-sizes-menu {
+  
+}
+
+.edit-product-option {
+  width: 150px;
+  color: #141414;
+  border: black 2px solid;
+}
+
+.edit-product-option:hover {
+  background-color: rgb(151, 151, 151, 0.2);
+}
+
+.edit-product-modal {
+  position: absolute;
+  width: 1000px;
+  min-height: 900px;
+  border: solid 2px black;
+  transform: translate(-50%, 0);
+  margin-left: 50%;
+  margin-top: 10%;
 }
