@@ -1,13 +1,13 @@
 import "../../styles/createprod.css";
 import React, { LegacyRef } from "react";
-import { useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRef} from "react";
 import { useEditProd } from "./useEditProd.ts";
 import { Prod } from "../../interfaces/productInterfaces.ts";
 
 interface Edit {
   product: Prod;
 }
+
 const EditProd: React.FC<Edit> = ({ product }) => {
   const {
     title,
@@ -52,27 +52,7 @@ const EditProd: React.FC<Edit> = ({ product }) => {
     { color: "Yellow", class: "yellowclass" },
   ];
   const selectedCategory = useRef<string[]>();
-  const navigate = useNavigate();
   const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const url: string = process.env.REACT_APP_URL + "/role";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          key: localStorage.getItem("auth_token"),
-        }),
-      }).then((res) => res.json());
-      // console.log(response);
-      if (response.role != "admin") navigate("/NotFound");
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div>
@@ -120,7 +100,6 @@ const EditProd: React.FC<Edit> = ({ product }) => {
                         );
                       })
                     : Array.from(imgFile[idx] as FileList).map((image: File) => {
-                        console.log('asd', image);
                         return <img src={URL.createObjectURL(image)}/>;
                       })}
                 </div>
@@ -169,7 +148,7 @@ const EditProd: React.FC<Edit> = ({ product }) => {
                         {/**make the colors work better with the arr state */}
                         <input
                           type="checkbox"
-                          defaultChecked={false}
+                          defaultChecked={pickedQuantity[idx][index] > 0}
                           className="checkbox checkbox-sm"
                           onChange={() => {
                             updateSizeOptions(size, idx);
@@ -177,6 +156,7 @@ const EditProd: React.FC<Edit> = ({ product }) => {
                         />
                         <input
                           className="size-quantity-choices"
+                          value={pickedQuantity[idx][index] || 0}
                           onChange={(e) => {
                             setPickedQuantity((prev) => {
                               prev = [...pickedQuantity];
@@ -191,6 +171,7 @@ const EditProd: React.FC<Edit> = ({ product }) => {
                 </div>
                 <div className="sizes-div">
                   <p>Shoe Colours to put as stocked</p>
+                  <p>{pickedColor[idx]}</p>
                   <div className="sizes-subdiv">
                     {colorsArr.map((color: Color, index: number) => (
                       <div className="colors-choices">

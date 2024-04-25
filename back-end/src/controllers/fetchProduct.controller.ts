@@ -11,7 +11,7 @@ const Post = async (req: Request, res: Response) => {
       ? newArr.push(product!.colorVariations[i])
       : arrRest.push(product!.colorVariations[i]);
   }
-  for (let i = 0; i < arrRest.length; i++) {
+  for (let i: number = 0; i < arrRest.length; i++) {
     newArr.push(arrRest[i]);
   }
   console.log("after", newArr);
@@ -21,6 +21,7 @@ const Post = async (req: Request, res: Response) => {
       description: product!.description,
       colorVariations: newArr,
       season: product!.season,
+      _id: product!._id
     },
   });
 };

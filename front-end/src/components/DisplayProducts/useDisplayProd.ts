@@ -99,6 +99,7 @@ const handleSeasonChange = (season) => {
   pickedSeasons.current.sort();
   console.log("seasons picked", pickedSeasons.current);
 };
+
 const handleClickProduct = (title: string, color: string) => {
   const queryParams = { title, color };
   const searchParams = new URLSearchParams(queryParams);

@@ -2,7 +2,7 @@ import { Schema, model, Document } from "mongoose";
 
 // interface Quantity {
 //   available: number;
-//   reserved: number;
+//   reserved: number;п
 //   sold: number;
 // }
 
@@ -20,6 +20,7 @@ export interface product extends Document {
   description: string;
   colorVariations: ColorVariation[];
   season: string;
+  _id?: string
 }
 
 const productSchema = new Schema<product>({

@@ -3,7 +3,11 @@ import path from "path";
 import { Request } from "express";
 
 const storage = multer.diskStorage({
-  destination: function (req: Request, file: Express.Multer.File, cb: Function) {
+  destination: function (
+    req: Request,
+    file: Express.Multer.File,
+    cb: Function
+  ) {
     const uploadPath = path.join(__dirname, "../uploads/");
     cb(null, uploadPath);
   },

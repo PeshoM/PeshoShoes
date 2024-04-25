@@ -5,6 +5,7 @@ const useProduct = () => {
     const [sizesSet, setSizesSet] = useState<Set<number>>(new Set<number>());
 
     const handleImageClick = (idx: number) => {
+      
       let newArr: ColorVariation[] = [];
       product && newArr.push(product.colorVariations[idx]);
       product && product.colorVariations.splice(idx, 1);
@@ -21,6 +22,7 @@ const useProduct = () => {
       obj["description"] = product?.description;
       obj["colorVariations"] = newArr;
       obj["season"] = product?.season;
+      obj["_id"] = product?._id;
       setSizesSet(new Set<number>(newArr[0].sizes));
       console.log("set", sizesSet);
 

@@ -8,4 +8,6 @@ router.post("/products", upload.any(), productsController.Post);
 
 router.get("/products", productsController.Get);
 
+router.patch("/products", upload.any(), productsController.Update);
+
 export default router;

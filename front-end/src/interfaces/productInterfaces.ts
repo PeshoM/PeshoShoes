@@ -7,6 +7,7 @@ export interface ColorVariation {
   rating: number[];
 }
 export interface Prod {
+  _id: string
   title: string;
   description: string;
   colorVariations: ColorVariation[];

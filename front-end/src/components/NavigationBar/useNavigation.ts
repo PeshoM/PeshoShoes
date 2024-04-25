@@ -30,9 +30,9 @@ const useNavigation = () => {
         key: token,
       }),
     }).then((res) => res.json());
-    console.log("registeredUser", response);
+    // console.log("registeredUser", response);
     response.registeredUser && setRegisteredUser(() => response.registeredUser);
-    console.log(response.registeredUser);
+    // console.log(response.registeredUser);
   };
 
   const handleUnderline = (setter: Function, index: number) => {

@@ -7,20 +7,20 @@ const useEditProd = (product: Prod) => {
   const [pickedPrice, setPickedPrice] = useState<number[]>([]);
   const [pickedQuantity, setPickedQuantity] = useState<number[][]>([]);
   let quantityArr: number[] = Array.from({ length: 31 }, (_, i) => 0);
-  console.log(quantityArr);
   const [pickedSizes, setPickedSizes] = useState<number[][]>([]);
   const [pickedColor, setPickedColor] = useState<string[]>([]);
   const selectedSeason = useRef<HTMLSelectElement>();
   const [numOfColors, setNumOfColors] = useState<any[]>([]);
   const imagesRef = useRef<any>([]);
   const [imgFile, setImgFile] = useState<FileList[] | any[]>([]);
+  const [changedIdx, setChangedIdx] = useState<Set<number>>(new Set<number>());
 
   useEffect(() => {
+    console.log(product._id);
     if (title.current) title.current.value = product.title;
     if (description.current) description.current.value = product.description;
     if (selectedSeason.current) selectedSeason.current.value = product.season;
 
-    // Initialize state arrays based on product color variations
     const initialPickedPrice: number[] = [];
     const initialPickedQuantity: number[][] = [];
     const initialPickedSizes: number[][] = [];
@@ -28,24 +28,22 @@ const useEditProd = (product: Prod) => {
     const initialNumOfColors: number[] = [];
     const initialImgFile: File[][] = [];
 
-    for (let i = 0; i < product.colorVariations.length; i++) {
-      const colorVariation = product.colorVariations[i];
+    for (let i: number = 0; i < product.colorVariations.length; i++) {
+      const colorVariation: ColorVariation = product.colorVariations[i];
       const newRef = React.createRef();
       imagesRef.current.push(newRef);
-
-      // Populate imgFile with image data for each color variation
+      console.log("colorVar log", colorVariation);
       initialImgFile.push(
         colorVariation.images.map((image) => new File([image], image))
       );
 
-      initialPickedPrice.push(colorVariation.price);
       initialPickedQuantity.push([...colorVariation.quantity]);
       initialPickedSizes.push([...colorVariation.sizes]);
+      initialPickedPrice.push(colorVariation.price);
       initialPickedColor.push(colorVariation.color);
       initialNumOfColors.push(0);
     }
 
-    // Set the initial state values
     setImgFile(initialImgFile);
     setPickedPrice(initialPickedPrice);
     setPickedQuantity(initialPickedQuantity);
@@ -57,7 +55,7 @@ const useEditProd = (product: Prod) => {
   const handleColorVar = () => {
     const newRef = React.createRef();
     imagesRef.current.push(newRef);
-    // Set The Values
+
     setNumOfColors([...numOfColors, 0]);
     setImgFile([...imgFile, []]);
     setPickedPrice([...pickedPrice, 0]);
@@ -79,13 +77,9 @@ const useEditProd = (product: Prod) => {
 
   async function HandleRequest() {
     let data = new FormData();
-    // console.log("picked title", title.current?.value);
-    // console.log("picked desc", description.current?.value);
-    // console.log("picked color", pickedColor);
-    // console.log("picked price", pickedPrice);
-    // console.log("picked quantity", pickedQuantity);
-    // console.log("picked sizes", pickedSizes);
-    // console.log("picked images", imgFile);
+    const numberSetString = JSON.stringify(Array.from(changedIdx));
+    data.append("changedIdx", numberSetString)
+    data.append("productId", product._id);
     data.append("title", title.current!.value);
     data.append("description", description.current!.value);
     for (let i: number = 0; i < pickedColor.length; i++) {
@@ -95,9 +89,9 @@ const useEditProd = (product: Prod) => {
       //@ts-ignore
       data.append("price", pickedPrice[i]);
     }
-    for (let rowIndex = 0; rowIndex < pickedSizes.length; rowIndex++) {
+    for (let rowIndex: number = 0; rowIndex < pickedSizes.length; rowIndex++) {
       const row = pickedSizes[rowIndex];
-      for (let colIndex = 0; colIndex < row.length; colIndex++) {
+      for (let colIndex: number = 0; colIndex < row.length; colIndex++) {
         const value = row[colIndex];
         data.append(`sizes_${rowIndex}_${colIndex}`, String(value));
       }
@@ -119,16 +113,19 @@ const useEditProd = (product: Prod) => {
 
     for (let i: number = 0; i < imgFile.length; i++) {
       const fileList = imgFile[i];
+
       for (let j: number = 0; j < fileList.length; j++) {
         data.append(`images_${i}_${j}`, fileList[j]);
       }
     }
+    console.log("file", imgFile);
     // data.append("key", localStorage.getItem('auth_token'))
     const url: string = process.env.REACT_APP_URL + "/products";
     const response: Response = await fetch(url, {
-      method: "POST",
+      method: "PATCH",
       body: data,
     });
+    handleEditProduct(title.current!.value, pickedColor[0]);
   }
 
   const updateSizeOptions = (size: number, idx: number) => {
@@ -150,18 +147,34 @@ const useEditProd = (product: Prod) => {
     // console.log(pickedColor);
   };
 
-  useEffect(() => {
-    console.log(imgFile);
-  }, [imgFile]);
-
   const handleImageChanges = (idx: number) => {
+    if(!changedIdx.has(idx)) {
+      changedIdx.add(idx);
+      setChangedIdx(changedIdx);
+    }
+    console.log(changedIdx);
     setImgFile((prev) => {
       prev = [...imgFile];
       if (imagesRef.current[idx].current.files)
         prev[idx] = imagesRef.current[idx].current.files;
       return prev;
     });
-    console.log(imgFile);
+    console.log("picked", imgFile);
+  };
+
+  useEffect(() => {
+    console.log("imgFile updates", imgFile);
+  }, [imgFile]);
+
+  useEffect(() => {
+    console.log("changedIdx", changedIdx);
+  }, [changedIdx]);
+
+  const handleEditProduct = (title: string, color: string) => {
+    const queryParams = { title, color };
+    const searchParams = new URLSearchParams(queryParams);
+    const url = `/Product?${searchParams.toString()}`;
+    window.location.href = url;
   };
 
   return {

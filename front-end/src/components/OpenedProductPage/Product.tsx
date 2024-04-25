@@ -63,14 +63,16 @@ const Product: React.FC = () => {
     };
   }, [isClicked]);
 
+  useEffect(() => {
+    console.log("local product", product)
+  }, [product]);
+
   return (
     <div
       onClick={(event) => {
-        console.log('sizesRef', sizesRef?.current, event.target)
-        //@ts-ignore
-       if(sizesRef.current && !sizesRef.current.contains(event.target)) setIsOpen(false);
-       //@ts-ignore
-       else if (sizesRef.current && sizesRef.current.contains(event.target)) setIsOpen(true);
+        // console.log('sizesRef', sizesRef?.current, event.target)
+       if(sizesRef.current && (sizesRef.current as HTMLDivElement).contains(event.target as HTMLElement)) setIsOpen(false);
+       else if (sizesRef.current && (sizesRef.current as HTMLDivElement).contains(event.target as HTMLElement)) setIsOpen(true);
        
       }}
     >
