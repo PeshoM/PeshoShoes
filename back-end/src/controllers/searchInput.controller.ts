@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 const Post = async (req: Request, res: Response) => {
   let data: string = req.body.input;
   let results: product[] | undefined;
-  if(data == "") return res.json(results = await Product.find({}));
+  if(data == "" || !data) return;
   if (data) {
     let results = await Product.find({
       title: {

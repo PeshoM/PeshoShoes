@@ -1,30 +1,23 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const useCreateProd = () => {
   const title = useRef<HTMLInputElement>();
   const description = useRef<HTMLInputElement>();
   const [pickedPrice, setPickedPrice] = useState<number[]>([]);
   const [pickedQuantity, setPickedQuantity] = useState<number[][]>([]);
-  let quantityArr: number[] = [
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-  ];
+  let quantityArr: number[] = Array.from({ length: 31 }, (_, i) => 0);
   const [pickedSizes, setPickedSizes] = useState<number[][]>([]);
   const [pickedColor, setPickedColor] = useState<string[]>([]);
-  const selectedSeason = useRef<HTMLInputElement>();
+  const selectedSeason = useRef<HTMLSelectElement>(null);
+  const selectedGender = useRef<HTMLSelectElement>(null);
   const [numOfColors, setNumOfColors] = useState<number[]>([]);
   const imagesRef = useRef<any>([]);
   const [imgFile, setImgFile] = useState<any>([]);
+  const navigate = useNavigate();
 
   async function HandleRequest() {
     let data = new FormData();
-    // console.log("picked title", title.current?.value);
-    // console.log("picked desc", description.current?.value);
-    // console.log("picked color", pickedColor);
-    // console.log("picked price", pickedPrice);
-    // console.log("picked quantity", pickedQuantity);
-    // console.log("picked sizes", pickedSizes);
-    // console.log("picked images", imgFile);
     data.append("title", title.current!.value);
     data.append("description", description.current!.value);
     for (let i: number = 0; i < pickedColor.length; i++) {
@@ -77,7 +70,6 @@ const useCreateProd = () => {
     }
     pickedSizes[idx] = [...pickedSizes[idx], size];
     pickedSizes[idx].sort();
-    // console.log("sizes picked", pickedSizes);
   };
 
   const handleColorChange = (color: string, idx: number) => {
@@ -86,16 +78,11 @@ const useCreateProd = () => {
       prev[idx] = color;
       return prev;
     });
-    // console.log(pickedColor);
   };
 
   const handleColorVar = () => {
-    // Create a new ref and add it to the existing array of refs
     const newRef = React.createRef();
     imagesRef.current.push(newRef);
-    // setImagesRef([...imagesRef, newRef])
-
-    // Update state as needed
     setNumOfColors([...numOfColors, 0]);
     setImgFile([...imgFile, []]);
     setPickedPrice([...pickedPrice, 0]);
@@ -103,12 +90,6 @@ const useCreateProd = () => {
     setPickedSizes([...pickedSizes, []]);
     setPickedColor([...pickedColor, ""]);
 
-    // Logging for debugging
-    // console.log("num of colors", numOfColors);
-    // console.log("picked color", pickedColor);
-    // console.log("picked price", pickedPrice);
-    // console.log("picked quantity", pickedQuantity);
-    // console.log("picked sizes", pickedSizes);
     console.log("picked images", imgFile);
     console.log(imagesRef.current);
     for (let i = 0; i < imagesRef.current.length; i++) {
@@ -124,6 +105,23 @@ const useCreateProd = () => {
       return prev;
     });
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      const url: string = process.env.REACT_APP_URL + "/role";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          key: localStorage.getItem("auth_token"),
+        }),
+      }).then((res) => res.json());
+      if (response.role != "admin") navigate("/NotFound");
+    };
+    fetchData();
+  }, []);
+  
 
   return {
     title,
@@ -134,6 +132,7 @@ const useCreateProd = () => {
     selectedSeason,
     imagesRef,
     pickedPrice,
+    selectedGender,
     setPickedPrice,
     setPickedQuantity,
     HandleRequest,

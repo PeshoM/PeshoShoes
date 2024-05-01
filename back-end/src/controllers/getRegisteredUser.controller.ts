@@ -1,6 +1,6 @@
-import { User, user } from "../schemas/users.schema";
+import { User } from "../schemas/users.schema";
 import { Request, Response } from "express";
-const jwt = require("jsonwebtoken");
+import Jwt from "jsonwebtoken"
 
 const Post = async (req: Request, res: Response) => {
   const { key } = req.body;
@@ -14,7 +14,7 @@ const Post = async (req: Request, res: Response) => {
   }
 
   try {
-    const decoded = jwt.verify(key, secretKey) as { key: { email: string }; iat: number };
+    const decoded = Jwt.verify(key, secretKey) as { key: { email: string }; iat: number };
     console.log("Decoded JWT:", decoded);
 
     const registeredUser = await User.findOne({ email: decoded.key.email });

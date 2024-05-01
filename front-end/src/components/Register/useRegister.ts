@@ -21,7 +21,7 @@ const useRegister = () => {
     false,
     false,
   ]);
-  const { setAuthModal } = useContext(ProductContext);
+  const { setAuthModal, setLoginOrRegister } = useContext(ProductContext);
   const { getRegisteredUser } = useNavigation();
   interface token extends Response {
     token?: string;
@@ -93,6 +93,10 @@ const useRegister = () => {
     document.body.classList.remove("modal-open");
   }
 
+  const handleLogIn = () => {
+    setLoginOrRegister(true);
+  }
+
   return {
     isEmpty,
     isTooLong,
@@ -105,6 +109,7 @@ const useRegister = () => {
     email,
     HandleSubmit,
     handleIncorrectField,
+    handleLogIn
   };
 };
 

@@ -3,12 +3,13 @@ import Register from "./Register/Register.tsx";
 import Login from "./Login/Login.tsx";
 import { ProductContext } from "./Context.tsx";
 import "../styles/auth.css";
+import { useTranslation } from "react-i18next";
 
 const Auth: React.FC = () => {
   const { loginOrRegister, setLoginOrRegister, setAuthModal } =
     useContext(ProductContext);
   const [underline, setUnderline] = useState<string[]>(["", ""]);
-
+  const { t } = useTranslation();
   function closeModal() {
     document.body.classList.remove("modal-open");
   }
@@ -47,7 +48,7 @@ const Auth: React.FC = () => {
                 setLoginOrRegister(true);
               }}
             >
-              LOG IN
+              {t('LOG IN')}
             </div>
             <div
               className={"authentication-option " + underline[1]}
@@ -55,7 +56,7 @@ const Auth: React.FC = () => {
                 setLoginOrRegister(false);
               }}
             >
-              CREATE ACCOUNT
+             {t('CREATE ACCOUNT')}
             </div>
           </div>
           {loginOrRegister ? <Login /> : <Register />}

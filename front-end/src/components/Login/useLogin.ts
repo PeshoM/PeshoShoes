@@ -8,7 +8,7 @@ const useLogin = () => {
   const [isEmpty, setIsEmpty] = useState<boolean[]>([false, false]);
   const [passwordTooShort, setPasswordTooShort] = useState<boolean>();
   const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
-  const { setAuthModal } = useContext(ProductContext);
+  const { setAuthModal, setLoginOrRegister } = useContext(ProductContext);
   const { getRegisteredUser } = useNavigation();
   interface token extends Response {
     token: string;
@@ -57,6 +57,10 @@ const useLogin = () => {
     document.body.classList.remove("modal-open");
   }
 
+  const handleRegister = () => {
+    setLoginOrRegister(false);
+  }
+
   return {
     password,
     email,
@@ -65,6 +69,7 @@ const useLogin = () => {
     passwordTooShort,
     handleIncorrectField,
     HandleSubmit,
+    handleRegister
   };
 };
 

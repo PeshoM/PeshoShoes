@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@nextui-org/react": "^2.2.10",
+    "@stripe/react-stripe-js": "^2.7.0",
+    "@stripe/stripe-js": "^3.3.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -12,11 +14,13 @@
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.8",
     "framer-motion": "^11.0.28",
+    "i18next": "^23.11.3",
     "postcss": "^8.4.31",
     "rc-slider": "^10.5.0",
     "react": "^18.2.0",
     "react-daisyui": "^4.1.1",
     "react-dom": "^18.2.0",
+    "react-i18next": "^14.1.1",
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"

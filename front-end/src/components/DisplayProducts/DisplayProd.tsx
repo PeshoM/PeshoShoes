@@ -1,5 +1,6 @@
 import "../../styles/displayprod.css";
-import { useEffect, useState, useContext} from "react";
+import "../../styles/main.css";
+import { useEffect, useState, useContext } from "react";
 import React from "react";
 import Footer from "../Footer.tsx";
 import Navigation from "../NavigationBar/Navigation.tsx";
@@ -22,12 +23,8 @@ const DisplayProd = () => {
     handleSeasonChange,
     handleClickProduct,
   } = useDisplayProd();
-  const {
-    products,
-    setProduct,
-    searchedProds,
-    setSearchedProds,
-  } = useContext(ProductContext)
+  const { products, setProduct, searchedProds, setSearchedProds } =
+    useContext(ProductContext);
   const [range, setRange] = useState([null, null]);
   let colorsArr = [
     { color: "Beige", class: "beigeclass" },
@@ -47,8 +44,8 @@ const DisplayProd = () => {
   const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
 
   useEffect(() => {
-    console.log('range log', range);
-    console.log('log',range[1]);
+    console.log("range log", range);
+    console.log("log", range[1]);
   }, [range]);
 
   useEffect(() => {
@@ -73,12 +70,17 @@ const DisplayProd = () => {
       setEndValue(response.maxVal);
       console.log("min and max for range", range);
       console.log(response);
-    }; // asd asddsa asd
+    };
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const optionsString = urlSearchParams.get("options");
 
+    // Parse optionsString into an array
+    const options = optionsString ? JSON.parse(optionsString) : null;
+    console.log("123");
+    // Log or use options
+    console.log("Options from URL:", options);
     fetchData();
   }, []);
-
-
 
   return (
     <div>
@@ -157,7 +159,7 @@ const DisplayProd = () => {
                 <div className="colors-div-display">
                   <p>Shoe colour</p>
                   <div className="colors-subdiv-display">
-                    {colorsArr.map((color, index) => (
+                    {colorsArr.map((color) => (
                       <div className="colors-choices-display">
                         <input
                           type="checkbox"
@@ -191,7 +193,7 @@ const DisplayProd = () => {
                 <div className="seasons-div-display">
                   <div className="seasons-subdiv-display">
                     {["spring", "summer", "autumn", "winter"].map(
-                      (season, index) => (
+                      (season) => (
                         <div className="seasons-choices-display">
                           <input
                             type="checkbox"
@@ -244,10 +246,7 @@ const DisplayProd = () => {
                         >
                           <img
                             className="displayed_images"
-                            src={
-                              imagepath +
-                              colorVar.images[0]
-                            }
+                            src={imagepath + colorVar.images[0]}
                             alt={product.title}
                           />
                           <div className="info">

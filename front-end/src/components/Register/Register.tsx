@@ -1,8 +1,23 @@
 import "../../styles/register.css";
 import React, { useEffect, useState, LegacyRef, MutableRefObject } from "react";
 import { useRegister } from "./useRegister.ts";
+import { useTranslation } from "react-i18next";
+
 const Register: React.FC = () => {
-  const { firstName, lastName, email, password, confirmPassword, isEmpty, isTooLong, isValidEmail, passwordTooShort, HandleSubmit, handleIncorrectField } = useRegister();
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+    isEmpty,
+    isTooLong,
+    isValidEmail,
+    passwordTooShort,
+    HandleSubmit,
+    handleIncorrectField,
+    handleLogIn,
+  } = useRegister();
   const [incorrectField, setIncorrectField] = useState<string[]>([
     "valid",
     "valid",
@@ -21,6 +36,7 @@ const Register: React.FC = () => {
     { name: "Password", ref: password, type: "password" },
     { name: "Confirm Password", ref: confirmPassword, type: "password" },
   ];
+  const { t } = useTranslation();
 
   useEffect(() => {
     setIncorrectField((prev) => {
@@ -56,7 +72,7 @@ const Register: React.FC = () => {
                 index: number
               ) => (
                 <div className="register-data">
-                  <label>{field.name}</label>
+                  <label>{t(field.name)}</label>
                   <input
                     ref={field.ref as LegacyRef<HTMLInputElement>}
                     type={field.type}
@@ -70,23 +86,25 @@ const Register: React.FC = () => {
                     }}
                   />
                   {isEmpty[index] && (
-                    <label className="invalid-field">Field is required</label>
+                    <label className="invalid-field">
+                      {t("Field is required")}
+                    </label>
                   )}
                   {isTooLong[index] && (
                     <label className="invalid-field">
-                      Maximum is 32 characters
+                      {t("Maximum is 32 characters")}
                     </label>
                   )}
                   {!isValidEmail && !isEmpty[index] && index == 2 && (
                     <label className="invalid-field">
-                      Please enter a valid email address
+                      {t("Please enter a valid email address")}
                     </label>
                   )}
                   {passwordTooShort[index - 3] &&
                     index >= 3 &&
                     !isEmpty[index] && (
                       <label className="invalid-field">
-                        Minimum is 5 characters
+                        {t("Minimum is 5 characters")}
                       </label>
                     )}
                 </div>
@@ -96,12 +114,17 @@ const Register: React.FC = () => {
               <input
                 type="submit"
                 className="register-fields-valid register-data-submit"
-                value="CREATE ACCOUNT"
+                value={t("CREATE ACCOUNT")}
               ></input>
             </div>
             <div className="already-member-paragraph">
-              <span>Already a member?</span>
-              <button className="already-member-button">Log in</button>
+              <span>{t("Already a member")}?</span>
+              <button
+                className="already-member-button"
+                onClick={() => handleLogIn()}
+              >
+                {t('Log in')}
+              </button>
             </div>
           </div>
         </div>

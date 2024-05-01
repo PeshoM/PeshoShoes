@@ -4,7 +4,7 @@ export interface ColorVariation {
   quantity: number[];
   sizes: number[];
   color: string;
-  rating: number[];
+  rating?: number[];
 }
 export interface Prod {
   _id: string

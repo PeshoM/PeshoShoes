@@ -5,6 +5,7 @@ import categories from "../../categories.js";
 import { ProductContext } from "../Context.tsx";
 import Auth from "../Auth.tsx";
 import { useNavigation } from "./useNavigation.ts";
+import { useTranslation } from "react-i18next";
 
 const Navigation: React.FC = () => {
   // console.log("hereeee");
@@ -21,7 +22,8 @@ const Navigation: React.FC = () => {
     handleOpenLogin,
     handleOpenRegister,
     handleLogOut,
-    getRegisteredUser
+    getRegisteredUser,
+    handleClickNavUrl,
   } = useNavigation();
   let location = useLocation();
   const [hovered, setHovered] = useState<string[]>([
@@ -35,7 +37,13 @@ const Navigation: React.FC = () => {
     "",
   ]);
   const [isShown, setIsShown] = useState<number>(-1);
-  const { options, authModal, setAuthModal, registeredUser, setRegisteredUser } = useContext(ProductContext);
+  const {
+    options,
+    authModal,
+    setAuthModal,
+    registeredUser,
+    setRegisteredUser,
+  } = useContext(ProductContext);
   const navigate = useNavigate();
   const [userIconHovered, setUserIconHovered] = useState<boolean>(false);
   const [showInputMenu, setShowInputMenu] = useState<boolean>(false);
@@ -46,18 +54,12 @@ const Navigation: React.FC = () => {
     "Discount codes",
     "My benefits",
   ];
-  let navBarOptionsArr: string[] = [
-    "New arrivals",
-    "Shoes",
-    "Clothing",
-    "Accessories",
-    "Brands",
-    "Sale",
-  ];
-
+  let navBarOptionsArr: string[] = ["Shoes", "Brands", "Sale"];
+  const { t } = useTranslation();
+  
   useEffect(() => {
     getRegisteredUser(localStorage.getItem("auth_token"));
-  }, [])
+  }, []);
 
   return (
     <div>
@@ -66,17 +68,17 @@ const Navigation: React.FC = () => {
           <div className="nav_genders">
             <div>
               <a href="" className="nav_gender">
-                Men
+                {t("MEN")}
               </a>
             </div>
             <div>
               <a href="" className="nav_gender">
-                Women
+                {t("WOMEN")}
               </a>
             </div>
             <div>
               <a href="" className="nav_gender">
-                Kids
+                {t("KIDS")}
               </a>
             </div>
           </div>
@@ -125,7 +127,7 @@ const Navigation: React.FC = () => {
                 }}
               >
                 <a href="" className="MainItem_mainLink">
-                  {navBarOption}
+                  {t(navBarOption)}
                 </a>
               </li>
             ))}
@@ -153,15 +155,15 @@ const Navigation: React.FC = () => {
                       className="login-button"
                       onClick={() => handleOpenLogin()}
                     >
-                      LOG IN
+                      {t("LOG IN")}
                     </button>
                     <div className="register-text-paragraph">
-                      <span>New customer?</span>
+                      <span>{t("New customer")}?</span>
                       <button
                         className="register-button"
                         onClick={() => handleOpenRegister()}
                       >
-                        Register
+                        {t("Register")}
                       </button>
                     </div>
                   </div>
@@ -172,7 +174,7 @@ const Navigation: React.FC = () => {
                       className="personalized-option-div"
                       onClick={() => !registeredUser && handleOpenLogin()}
                     >
-                      <div className="personalized-option">{option}</div>
+                      <div className="personalized-option">{t(option)}</div>
                     </div>
                   ))}
                 </div>
@@ -193,14 +195,14 @@ const Navigation: React.FC = () => {
                     setShowInputMenu(true);
                     setInputText(e.target.value);
                     handleChange(e);
-                    // console.log(inputText);
+                    console.log("here line 197");
                   }}
                   onFocus={() => setShowInputMenu(true)}
                   onBlur={() => setShowInputMenu(false)}
                   onKeyDown={handleKeyDown}
                   type="text"
                   className="searchTerm"
-                  placeholder="What are you looking for?"
+                  placeholder={`${t("What are you looking for")}?`}
                   value={inputText}
                 />
                 <button
@@ -208,8 +210,7 @@ const Navigation: React.FC = () => {
                   className="searchButton"
                   onClick={() => {
                     handleSearch();
-                    location.pathname != "/DisplayProd" &&
-                      navigate("/DisplayProd");
+                    location.pathname != "/" && navigate("/");
                   }}
                 >
                   <img src="icons8-search-500.png" />
@@ -217,25 +218,37 @@ const Navigation: React.FC = () => {
               </div>
               <div className="searchProducts">
                 <ul>
-                  {inputText.length > 0 &&
-                    showInputMenu &&
-                    options.map((product, index: number) => (
-                      <>
-                        {product.colorVariations.map(
-                          (colorVar, idx: number) => (
-                            <div className="product" key={index}>
-                              <img
-                                className="searchBarImages"
-                                src={imagepath + colorVar.images[0]}
-                                alt={product.title}
-                              />
-                              <p className="resTitles">{product.title}</p>
-                              <p className="resPrices">{colorVar.price}</p>
-                            </div>
-                          )
-                        )}
-                      </>
-                    ))}
+                  {inputText.length > 0 && showInputMenu && options.length > 0
+                    ? options.map((product, index: number) => (
+                        <>
+                          {product.colorVariations.map(
+                            (colorVar, idx: number) => (
+                              <div className="product" key={index}>
+                                <img
+                                  className="searchBarImages"
+                                  src={imagepath + colorVar.images[0]}
+                                  alt={product.title}
+                                />
+                                <p className="resTitles">{product.title}</p>
+                                <p className="resPrices">{colorVar.price}</p>
+                              </div>
+                            )
+                          )}
+                        </>
+                      ))
+                    : inputText.length > 0 &&
+                      showInputMenu && (
+                        <>
+                          <div className="no-results-input-text">
+                            <p className="no-results-warning">
+                              No results for "{inputText}"
+                            </p>
+                            <p className="spelling-error-warning">
+                              Check the spelling or try a different search term.
+                            </p>
+                          </div>
+                        </>
+                      )}
                 </ul>
               </div>
             </div>
@@ -253,33 +266,41 @@ const Navigation: React.FC = () => {
                 return (
                   <div className="columns_Hovered_Children">
                     <div className="columns_Elements_Hovered_Children">
-                      {Object.keys(category).map((titles, idx: number) => {
-                        // {}[i] -> titles
-                        return (
-                          <div>
+                      {Object.keys(category).map(
+                        (titles: string, idx: number) => {
+                          // {}[i] -> titles
+                          return (
                             <div>
-                              <div className="titles_Hovered_Children">
-                                {titles}
+                              <div>
+                                <div className="titles_Hovered_Children">
+                                  {t(titles)}
+                                </div>
+                              </div>
+                              <div>
+                                {/* napravi titles da e custom name za vseki hardcode i shte ima proverka s map ili neshto za da vzemesh dadeniq filtur */}
+                                {/*@ts-ignore*/}
+                                {Object.values(category)[idx].map(
+                                  (element: { name: string; url: string }) => {
+                                    return (
+                                      <div
+                                        className="nav_bar_Hovered_Elements"
+                                        onClick={() => {
+                                          handleClickNavUrl(
+                                            titles,
+                                            element.name
+                                          );
+                                        }}
+                                      >
+                                        {t(element.name)}
+                                      </div>
+                                    );
+                                  }
+                                )}
                               </div>
                             </div>
-                            <div>
-                              {/*@ts-ignore*/}
-                              {Object.values(category)[idx].map((element) => {
-                                // console.log(element);
-                                return (
-                                  <a
-                                    href={element.url}
-                                    className="nav_bar_Hovered_Elements"
-                                  >
-                                    {element.name}
-                                  </a>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        );
-                        //
-                      })}
+                          );
+                        }
+                      )}
                     </div>
                   </div>
                 );

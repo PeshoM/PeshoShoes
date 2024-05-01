@@ -15,8 +15,14 @@ li a {
   padding: 0;
 }
 
-.navbar .nav_left li {
-  padding: 3%;
+.nav_left {
+  padding-left: 15px;
+  position: absolute;
+  left: 0;
+  align-items: stretch;
+  li {
+    padding-inline: 10%;
+  }
 }
 
 .nav_Left_Hovered_Child {
@@ -86,12 +92,11 @@ li a {
   color: white;
   display: block;
   font-family: var(--font-family-accent);
-  font-size: 0.875rem;
   line-height: 1.4286;
 }
 
 .MainItem_mainLink {
-  font-size: 0.875rem !important;
+  font-size: 1rem;
   line-height: 1.4286;
   text-decoration: none;
   text-transform: uppercase;
@@ -100,9 +105,6 @@ li a {
   font-family: var(--font-family-accent);
 }
 
-.nav_left li {
-  padding-left: 15px;
-}
 /* 
 .MainItem_mainItem :hover {
   text-decoration: underline solid white 2.5px;
@@ -137,13 +139,6 @@ li a {
   display: flex;
 }
 
-.nav_left {
-  padding-left: 15px;
-  position: absolute;
-  left: 0;
-  align-items: stretch;
-}
-
 .nav_right {
   position: absolute;
   right: 0;
@@ -161,7 +156,12 @@ li a {
 
 .nav_bar_Hovered_Elements {
   display: block;
+  cursor: pointer;
   margin-bottom: 0.1vw;
+}
+
+.nav_bar_Hovered_Elements:hover {
+  text-decoration: underline;
 }
 
 .nav_bar_Hovered_Elements_Sale {
@@ -344,13 +344,16 @@ body.modal-open {
   border-bottom: solid rgb(169, 169, 169) 2px;
   height: 20%;
   width: 100%;
-  p span {
-    font-size: 1.4rem;
-    display: inline-block;
-    width: 80%;
-    white-space: nowrap;
-    overflow: hidden !important;
-    text-overflow: ellipsis;
+  p {
+    width: 100%;
+    span {
+      font-size: 1.4rem;
+      display: inline-block;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden !important;
+      text-overflow: ellipsis;
+    }
   }
 }
 
@@ -369,4 +372,17 @@ body.modal-open {
 
 .registered-log-out-button:hover {
   background-color: rgb(108, 108, 108, 0.2);
+}
+
+.no-results-input-text {
+  padding: 2%;
+  min-height: 80px;
+  border: 1px solid black;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  p {
+    overflow-wrap: break-word;
+  }
 }

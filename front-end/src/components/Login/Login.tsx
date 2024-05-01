@@ -1,12 +1,7 @@
 import "../../styles/login.css";
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  LegacyRef,
-  MutableRefObject,
-} from "react";
+import React, { useState, useEffect, LegacyRef, MutableRefObject } from "react";
 import { useLogin } from "./useLogin.ts";
+import { useTranslation } from "react-i18next";
 
 const Login: React.FC = () => {
   const {
@@ -17,6 +12,7 @@ const Login: React.FC = () => {
     passwordTooShort,
     handleIncorrectField,
     HandleSubmit,
+    handleRegister,
   } = useLogin();
   const [incorrectField, setIncorrectField] = useState<string[]>([
     "valid",
@@ -30,6 +26,7 @@ const Login: React.FC = () => {
     { name: "Email", ref: email, type: "text" },
     { name: "Password", ref: password, type: "password" },
   ];
+  const { t } = useTranslation();
 
   useEffect(() => {
     setIncorrectField((prev) => {
@@ -70,7 +67,7 @@ const Login: React.FC = () => {
                 index: number
               ) => (
                 <div className="register-data">
-                  <label>{field.name}</label>
+                  <label>{t(field.name)}</label>
                   <input
                     ref={field.ref as LegacyRef<HTMLInputElement>}
                     type={field.type}
@@ -84,16 +81,18 @@ const Login: React.FC = () => {
                     }}
                   />
                   {isEmpty[index] && (
-                    <label className="invalid-field">Field is required</label>
+                    <label className="invalid-field">
+                      {t("Field is required")}
+                    </label>
                   )}
                   {!isValidEmail && !isEmpty[index] && index == 0 && (
                     <label className="invalid-field">
-                      Please enter a valid email address
+                      {t("Please enter a valid email address")}
                     </label>
                   )}
                   {passwordTooShort && index >= 1 && !isEmpty[index] && (
                     <label className="invalid-field">
-                      Minimum is 5 characters
+                      {t("Minimum is 5 characters")}
                     </label>
                   )}
                 </div>
@@ -103,15 +102,20 @@ const Login: React.FC = () => {
               <input
                 type="submit"
                 className="register-fields-valid register-data-submit"
-                value="CREATE ACCOUNT"
+                value={t("LOG IN")}
               ></input>
             </div>
             <div className="forgotten-password">
-              <span>Forgotten your password?</span>
+              <span>{t("Forgotten your password")}?</span>
             </div>
             <div className="already-member-paragraph">
-              <span>New customer?</span>
-              <button className="already-member-button">Register</button>
+              <span>{t("New customer")}?</span>
+              <button
+                className="already-member-button"
+                onClick={() => handleRegister()}
+              >
+                {t("Register")}
+              </button>
             </div>
           </div>
         </div>

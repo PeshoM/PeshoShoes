@@ -1,7 +1,6 @@
 import { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProductContext } from "../Context.tsx";
-import { user } from "../../../../back-end/src/schemas/users.schema.ts";
 const useNavigation = () => {
   let location = useLocation();
   const [inputText, setInputText] = useState<string>("");
@@ -14,7 +13,6 @@ const useNavigation = () => {
     setSearchedProds,
     setLoginOrRegister,
     setAuthModal,
-    registeredUser,
     setRegisteredUser,
   } = useContext(ProductContext);
   const navigate = useNavigate();
@@ -56,7 +54,7 @@ const useNavigation = () => {
     setInputText(() => {
       return e.target.value;
     });
-    console.log("typed:", lowerCase);
+    // console.log("typed:", lowerCase);
     const url: string = process.env.REACT_APP_URL + "/searchInput";
     const response = await fetch(url, {
       method: "POST",
@@ -74,21 +72,52 @@ const useNavigation = () => {
 
   let handleSearch = async () => {
     console.log("curr options", options);
-    options.length > 0
-      ? (() => {
-          setProduct(options);
-          setSearchedProds(options);
-        }).call(null)
-      : setProduct(allProducts);
-    // setProduct(response.results)
+    if (options.length <= 0 || !options) return;
+
+    // Convert options to a JSON string
+    const optionsString = JSON.stringify(options);
+    console.log("Options string:", optionsString); // Debug statement
+
+    const queryParams = { options: optionsString };
+    const searchParams = new URLSearchParams(queryParams);
+    const newUrl = `/?${searchParams.toString()}`;
+    console.log("New URL:", newUrl); // Debug statement
+
+    // Change the URL without causing a page refresh
+    window.history.pushState({ path: newUrl }, "", newUrl);
+
+    // Set state with the search results
+    setProduct(options);
+    setSearchedProds(options);
+
+    // Debug: Log the search results
+    console.log("Search results:", options);
+    // Call parseOptionsFromUrl after setting the options
+    parseOptionsFromUrl();
+  };
+
+  const parseOptionsFromUrl = () => {
+    // Parse options from the URL
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const optionsString = urlSearchParams.get("options");
+
+    // Parse optionsString into an array
+    const options = optionsString
+      ? JSON.parse(decodeURIComponent(optionsString))
+      : null;
+
+    // Log or use options
+    console.log("Options from URL:", options);
+    // Or do something else with options
   };
 
   const handleKeyDown = async (event) => {
     if (event.key === "Enter") {
-      options == "" || !options ? setProduct(allProducts) : handleSearch();
-      console.log(location.pathname);
+      if (options == "" || !options) return;
+      handleSearch();
+      // console.log(location.pathname);
       setInputText("");
-      location.pathname != "/DisplayProd" && navigate("/DisplayProd");
+      location.pathname != "/" && navigate("/");
     }
   };
 
@@ -123,6 +152,33 @@ const useNavigation = () => {
     setRegisteredUser(null);
   };
 
+  const handleClickNavigateUrl = async () => {
+    const url: string = process.env.REACT_APP_URL + "/clickedNavigationUrl";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    });
+  };
+  const handleSearchQueryParams = (searchResults) => {
+    const queryParams = { searchResults };
+    const searchParams = new URLSearchParams(queryParams);
+    const newUrl = `/?${searchParams.toString()}`;
+
+    // Change the URL without causing a page refresh
+    window.history.pushState({ path: newUrl }, "", newUrl);
+    console.log("search results not stringified", searchResults);
+    console.log("Search results:", JSON.stringify(searchResults));
+  };
+  const handleClickNavUrl = (title: string, name: string) => {
+    const queryParams = { title, name };
+    const searchParams = new URLSearchParams(queryParams);
+    const url = `/?${searchParams.toString()}`;
+    window.location.href = url;
+  };
+
   return {
     inputText,
     setInputText,
@@ -138,6 +194,7 @@ const useNavigation = () => {
     handleOpenRegister,
     handleLogOut,
     getRegisteredUser,
+    handleClickNavUrl,
   };
 };
 

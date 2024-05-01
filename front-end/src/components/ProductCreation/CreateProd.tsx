@@ -1,7 +1,6 @@
 import "../../styles/createprod.css";
 import React, { LegacyRef } from "react";
-import { useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 import { useCreateProd } from "./useCreateProd.ts";
 const CreateProd: React.FC = () => {
   const {
@@ -13,6 +12,7 @@ const CreateProd: React.FC = () => {
     selectedSeason,
     imagesRef,
     pickedPrice,
+    selectedGender,
     setPickedPrice,
     setPickedQuantity,
     HandleRequest,
@@ -21,11 +21,7 @@ const CreateProd: React.FC = () => {
     handleColorVar,
     handleImageChanges,
   } = useCreateProd();
-  let sizesArr: number[] = [
-    34, 34.5, 35, 35.5, 36, 36.5, 37, 37.5, 38, 38.5, 39, 39.5, 40, 40.5, 41,
-    41.5, 42, 42.5, 43, 43.5, 44, 44.5, 45, 45.5, 46, 46.5, 47, 47.5, 48, 48.5,
-    49,
-  ];
+  const sizesArr: number[] = Array.from({ length: 31 },(_, index) => 34 + index * 0.5);
   interface Color {
     color: string;
     class: string;
@@ -46,26 +42,6 @@ const CreateProd: React.FC = () => {
     { color: "Yellow", class: "yellowclass" },
   ];
   const selectedCategory = useRef<string[]>();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const url: string = process.env.REACT_APP_URL + "/role";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          key: localStorage.getItem("auth_token"),
-        }),
-      }).then((res) => res.json());
-      // console.log(response);
-      if (response.role != "admin") navigate("/NotFound");
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div>
@@ -87,32 +63,32 @@ const CreateProd: React.FC = () => {
           />
           {numOfColors.map((a, idx) => {
             // console.log(imagesRef.current[idx]);
-          return (
-            <div className="colorVarContainer">
-              {"Color " + (idx + 1)}
-              <input
-                ref={imagesRef.current[idx]}
-                onChange={() => handleImageChanges(idx)}
-                type="file"
-                className="file-input file-input-bordered w-full max-w-xs"
-                multiple
-              />
-              <input
-                type="number"
-                placeholder="Type Price here"
-                value={pickedPrice[idx]}
-                onChange={(e) => {
-                  setPickedPrice((prev) => {
-                    prev = [...pickedPrice];
-                    prev[idx] = parseFloat(
-                      parseFloat(e.target.value).toFixed(2)
-                    );
-                    return prev;
-                  });
-                }}
-                className="input input-bordered w-full max-w-xs"
-              />
-              {/* <input
+            return (
+              <div className="colorVarContainer">
+                {"Color " + (idx + 1)}
+                <input
+                  ref={imagesRef.current[idx]}
+                  onChange={() => handleImageChanges(idx)}
+                  type="file"
+                  className="file-input file-input-bordered w-full max-w-xs"
+                  multiple
+                />
+                <input
+                  type="number"
+                  placeholder="Type Price here"
+                  value={pickedPrice[idx]}
+                  onChange={(e) => {
+                    setPickedPrice((prev) => {
+                      prev = [...pickedPrice];
+                      prev[idx] = parseFloat(
+                        parseFloat(e.target.value).toFixed(2)
+                      );
+                      return prev;
+                    });
+                  }}
+                  className="input input-bordered w-full max-w-xs"
+                />
+                {/* <input
                 //@ts-ignore
                 type="number"
                 placeholder="Type Quantity here"
@@ -126,58 +102,59 @@ const CreateProd: React.FC = () => {
                 }}
                 className="input input-bordered w-full max-w-xs"
               /> */}
-              <div className="sizes-div">
-                <p>Sizes to put as stocked</p>
-                <div className="sizes-subdiv">
-                  {sizesArr.map((size: number, index: number) => (
-                    <div className="sizes-choices">
-                      {size}
-                      {/**make the colors work better with the arr state */}
-                      <input
-                        type="checkbox"
-                        defaultChecked={false}
-                        className="checkbox checkbox-sm"
-                        onChange={() => {
-                          updateSizeOptions(size, idx);
-                        }}
-                      />
-                      <input
-                        className="size-quantity-choices"
-                        onChange={(e) => {
-                          setPickedQuantity((prev) => {
-                            prev = [...pickedQuantity];
-                            prev[idx][index] = parseInt(e.target.value);
-                            return prev;
-                          });
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="sizes-div">
-                <p>Shoe Colours to put as stocked</p>
-                <div className="sizes-subdiv">
-                  {colorsArr.map((color: Color, index: number) => (
-                    <div className="colors-choices">
-                      <div className={color.class + " squares"}>
-                        {color.color}
+                <div className="sizes-div">
+                  <p>Sizes to put as stocked</p>
+                  <div className="sizes-subdiv">
+                    {sizesArr.map((size: number, index: number) => (
+                      <div className="sizes-choices">
+                        {size}
+                        {/**make the colors work better with the arr state */}
+                        <input
+                          type="checkbox"
+                          defaultChecked={false}
+                          className="checkbox checkbox-sm"
+                          onChange={() => {
+                            updateSizeOptions(size, idx);
+                          }}
+                        />
+                        <input
+                          className="size-quantity-choices"
+                          onChange={(e) => {
+                            setPickedQuantity((prev) => {
+                              prev = [...pickedQuantity];
+                              prev[idx][index] = parseInt(e.target.value);
+                              return prev;
+                            });
+                          }}
+                        />
                       </div>
-                      <input
-                        type="radio"
-                        name="color"
-                        className="checkbox checkbox-sm"
-                        checked={pickedColor[idx] === color.color}
-                        onChange={() => {
-                          handleColorChange(color.color, idx);
-                        }}
-                      />
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+                <div className="sizes-div">
+                  <p>Shoe Colours to put as stocked</p>
+                  <div className="sizes-subdiv">
+                    {colorsArr.map((color: Color, index: number) => (
+                      <div className="colors-choices">
+                        <div className={color.class + " squares"}>
+                          {color.color}
+                        </div>
+                        <input
+                          type="radio"
+                          name="color"
+                          className="checkbox checkbox-sm"
+                          checked={pickedColor[idx] === color.color}
+                          onChange={() => {
+                            handleColorChange(color.color, idx);
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          )})}
+            );
+          })}
           <button
             className="colorVarButton"
             onClick={() => {
@@ -189,7 +166,6 @@ const CreateProd: React.FC = () => {
           <div className="colors-seasons-div">
             <div className="seasons-div">
               <p>Select a season</p>
-              {/*@ts-ignore*/}
               <select ref={selectedSeason}>
                 <option value="" disabled hidden selected>
                   Seasons
@@ -198,6 +174,17 @@ const CreateProd: React.FC = () => {
                 <option value="summer">Summer</option>
                 <option value="autumn">Autumn</option>
                 <option value="winter">Winter</option>
+              </select>
+            </div>
+            <div className="seasons-div">
+              <p>Select a season</p>
+              <select ref={selectedGender}>
+                <option value="" disabled hidden selected>
+                  Genders
+                </option>
+                <option value="man">Man</option>
+                <option value="woman">Woman</option>
+                <option value="kids">Kids</option>
               </select>
             </div>
             <div className="categories-div">

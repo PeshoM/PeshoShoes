@@ -51,7 +51,7 @@ const useEditProd = (product: Prod) => {
     setPickedColor(initialPickedColor);
     setNumOfColors(initialNumOfColors);
   }, []);
-
+  
   const handleColorVar = () => {
     const newRef = React.createRef();
     imagesRef.current.push(newRef);
