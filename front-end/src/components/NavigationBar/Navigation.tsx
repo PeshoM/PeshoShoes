@@ -262,7 +262,7 @@ const Navigation: React.FC = () => {
             }}
           >
             {isShown >= 0 &&
-              categories[isShown].map((category, idx: number) => {
+              categories[isShown].map((category) => {
                 return (
                   <div className="columns_Hovered_Children">
                     <div className="columns_Elements_Hovered_Children">
@@ -277,7 +277,6 @@ const Navigation: React.FC = () => {
                                 </div>
                               </div>
                               <div>
-                                {/* napravi titles da e custom name za vseki hardcode i shte ima proverka s map ili neshto za da vzemesh dadeniq filtur */}
                                 {/*@ts-ignore*/}
                                 {Object.values(category)[idx].map(
                                   (element: { name: string; url: string }) => {

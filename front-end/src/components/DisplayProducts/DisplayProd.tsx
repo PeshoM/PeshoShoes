@@ -6,9 +6,11 @@ import Footer from "../Footer.tsx";
 import Navigation from "../NavigationBar/Navigation.tsx";
 import { ProductContext } from "../Context.tsx";
 import { useDisplayProd } from "./useDisplayProd.ts";
+import { useSearchParams } from "react-router-dom";
 
 const DisplayProd = () => {
   const {
+    range,
     activeTabs,
     startValue,
     setStartValue,
@@ -22,10 +24,11 @@ const DisplayProd = () => {
     handleColorChange,
     handleSeasonChange,
     handleClickProduct,
+    fetchData,
+    fetchParamsData,
   } = useDisplayProd();
   const { products, setProduct, searchedProds, setSearchedProds } =
     useContext(ProductContext);
-  const [range, setRange] = useState([null, null]);
   let colorsArr = [
     { color: "Beige", class: "beigeclass" },
     { color: "Black", class: "blackclass" },
@@ -42,45 +45,29 @@ const DisplayProd = () => {
     { color: "Yellow", class: "yellowclass" },
   ];
   const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
+  const [searchParams] = useSearchParams();
+  const searchResults: string | null = searchParams.get("searchResults");
+
+  // useEffect(() => {
+  //   fetchParamsData(searchResults);
+  //   console.log("searchResults param", searchResults, !searchResults);
+  //   fetchParamsData(searchResults);
+  // }, []);
+  useEffect(() => {
+    if(!searchResults) {
+      console.log("fetchData called");
+      fetchData();
+    } else {
+      console.log("fetchParamsData called");
+      fetchParamsData(searchResults);
+    }
+    // !searchResults ? fetchData() : fetchParamsData(searchResults);
+  }, [searchResults]);
 
   useEffect(() => {
     console.log("range log", range);
     console.log("log", range[1]);
   }, [range]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const url: string = process.env.REACT_APP_URL + "/products";
-      const response = await fetch(url, {
-        method: "GET",
-      }).then((res) => {
-        return res.json();
-      });
-      console.log(response);
-      if (products.length == 0) setProduct(response.products);
-      if (searchedProds.length == 0) setSearchedProds(response.products);
-      setRange((prev) => {
-        prev = [...range];
-        prev[0] = response.minVal;
-        prev[1] = response.maxVal;
-        console.log(prev[0], prev[1], "datatata");
-        return prev;
-      });
-      setStartValue(response.minVal);
-      setEndValue(response.maxVal);
-      console.log("min and max for range", range);
-      console.log(response);
-    };
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const optionsString = urlSearchParams.get("options");
-
-    // Parse optionsString into an array
-    const options = optionsString ? JSON.parse(optionsString) : null;
-    console.log("123");
-    // Log or use options
-    console.log("Options from URL:", options);
-    fetchData();
-  }, []);
 
   return (
     <div>
@@ -101,11 +88,10 @@ const DisplayProd = () => {
               <div className="sizes-menu">
                 <p>EUROPEAN</p>
                 <div>
-                  {[
-                    34, 34.5, 35, 35.5, 36, 36.5, 37, 37.5, 38, 38.5, 39, 39.5,
-                    40, 40.5, 41, 41.5, 42, 42.5, 43, 43.5, 44, 44.5, 45, 45.5,
-                    46, 46.5, 47, 47.5, 48, 48.5, 49,
-                  ].map((size: number, index: number) => (
+                  {Array.from(
+                    { length: 31 },
+                    (_, index) => 34 + index * 0.5
+                  ).map((size: number, index: number) => (
                     <div className="single-size-option">
                       <input
                         type="checkbox"
@@ -192,22 +178,20 @@ const DisplayProd = () => {
               <div className="seasons-main">
                 <div className="seasons-div-display">
                   <div className="seasons-subdiv-display">
-                    {["spring", "summer", "autumn", "winter"].map(
-                      (season) => (
-                        <div className="seasons-choices-display">
-                          <input
-                            type="checkbox"
-                            defaultChecked={false}
-                            className=""
-                            onChange={() => {
-                              handleSeasonChange(season);
-                              handleFiltering();
-                            }}
-                          />
-                          <div>{season}</div>
-                        </div>
-                      )
-                    )}
+                    {["spring", "summer", "autumn", "winter"].map((season) => (
+                      <div className="seasons-choices-display">
+                        <input
+                          type="checkbox"
+                          defaultChecked={false}
+                          className=""
+                          onChange={() => {
+                            handleSeasonChange(season);
+                            handleFiltering();
+                          }}
+                        />
+                        <div>{season}</div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

@@ -1,5 +1,5 @@
-import { useState, useContext } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ProductContext } from "../Context.tsx";
 const useNavigation = () => {
   let location = useLocation();
@@ -16,6 +16,8 @@ const useNavigation = () => {
     setRegisteredUser,
   } = useContext(ProductContext);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchResults = searchParams.get("searchResults");
 
   const getRegisteredUser = async (token: string | null) => {
     const url: string = process.env.REACT_APP_URL + "/getRegisteredUser";
@@ -69,46 +71,13 @@ const useNavigation = () => {
     });
     setOption(response);
   };
-
+  
   let handleSearch = async () => {
     console.log("curr options", options);
     if (options.length <= 0 || !options) return;
-
-    // Convert options to a JSON string
-    const optionsString = JSON.stringify(options);
-    console.log("Options string:", optionsString); // Debug statement
-
-    const queryParams = { options: optionsString };
-    const searchParams = new URLSearchParams(queryParams);
-    const newUrl = `/?${searchParams.toString()}`;
-    console.log("New URL:", newUrl); // Debug statement
-
-    // Change the URL without causing a page refresh
-    window.history.pushState({ path: newUrl }, "", newUrl);
-
-    // Set state with the search results
+    setSearchParams({ searchResults: inputText.toLowerCase() });
     setProduct(options);
     setSearchedProds(options);
-
-    // Debug: Log the search results
-    console.log("Search results:", options);
-    // Call parseOptionsFromUrl after setting the options
-    parseOptionsFromUrl();
-  };
-
-  const parseOptionsFromUrl = () => {
-    // Parse options from the URL
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const optionsString = urlSearchParams.get("options");
-
-    // Parse optionsString into an array
-    const options = optionsString
-      ? JSON.parse(decodeURIComponent(optionsString))
-      : null;
-
-    // Log or use options
-    console.log("Options from URL:", options);
-    // Or do something else with options
   };
 
   const handleKeyDown = async (event) => {

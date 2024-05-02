@@ -2,7 +2,7 @@ import { useContext, useRef, useState } from "react";
 import { ProductContext } from "../Context.tsx";
 
 const useDisplayProd = () => {
-  const { setProduct, searchedProds } = useContext(ProductContext);
+  const { products, setProduct, searchedProds, setSearchedProds } = useContext(ProductContext);
   const [activeTabs, setActiveTabs] = useState<boolean[]>([
     false,
     false,
@@ -17,6 +17,7 @@ const useDisplayProd = () => {
   const [selectedColor, setSelectedColor] = useState(null);
   const pickedColors = useRef<string[]>([]);
   const pickedSeasons = useRef<string[]>([]);
+  const [range, setRange] = useState([null, null]);
 
   const handleStartChange = (e) => {
     const newStartValue = parseFloat(e.target.value);
@@ -32,7 +33,7 @@ const useDisplayProd = () => {
     }
   };
 
-  const handleTabClick = (idx) => {
+  const handleTabClick = (idx: number) => {
     setActiveTabs((prevActiveTabs) => {
       prevActiveTabs = [...activeTabs];
       prevActiveTabs[idx] = !prevActiveTabs[idx];
@@ -75,7 +76,7 @@ const useDisplayProd = () => {
     }
     pickedSizes.current = [...pickedSizes.current, size];
     pickedSizes.current.sort();
-    console.log("sizes picked", pickedSizes.current);
+    // console.log("sizes picked", pickedSizes.current);
   };
 
   const handleColorChange = (color) => {
@@ -85,7 +86,7 @@ const useDisplayProd = () => {
     }
     pickedColors.current = [...pickedColors.current, color];
     pickedColors.current.sort();
-    console.log("colors picked", pickedColors.current);
+    // console.log("colors picked", pickedColors.current);
   };
 
   const handleSeasonChange = (season) => {
@@ -95,7 +96,7 @@ const useDisplayProd = () => {
     }
     pickedSeasons.current = [...pickedSeasons.current, season];
     pickedSeasons.current.sort();
-    console.log("seasons picked", pickedSeasons.current);
+    // console.log("seasons picked", pickedSeasons.current);
   };
 
   const handleClickProduct = (title: string, color: string) => {
@@ -105,22 +106,52 @@ const useDisplayProd = () => {
     window.location.href = url;
   };
 
-  const parseOptionsFromUrl = () => {
-    // Parse options from the URL
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const optionsString = urlSearchParams.get("options");
-
-    // Parse optionsString into an array
-    const options = optionsString
-      ? JSON.parse(decodeURIComponent(optionsString))
-      : null;
-
-    // Log or use options
-    console.log("Options from URL:", options);
-    // Or do something else with options
+  const fetchData = async () => {
+    const url: string = process.env.REACT_APP_URL + "/products";
+    const response = await fetch(url, {
+      method: "GET",
+    }).then((res) => {
+      return res.json();
+    });
+    setProduct(response.products);
+    setSearchedProds(response.products);
+    setRange((prev) => {
+      prev = [...range];
+      prev[0] = response.minVal;
+      prev[1] = response.maxVal;
+      // console.log(prev[0], prev[1], "datatata");
+      return prev;
+    });
+    setStartValue(response.minVal);
+    setEndValue(response.maxVal);
+    console.log("i got here");
+    // console.log("min and max for range", range);
   };
 
+  const fetchParamsData = async ( params: string | null ) => {
+    const url: string = `${process.env.REACT_APP_URL}/fetchParamsData?searchResults=${params}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      return res.json();
+    });
+    setProduct(response.products);
+    setSearchedProds(response.products);
+    setRange((prev) => {
+      prev = [...range];
+      prev[0] = response.minVal;
+      prev[1] = response.maxVal;
+      // console.log(prev[0], prev[1], "datatata");
+      return prev;
+    });
+    setStartValue(response.minVal);
+    setEndValue(response.maxVal);
+  }
   return {
+    range,
     activeTabs,
     selectedColor,
     startValue,
@@ -135,7 +166,8 @@ const useDisplayProd = () => {
     handleColorChange,
     handleSeasonChange,
     handleClickProduct,
-    parseOptionsFromUrl,
+    fetchData,
+    fetchParamsData,
   };
 };
 
