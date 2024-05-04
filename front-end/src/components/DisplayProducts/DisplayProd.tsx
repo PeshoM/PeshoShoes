@@ -7,6 +7,7 @@ import Navigation from "../NavigationBar/Navigation.tsx";
 import { ProductContext } from "../Context.tsx";
 import { useDisplayProd } from "./useDisplayProd.ts";
 import { useSearchParams } from "react-router-dom";
+import { Prod } from "../../interfaces/productInterfaces.ts";
 
 const DisplayProd = () => {
   const {
@@ -26,6 +27,8 @@ const DisplayProd = () => {
     handleClickProduct,
     fetchData,
     fetchParamsData,
+    handleGenderChange,
+    handleCategoryChange,
   } = useDisplayProd();
   const { products, setProduct, searchedProds, setSearchedProds } =
     useContext(ProductContext);
@@ -47,14 +50,26 @@ const DisplayProd = () => {
   const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
   const [searchParams] = useSearchParams();
   const searchResults: string | null = searchParams.get("searchResults");
-
+  const title: string | null = searchParams.get("title");
+  const name: string | null = searchParams.get("name");
+  const gendersArr: string[] = ["man", "woman", "kids"];
+  const categoriesArr: string[] = [
+    "sneakers",
+    "low Top",
+    "slides",
+    "slip-ons",
+    "sustainable sneakers",
+    "sandals",
+    "boots",
+    "high top",
+  ];
   // useEffect(() => {
   //   fetchParamsData(searchResults);
   //   console.log("searchResults param", searchResults, !searchResults);
   //   fetchParamsData(searchResults);
   // }, []);
   useEffect(() => {
-    if(!searchResults) {
+    if (!searchResults) {
       console.log("fetchData called");
       fetchData();
     } else {
@@ -64,6 +79,9 @@ const DisplayProd = () => {
     // !searchResults ? fetchData() : fetchParamsData(searchResults);
   }, [searchResults]);
 
+  useEffect(() => {
+    console.log("title params", title, name);
+  }, [title]);
   useEffect(() => {
     console.log("range log", range);
     console.log("log", range[1]);
@@ -91,7 +109,7 @@ const DisplayProd = () => {
                   {Array.from(
                     { length: 31 },
                     (_, index) => 34 + index * 0.5
-                  ).map((size: number, index: number) => (
+                  ).map((size: number) => (
                     <div className="single-size-option">
                       <input
                         type="checkbox"
@@ -152,7 +170,6 @@ const DisplayProd = () => {
                           defaultChecked={false}
                           name="colors"
                           value={color.color}
-                          // checked={selectedColor === color.color}
                           onChange={() => {
                             handleColorChange(color.color);
                             handleFiltering();
@@ -213,14 +230,67 @@ const DisplayProd = () => {
             >
               CATEGORIES
             </div>
-            {activeTabs[4] && <div>123456</div>}
+            {activeTabs[4] && (
+              <div className="categories-main">
+                <div>
+                  <div>
+                    {categoriesArr.map((category) => (
+                      <div className="colors-choices-display">
+                        <input
+                          type="checkbox"
+                          defaultChecked={false}
+                          name="categories"
+                          value={category}
+                          onChange={() => {
+                            handleCategoryChange(category);
+                            handleFiltering();
+                          }}
+                        />
+                        {category}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+            <div
+              className="filtering-options"
+              onClick={() => {
+                handleTabClick(5);
+              }}
+            >
+              GENDER
+            </div>
+            {activeTabs[5] && (
+              <div className="genders-main">
+                <div className="colors-div-display">
+                  <div className="colors-subdiv-display">
+                    {gendersArr.map((gender) => (
+                      <div className="colors-choices-display">
+                        <input
+                          type="checkbox"
+                          defaultChecked={false}
+                          name="genders"
+                          value={gender}
+                          onChange={() => {
+                            handleGenderChange(gender);
+                            handleFiltering();
+                          }}
+                        />
+                        {gender}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div className="midPart-right">
             <div className="Container">
               <ul className="items-section">
-                {products.map((product, index: number) => (
+                {products.map((product: Prod, index: number) => (
                   <>
-                    {product.colorVariations.map((colorVar, idx: number) => (
+                    {product.colorVariations.map((colorVar) => (
                       <li className="a" key={index}>
                         <div
                           className="products"

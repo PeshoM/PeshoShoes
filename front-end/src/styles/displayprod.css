@@ -126,6 +126,7 @@ body {
   color: #000;
   text-transform: var(--text-transform);
   position: relative;
+  user-select: none;
 }
 
 .double-range-slider {
@@ -235,5 +236,15 @@ body {
 
 .seasons-choices-display {
   display: flex;
+  color: #000;
+}
+
+.genders-main {
+  display: flex;
+  color: #000;
+}
+
+.categories-main {
+  display:flex;
   color: #000;
 }

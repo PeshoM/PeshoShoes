@@ -65,23 +65,6 @@ const Navigation: React.FC = () => {
     <div>
       <div className="Ultranav">
         <div className="main navbar">
-          <div className="nav_genders">
-            <div>
-              <a href="" className="nav_gender">
-                {t("MEN")}
-              </a>
-            </div>
-            <div>
-              <a href="" className="nav_gender">
-                {t("WOMEN")}
-              </a>
-            </div>
-            <div>
-              <a href="" className="nav_gender">
-                {t("KIDS")}
-              </a>
-            </div>
-          </div>
           <div
             className="navbar-center"
             onClick={() => {

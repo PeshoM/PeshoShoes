@@ -11,6 +11,8 @@ const useCreateProd = () => {
   const [pickedColor, setPickedColor] = useState<string[]>([]);
   const selectedSeason = useRef<HTMLSelectElement>(null);
   const selectedGender = useRef<HTMLSelectElement>(null);
+  const selectedCategory = useRef<HTMLSelectElement>(null);
+  const selectedSport = useRef<HTMLSelectElement>(null);
   const [numOfColors, setNumOfColors] = useState<number[]>([]);
   const imagesRef = useRef<any>([]);
   const [imgFile, setImgFile] = useState<any>([]);
@@ -48,6 +50,9 @@ const useCreateProd = () => {
     }
 
     data.append("season", selectedSeason.current!.value);
+    data.append("gender", selectedGender.current!.value);
+    data.append("category", selectedCategory.current!.value);
+    data.append("sport", selectedSport.current!.value);
 
     for (let i: number = 0; i < imgFile.length; i++) {
       const fileList = imgFile[i];
@@ -92,7 +97,7 @@ const useCreateProd = () => {
 
     console.log("picked images", imgFile);
     console.log(imagesRef.current);
-    for (let i = 0; i < imagesRef.current.length; i++) {
+    for (let i: number = 0; i < imagesRef.current.length; i++) {
       console.log("line115 images ref", i, imagesRef.current[i].current?.files);
     }
   };
@@ -106,7 +111,7 @@ const useCreateProd = () => {
     });
   };
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchRoleData = async () => {
       const url: string = process.env.REACT_APP_URL + "/role";
       const response = await fetch(url, {
         method: "POST",
@@ -119,9 +124,8 @@ const useCreateProd = () => {
       }).then((res) => res.json());
       if (response.role != "admin") navigate("/NotFound");
     };
-    fetchData();
+    fetchRoleData();
   }, []);
-  
 
   return {
     title,
@@ -133,6 +137,8 @@ const useCreateProd = () => {
     imagesRef,
     pickedPrice,
     selectedGender,
+    selectedCategory,
+    selectedSport,
     setPickedPrice,
     setPickedQuantity,
     HandleRequest,

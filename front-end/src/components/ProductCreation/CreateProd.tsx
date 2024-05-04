@@ -1,6 +1,5 @@
 import "../../styles/createprod.css";
 import React, { LegacyRef } from "react";
-import { useRef } from "react";
 import { useCreateProd } from "./useCreateProd.ts";
 const CreateProd: React.FC = () => {
   const {
@@ -13,6 +12,8 @@ const CreateProd: React.FC = () => {
     imagesRef,
     pickedPrice,
     selectedGender,
+    selectedCategory,
+    selectedSport,
     setPickedPrice,
     setPickedQuantity,
     HandleRequest,
@@ -41,7 +42,6 @@ const CreateProd: React.FC = () => {
     { color: "White", class: "whiteclass" },
     { color: "Yellow", class: "yellowclass" },
   ];
-  const selectedCategory = useRef<string[]>();
 
   return (
     <div>
@@ -88,27 +88,12 @@ const CreateProd: React.FC = () => {
                   }}
                   className="input input-bordered w-full max-w-xs"
                 />
-                {/* <input
-                //@ts-ignore
-                type="number"
-                placeholder="Type Quantity here"
-                value={pickedQuantity[idx]}
-                onChange={(e) => {
-                  setPickedQuantity((prev) => {
-                    prev = [...pickedQuantity];
-                    prev[idx] = parseInt(e.target.value);
-                    return prev;
-                  });
-                }}
-                className="input input-bordered w-full max-w-xs"
-              /> */}
                 <div className="sizes-div">
                   <p>Sizes to put as stocked</p>
                   <div className="sizes-subdiv">
                     {sizesArr.map((size: number, index: number) => (
                       <div className="sizes-choices">
                         {size}
-                        {/**make the colors work better with the arr state */}
                         <input
                           type="checkbox"
                           defaultChecked={false}
@@ -189,17 +174,31 @@ const CreateProd: React.FC = () => {
             </div>
             <div className="categories-div">
               <p>Select a shoe category</p>
-              {/*@ts-ignore*/}
               <select ref={selectedCategory}>
                 <option value="" disabled hidden selected>
                   Categories
                 </option>
-                <option value="sport">Sport</option>
-                <option value="lifestyle">Lifestyle</option>
-                <option value="formal">Formal</option>
+                <option value="sneakers">Sneakers</option>
+                <option value="low Top">Low top</option>
+                <option value="slides">Slides</option>
+                <option value="slip-ons">Slip-ons</option>
+                <option value="sustainable sneakers">Sustainable sneakers</option>
+                <option value="sandals">Sandals</option>
+                <option value="boots">Boots</option>
+                <option value="high top">High top</option>
+              </select>
+            </div>
+            <div className="seasons-div">
+              <p>Select a sport (optional)</p>
+              <select ref={selectedSport}>
+                <option value="" selected>
+                  Sport
+                </option>
+                <option value="running">Running</option>
+                <option value="skate">Skate</option>
+                <option value="basket">Basket</option>
+                <option value="fitness">Fitness</option>
                 <option value="outdoor">Outdoor</option>
-                <option value="specialty">Specialty</option>
-                <option value="trends">Fashion Trends</option>
               </select>
             </div>
           </div>

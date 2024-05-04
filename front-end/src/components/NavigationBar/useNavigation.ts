@@ -131,21 +131,9 @@ const useNavigation = () => {
       body: JSON.stringify({}),
     });
   };
-  const handleSearchQueryParams = (searchResults) => {
-    const queryParams = { searchResults };
-    const searchParams = new URLSearchParams(queryParams);
-    const newUrl = `/?${searchParams.toString()}`;
-
-    // Change the URL without causing a page refresh
-    window.history.pushState({ path: newUrl }, "", newUrl);
-    console.log("search results not stringified", searchResults);
-    console.log("Search results:", JSON.stringify(searchResults));
-  };
+  
   const handleClickNavUrl = (title: string, name: string) => {
-    const queryParams = { title, name };
-    const searchParams = new URLSearchParams(queryParams);
-    const url = `/?${searchParams.toString()}`;
-    window.location.href = url;
+    setSearchParams({ title, name });
   };
 
   return {

@@ -1,11 +1,5 @@
 import { Schema, model, Document } from "mongoose";
 
-// interface Quantity {
-//   available: number;
-//   reserved: number;п
-//   sold: number;
-// }
-
 export interface ColorVariation {
   images: string[];
   price: number;
@@ -20,7 +14,10 @@ export interface product extends Document {
   description: string;
   colorVariations: ColorVariation[];
   season: string;
-  _id?: string
+  gender: string;
+  category: string;
+  sport?: string;
+  _id?: string;
 }
 
 const productSchema = new Schema<product>({
@@ -33,10 +30,13 @@ const productSchema = new Schema<product>({
       quantity: [Number],
       sizes: [Number],
       color: String,
-      rating: [Number]
+      rating: [Number],
     }),
   ],
   season: String,
+  gender: String,
+  category: String,
+  sport: String
 });
-//need categories soon
+
 export const Product = model<product>("Product", productSchema);

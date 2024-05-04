@@ -17,6 +17,8 @@ const useDisplayProd = () => {
   const [selectedColor, setSelectedColor] = useState(null);
   const pickedColors = useRef<string[]>([]);
   const pickedSeasons = useRef<string[]>([]);
+  const pickedGenders = useRef<string[]>([]);
+  const pickedCategories = useRef<string[]>([]);
   const [range, setRange] = useState([null, null]);
 
   const handleStartChange = (e) => {
@@ -61,6 +63,8 @@ const useDisplayProd = () => {
         pickedSizes: pickedSizes.current,
         pickedColor: pickedColors.current,
         pickedSeason: pickedSeasons.current,
+        pickedGender: pickedGenders.current,
+        pickedCategory: pickedCategories.current,
         products: searchedProds,
       }),
     }).then((res) => {
@@ -89,6 +93,26 @@ const useDisplayProd = () => {
     // console.log("colors picked", pickedColors.current);
   };
 
+  const handleGenderChange = (gender: string) => {
+    for (let i = 0; i < pickedGenders.current.length; i++) {
+      if (pickedGenders.current[i] == gender)
+        return pickedGenders.current.splice(i, 1);
+    }
+    pickedGenders.current = [...pickedGenders.current, gender];
+    pickedGenders.current.sort();
+    console.log("picked gender", pickedGenders.current);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    for (let i = 0; i < pickedCategories.current.length; i++) {
+      if (pickedCategories.current[i] == category)
+        return pickedCategories.current.splice(i, 1);
+    }
+    pickedCategories.current = [...pickedCategories.current, category];
+    pickedCategories.current.sort();
+    console.log("picked category", pickedCategories.current);
+  };
+  
   const handleSeasonChange = (season) => {
     for (let i = 0; i < pickedSeasons.current.length; i++) {
       if (pickedSeasons.current[i] == season)
@@ -168,6 +192,8 @@ const useDisplayProd = () => {
     handleClickProduct,
     fetchData,
     fetchParamsData,
+    handleGenderChange,
+    handleCategoryChange,
   };
 };
 

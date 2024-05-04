@@ -8,11 +8,12 @@ const Post = async (req: Request, res: Response) => {
     min: number = req.body.minPrice,
     max: number = req.body.maxPrice,
     arr: product[] = [],
-    sizesSet = new Set(req.body.pickedSizes),
-    colorsSet = new Set(req.body.pickedColor),
-    seasonsSet = new Set(req.body.pickedSeason);
+    sizesSet: Set<number[]> = new Set(req.body.pickedSizes),
+    colorsSet: Set<string> = new Set(req.body.pickedColor),
+    seasonsSet: Set<string> = new Set(req.body.pickedSeason),
+    gendersSet: Set<string> = new Set(req.body.pickedGender),
+    categoriesSet: Set<string> = new Set(req.body.pickedCategory);
 
-  console.log(products.length, "asd");
   const filterArray = (set: Set<any>, arr: product[], param: params) => {
     let filteredArr: product[] = [];
     let hashSet = new Set();
@@ -42,7 +43,9 @@ const Post = async (req: Request, res: Response) => {
         products[i].colorVariations[j].price >= min &&
         (seasonsSet.has(products[i].season) || seasonsSet.size == 0) &&
         (colorsSet.has(products[i].colorVariations[j].color) ||
-          colorsSet.size == 0)
+          colorsSet.size == 0) &&
+        (gendersSet.has(products[i].gender) || gendersSet.size == 0) &&
+        (categoriesSet.has(products[i].category) || categoriesSet.size == 0)
       ) {
         let colorVar: ColorVariation = {
           images: [],
@@ -61,6 +64,9 @@ const Post = async (req: Request, res: Response) => {
           description: products[i].description,
           colorVariations: [colorVar],
           season: products[i].season,
+          gender: products[i].gender,
+          category: products[i].category,
+          sport: products[i].sport,
         } as product);
       } else continue;
     }

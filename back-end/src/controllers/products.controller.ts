@@ -70,6 +70,9 @@ const Post = async (req: Request, res: Response) => {
     description: req.body.description,
     colorVariations,
     season: req.body.season,
+    gender: req.body.gender,
+    category: req.body.category,
+    sport: req.body.sport,
   });
 
   await product.save();
@@ -96,7 +99,7 @@ const Get = async (req: Request, res: Response) => {
       season: doc[i].season,
     } as product);
   }
-  res.json({ products: prods, minVal: min, maxVal: max });
+  res.json({ products: doc, minVal: min, maxVal: max });
 };
 
 const Update = async (req: Request, res: Response) => {
@@ -158,8 +161,10 @@ const Update = async (req: Request, res: Response) => {
       sizes: [],
       color: "",
     };
-    
-    colorVariations[i]["images"] = changedIdx.has(i) ? imagesArr[i] : productToChange!.colorVariations[i].images;
+
+    colorVariations[i]["images"] = changedIdx.has(i)
+      ? imagesArr[i]
+      : productToChange!.colorVariations[i].images;
     colorVariations[i]["price"] =
       typeof req.body.price === "string" ? req.body.price : req.body.price[i];
     colorVariations[i]["quantity"] = quantityArr[i];
