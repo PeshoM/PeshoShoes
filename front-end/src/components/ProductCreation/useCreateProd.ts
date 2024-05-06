@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 const useCreateProd = () => {
   const title = useRef<HTMLInputElement>();
   const description = useRef<HTMLInputElement>();
+  const brand = useRef<HTMLInputElement>();
   const [pickedPrice, setPickedPrice] = useState<number[]>([]);
   const [pickedQuantity, setPickedQuantity] = useState<number[][]>([]);
   let quantityArr: number[] = Array.from({ length: 31 }, (_, i) => 0);
@@ -22,6 +23,7 @@ const useCreateProd = () => {
     let data = new FormData();
     data.append("title", title.current!.value);
     data.append("description", description.current!.value);
+    data.append("brand", brand.current!.value);
     for (let i: number = 0; i < pickedColor.length; i++) {
       data.append("color", pickedColor[i]);
     }
@@ -30,7 +32,7 @@ const useCreateProd = () => {
       data.append("price", pickedPrice[i]);
     }
     for (let rowIndex: number = 0; rowIndex < pickedSizes.length; rowIndex++) {
-      const row = pickedSizes[rowIndex];
+      const row: number[] = pickedSizes[rowIndex];
       for (let colIndex: number = 0; colIndex < row.length; colIndex++) {
         const value = row[colIndex];
         data.append(`sizes_${rowIndex}_${colIndex}`, String(value));
@@ -130,6 +132,7 @@ const useCreateProd = () => {
   return {
     title,
     description,
+    brand,
     pickedColor,
     numOfColors,
     pickedQuantity,

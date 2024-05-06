@@ -18,18 +18,18 @@ const useProduct = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    let fetchProduct = async () => {
-      const url: string = process.env.REACT_APP_URL + "/fetchProduct";
+    let fetchProduct = async (titleParam: string, colorParam: string) => {
+      const url: string = `${
+      process.env.REACT_APP_URL
+    }/fetchProduct?title=${encodeURIComponent(
+      titleParam
+    )}&color=${encodeURIComponent(colorParam)}`;
       console.log(searchParams.toString());
       let response = await fetch(url, {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          title,
-          color,
-        }),
       }).then((res) => {
         return res.json();
       });
@@ -37,7 +37,7 @@ const useProduct = () => {
       setSizesSet(new Set<number>(response.product.colorVariations[0].sizes));
       setQuantityArr(response.product.colorVariations[0].quantity);
     };
-    fetchProduct();
+    fetchProduct(title!, color!);
   }, []);
 
   useEffect(() => {

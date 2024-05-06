@@ -68,6 +68,7 @@ const Post = async (req: Request, res: Response) => {
   const product = new Product({
     title: req.body.title,
     description: req.body.description,
+    brand: req.body.brand,
     colorVariations,
     season: req.body.season,
     gender: req.body.gender,
@@ -82,8 +83,7 @@ const Post = async (req: Request, res: Response) => {
 
 const Get = async (req: Request, res: Response) => {
   const doc = await Product.find({});
-  let prods: product[] = [],
-    min: number = Number.MAX_VALUE,
+  let min: number = Number.MAX_VALUE,
     max: number = 0;
   for (let i = 0; i < doc.length; i++) {
     for (let j = 0; j < doc[i].colorVariations.length; j++) {
@@ -92,12 +92,6 @@ const Get = async (req: Request, res: Response) => {
       if (doc[i].colorVariations[j].price >= max)
         max = doc[i].colorVariations[j].price;
     }
-    prods.push({
-      title: doc[i].title,
-      description: doc[i].description,
-      colorVariations: doc[i].colorVariations,
-      season: doc[i].season,
-    } as product);
   }
   res.json({ products: doc, minVal: min, maxVal: max });
 };

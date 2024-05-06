@@ -5,6 +5,7 @@ const CreateProd: React.FC = () => {
   const {
     title,
     description,
+    brand,
     pickedColor,
     numOfColors,
     pickedQuantity,
@@ -59,6 +60,12 @@ const CreateProd: React.FC = () => {
             ref={description as LegacyRef<HTMLInputElement> | undefined}
             type="text"
             placeholder="Type Description here"
+            className="input input-bordered w-full max-w-xs"
+          />
+          <input
+            ref={brand as LegacyRef<HTMLInputElement> | undefined}
+            type="text"
+            placeholder="Type Brand here"
             className="input input-bordered w-full max-w-xs"
           />
           {numOfColors.map((a, idx) => {
@@ -119,7 +126,7 @@ const CreateProd: React.FC = () => {
                 <div className="sizes-div">
                   <p>Shoe Colours to put as stocked</p>
                   <div className="sizes-subdiv">
-                    {colorsArr.map((color: Color, index: number) => (
+                    {colorsArr.map((color: Color) => (
                       <div className="colors-choices">
                         <div className={color.class + " squares"}>
                           {color.color}
@@ -182,7 +189,9 @@ const CreateProd: React.FC = () => {
                 <option value="low Top">Low top</option>
                 <option value="slides">Slides</option>
                 <option value="slip-ons">Slip-ons</option>
-                <option value="sustainable sneakers">Sustainable sneakers</option>
+                <option value="sustainable sneakers">
+                  Sustainable sneakers
+                </option>
                 <option value="sandals">Sandals</option>
                 <option value="boots">Boots</option>
                 <option value="high top">High top</option>

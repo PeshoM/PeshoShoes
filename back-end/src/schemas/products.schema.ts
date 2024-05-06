@@ -12,6 +12,7 @@ export interface ColorVariation {
 export interface product extends Document {
   title: string;
   description: string;
+  brand: string;
   colorVariations: ColorVariation[];
   season: string;
   gender: string;
@@ -23,6 +24,7 @@ export interface product extends Document {
 const productSchema = new Schema<product>({
   title: String,
   description: String,
+  brand: String,
   colorVariations: [
     new Schema<ColorVariation>({
       images: [String],

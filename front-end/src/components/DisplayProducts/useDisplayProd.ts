@@ -174,6 +174,34 @@ const useDisplayProd = () => {
     setStartValue(response.minVal);
     setEndValue(response.maxVal);
   }
+
+  const handleClickNavigateUrl = async (titleParam: string, nameParam: string) => {
+    const url: string = `${
+      process.env.REACT_APP_URL
+    }/clickedNavigationUrl?title=${encodeURIComponent(
+      titleParam
+    )}&name=${encodeURIComponent(nameParam)}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      return res.json();
+    });
+    setProduct(response.products);
+    setSearchedProds(response.products);
+    setRange((prev) => {
+      prev = [...range];
+      prev[0] = response.minVal;
+      prev[1] = response.maxVal;
+      // console.log(prev[0], prev[1], "datatata");
+      return prev;
+    });
+    setStartValue(response.minVal);
+    setEndValue(response.maxVal);
+  };
+
   return {
     range,
     activeTabs,
@@ -194,6 +222,7 @@ const useDisplayProd = () => {
     fetchParamsData,
     handleGenderChange,
     handleCategoryChange,
+    handleClickNavigateUrl,
   };
 };
 

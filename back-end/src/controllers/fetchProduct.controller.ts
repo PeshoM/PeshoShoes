@@ -1,8 +1,8 @@
 import { Product, product } from "../schemas/products.schema";
 import { Request, Response } from "express";
 
-const Post = async (req: Request, res: Response) => {
-  const { title, color } = req.body;
+const Get = async (req: Request, res: Response) => {
+  const { title, color } = req.query;
   let newArr = [],
     arrRest = [];
   const product: product | null = await Product.findOne({ title });
@@ -14,16 +14,11 @@ const Post = async (req: Request, res: Response) => {
   for (let i: number = 0; i < arrRest.length; i++) {
     newArr.push(arrRest[i]);
   }
-  console.log("after", newArr);
+  let updatedProd: product = product!;
+  updatedProd.colorVariations = newArr;
   res.json({
-    product: {
-      title: product!.title,
-      description: product!.description,
-      colorVariations: newArr,
-      season: product!.season,
-      _id: product!._id
-    },
+    product: updatedProd,
   });
 };
 
-export default { Post };
+export default { Get };

@@ -29,6 +29,7 @@ const DisplayProd = () => {
     fetchParamsData,
     handleGenderChange,
     handleCategoryChange,
+    handleClickNavigateUrl,
   } = useDisplayProd();
   const { products, setProduct, searchedProds, setSearchedProds } =
     useContext(ProductContext);
@@ -78,6 +79,14 @@ const DisplayProd = () => {
     }
     // !searchResults ? fetchData() : fetchParamsData(searchResults);
   }, [searchResults]);
+
+  useEffect(() => {
+    (!title || !name) ? fetchData() : handleClickNavigateUrl(title, name);
+  }, [title]);
+
+  useEffect(() => {
+    !title || !name ? fetchData() : handleClickNavigateUrl(title, name);
+  }, [name]);
 
   useEffect(() => {
     console.log("title params", title, name);
@@ -130,8 +139,8 @@ const DisplayProd = () => {
             <div className="double-range-slider">
               <input
                 type="range"
-                min={range[0]!}
-                max={range[1]!}
+                min={range[0] != Number.MAX_VALUE ? range[0]! : 0}
+                max={range[1] || 0}
                 step={0.1}
                 value={startValue}
                 onChange={handleStartChange}
@@ -140,8 +149,8 @@ const DisplayProd = () => {
               <input
                 type="range"
                 step={0.1}
-                min={range[0]!}
-                max={range[1]!}
+                min={range[0] != Number.MAX_VALUE ? range[0]! : 0}
+                max={range[1] || 0}
                 value={endValue}
                 onChange={handleEndChange}
                 onMouseUp={handleFiltering}

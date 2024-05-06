@@ -3,6 +3,6 @@ import fetchProductController from "../controllers/fetchProduct.controller";
 
 const router: Router = Router();
 
-router.post( "/fetchProduct", fetchProductController.Post);
+router.get( "/fetchProduct", fetchProductController.Get);
 
 export default router;

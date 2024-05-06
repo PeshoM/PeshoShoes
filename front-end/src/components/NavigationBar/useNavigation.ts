@@ -71,7 +71,7 @@ const useNavigation = () => {
     });
     setOption(response);
   };
-  
+
   let handleSearch = async () => {
     console.log("curr options", options);
     if (options.length <= 0 || !options) return;
@@ -121,17 +121,6 @@ const useNavigation = () => {
     setRegisteredUser(null);
   };
 
-  const handleClickNavigateUrl = async () => {
-    const url: string = process.env.REACT_APP_URL + "/clickedNavigationUrl";
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({}),
-    });
-  };
-  
   const handleClickNavUrl = (title: string, name: string) => {
     setSearchParams({ title, name });
   };

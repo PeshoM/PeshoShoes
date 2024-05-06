@@ -10,6 +10,7 @@ import filteredDataRouter from "./routers/filteredData.router";
 import fetchProductRouter from "./routers/fetchProduct.router";
 import getRegisteredUserRouter from "./routers/getRegisteredUser.router";
 import fetchParamsDataRouter from "./routers/fetchParamsData.router";
+import clickedNavigationUrlRouter from "./routers/clickedNavigationUrl.router";
 import bodyParser from 'body-parser';
 import env from "dotenv";
 
@@ -31,6 +32,7 @@ server.use(filteredDataRouter);
 server.use(fetchProductRouter);
 server.use(getRegisteredUserRouter);
 server.use(fetchParamsDataRouter);
+server.use(clickedNavigationUrlRouter);
 
 server.use("/uploads", express.static("uploads"));
 process.env.DATABASE_CONNECTION &&
