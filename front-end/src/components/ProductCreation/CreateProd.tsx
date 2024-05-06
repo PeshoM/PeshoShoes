@@ -22,6 +22,7 @@ const CreateProd: React.FC = () => {
     handleColorChange,
     handleColorVar,
     handleImageChanges,
+    handleDeleteColor,
   } = useCreateProd();
   const sizesArr: number[] = Array.from({ length: 31 },(_, index) => 34 + index * 0.5);
   interface Color {
@@ -73,6 +74,7 @@ const CreateProd: React.FC = () => {
             return (
               <div className="colorVarContainer">
                 {"Color " + (idx + 1)}
+                <button className="delete-edit-modal-button" onClick={() => handleDeleteColor(idx)}>Delete color</button>
                 <input
                   ref={imagesRef.current[idx]}
                   onChange={() => handleImageChanges(idx)}

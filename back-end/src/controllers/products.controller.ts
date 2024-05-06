@@ -170,8 +170,12 @@ const Update = async (req: Request, res: Response) => {
   const updatedProd = {
     title: req.body.title,
     description: req.body.description,
+    brand: req.body.brand,
     colorVariations,
     season: req.body.season,
+    gender: req.body.gender,
+    category: req.body.category,
+    sport: req.body.sport,
     _id: req.body.productId,
   } as product;
 

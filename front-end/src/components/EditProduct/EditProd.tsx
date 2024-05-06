@@ -1,6 +1,5 @@
 import "../../styles/createprod.css";
 import React, { LegacyRef } from "react";
-import { useRef} from "react";
 import { useEditProd } from "./useEditProd.ts";
 import { Prod } from "../../interfaces/productInterfaces.ts";
 
@@ -12,10 +11,14 @@ const EditProd: React.FC<Edit> = ({ product }) => {
   const {
     title,
     description,
+    brand,
     pickedColor,
     numOfColors,
     pickedQuantity,
     selectedSeason,
+    selectedGender,
+    selectedCategory,
+    selectedSport,
     imagesRef,
     pickedPrice,
     imgFile,
@@ -26,12 +29,9 @@ const EditProd: React.FC<Edit> = ({ product }) => {
     handleColorChange,
     handleColorVar,
     handleImageChanges,
+    handleDeleteColor,
   } = useEditProd(product);
-  let sizesArr: number[] = [
-    34, 34.5, 35, 35.5, 36, 36.5, 37, 37.5, 38, 38.5, 39, 39.5, 40, 40.5, 41,
-    41.5, 42, 42.5, 43, 43.5, 44, 44.5, 45, 45.5, 46, 46.5, 47, 47.5, 48, 48.5,
-    49,
-  ];
+  let sizesArr: number[] = Array.from({ length: 31 }, (_, i) => 34 + i * 0.5);
   interface Color {
     color: string;
     class: string;
@@ -51,7 +51,6 @@ const EditProd: React.FC<Edit> = ({ product }) => {
     { color: "White", class: "whiteclass" },
     { color: "Yellow", class: "yellowclass" },
   ];
-  const selectedCategory = useRef<string[]>();
   const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
 
   return (
@@ -72,11 +71,24 @@ const EditProd: React.FC<Edit> = ({ product }) => {
             placeholder="Type Description here"
             className="input input-bordered w-full max-w-xs"
           />
+          <input
+            ref={brand as LegacyRef<HTMLInputElement> | undefined}
+            type="text"
+            placeholder="Type Brand here"
+            className="input input-bordered w-full max-w-xs"
+          />
           {numOfColors.map((a: number[], idx: number) => {
             // console.log(imagesRef.current[idx]);
             return (
               <div className="colorVarContainer">
-                {"Color " + (idx + 1)} <br /> {"Switch any picture"}
+                {"Color " + (idx + 1)}{" "}
+                <button
+                  className="delete-edit-modal-button"
+                  onClick={() => handleDeleteColor(idx)}
+                >
+                  Delete color
+                </button>
+                <br /> {"Switch any picture"}
                 <div className="shoe-variations-container">
                   {Array.isArray(imgFile[idx])
                     ? imgFile[idx]?.map((image: File) => {
@@ -99,9 +111,11 @@ const EditProd: React.FC<Edit> = ({ product }) => {
                           </div>
                         );
                       })
-                    : Array.from(imgFile[idx] as FileList).map((image: File) => {
-                        return <img src={URL.createObjectURL(image)}/>;
-                      })}
+                    : Array.from(imgFile[idx] as FileList).map(
+                        (image: File) => {
+                          return <img src={URL.createObjectURL(image)} />;
+                        }
+                      )}
                 </div>
                 <input
                   ref={imagesRef.current[idx]}
@@ -125,20 +139,6 @@ const EditProd: React.FC<Edit> = ({ product }) => {
                   }}
                   className="input input-bordered w-full max-w-xs"
                 />
-                {/* <input
-                //@ts-ignore
-                type="number"
-                placeholder="Type Quantity here"
-                value={pickedQuantity[idx]}
-                onChange={(e) => {
-                  setPickedQuantity((prev) => {
-                    prev = [...pickedQuantity];
-                    prev[idx] = parseInt(e.target.value);
-                    return prev;
-                  });
-                }}
-                className="input input-bordered w-full max-w-xs"
-              /> */}
                 <div className="sizes-div">
                   <p>Sizes to put as stocked</p>
                   <div className="sizes-subdiv">
@@ -205,7 +205,6 @@ const EditProd: React.FC<Edit> = ({ product }) => {
           <div className="colors-seasons-div">
             <div className="seasons-div">
               <p>Select a season</p>
-              {/*@ts-ignore*/}
               <select ref={selectedSeason}>
                 <option value="" disabled hidden selected>
                   Seasons
@@ -216,19 +215,46 @@ const EditProd: React.FC<Edit> = ({ product }) => {
                 <option value="winter">Winter</option>
               </select>
             </div>
+            <div className="seasons-div">
+              <p>Select a season</p>
+              <select ref={selectedGender}>
+                <option value="" disabled hidden selected>
+                  Genders
+                </option>
+                <option value="man">Man</option>
+                <option value="woman">Woman</option>
+                <option value="kids">Kids</option>
+              </select>
+            </div>
             <div className="categories-div">
               <p>Select a shoe category</p>
-              {/*@ts-ignore*/}
               <select ref={selectedCategory}>
                 <option value="" disabled hidden selected>
                   Categories
                 </option>
-                <option value="sport">Sport</option>
-                <option value="lifestyle">Lifestyle</option>
-                <option value="formal">Formal</option>
+                <option value="sneakers">Sneakers</option>
+                <option value="low Top">Low top</option>
+                <option value="slides">Slides</option>
+                <option value="slip-ons">Slip-ons</option>
+                <option value="sustainable sneakers">
+                  Sustainable sneakers
+                </option>
+                <option value="sandals">Sandals</option>
+                <option value="boots">Boots</option>
+                <option value="high top">High top</option>
+              </select>
+            </div>
+            <div className="seasons-div">
+              <p>Select a sport (optional)</p>
+              <select ref={selectedSport}>
+                <option value="" selected>
+                  Sport
+                </option>
+                <option value="running">Running</option>
+                <option value="skate">Skate</option>
+                <option value="basket">Basket</option>
+                <option value="fitness">Fitness</option>
                 <option value="outdoor">Outdoor</option>
-                <option value="specialty">Specialty</option>
-                <option value="trends">Fashion Trends</option>
               </select>
             </div>
           </div>

@@ -67,16 +67,24 @@ const useProduct = () => {
     let obj: Prod = {
       title: "",
       description: "",
+      brand: "",
       colorVariations: [
         { images: [], price: 0, quantity: [], sizes: [], color: "" },
       ],
       season: "",
+      gender: "",
+      category: "",
+      sport: "",
       _id: "",
     };
     obj.title = product!.title;
     obj.description = product!.description;
+    obj.description = product!.brand;
     obj.colorVariations = newArr;
     obj.season = product!.season;
+    obj.gender = product!.gender;
+    obj.category = product!.category;
+    obj.sport = product!.sport;
     obj._id = product!._id;
     setSizesSet(new Set<number>(newArr[0].sizes));
     console.log("set", sizesSet);

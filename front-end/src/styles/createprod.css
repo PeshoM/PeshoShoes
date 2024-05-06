@@ -124,3 +124,14 @@ input::-webkit-inner-spin-button {
   border: #000 solid 3px;
   color: black;
 }
+
+.delete-edit-modal-button {
+    width: 150px;
+    color: #141414;
+    border: black 2px solid;
+    background-color: white;
+}
+
+.delete-edit-modal-button:hover{
+    background-color: rgb(151, 151, 151, 0.2);
+}

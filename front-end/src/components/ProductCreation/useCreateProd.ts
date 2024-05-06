@@ -129,6 +129,46 @@ const useCreateProd = () => {
     fetchRoleData();
   }, []);
 
+  const handleDeleteColor = (idx: number) => {
+    setPickedColor((prevColors) => {
+      const updatedColors = [...prevColors];
+      updatedColors.splice(idx, 1);
+      return updatedColors;
+    });
+
+    setNumOfColors((prevNums) => {
+      const updatedNums = [...prevNums];
+      updatedNums.splice(idx, 1);
+      return updatedNums;
+    });
+
+    setPickedQuantity((prevQuantities) => {
+      const updatedQuantities = [...prevQuantities];
+      updatedQuantities.splice(idx, 1);
+      return updatedQuantities;
+    });
+
+    setPickedSizes((prevSizes) => {
+      const updatedSizes = [...prevSizes];
+      updatedSizes.splice(idx, 1);
+      return updatedSizes;
+    });
+
+    setPickedPrice((prevPrices) => {
+      const updatedPrices = [...prevPrices];
+      updatedPrices.splice(idx, 1);
+      return updatedPrices;
+    });
+
+    setImgFile((prevImgFiles) => {
+      const updatedImgFiles = [...prevImgFiles];
+      updatedImgFiles.splice(idx, 1);
+      return updatedImgFiles;
+    });
+
+    imagesRef.current.splice(idx, 1);
+  };
+
   return {
     title,
     description,
@@ -149,6 +189,7 @@ const useCreateProd = () => {
     handleColorChange,
     handleColorVar,
     handleImageChanges,
+    handleDeleteColor,
   };
 };
 

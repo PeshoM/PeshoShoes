@@ -4,12 +4,16 @@ import { ColorVariation, Prod } from "../../interfaces/productInterfaces";
 const useEditProd = (product: Prod) => {
   const title = useRef<HTMLInputElement>();
   const description = useRef<HTMLInputElement>();
+  const brand = useRef<HTMLInputElement>();
   const [pickedPrice, setPickedPrice] = useState<number[]>([]);
   const [pickedQuantity, setPickedQuantity] = useState<number[][]>([]);
   let quantityArr: number[] = Array.from({ length: 31 }, (_, i) => 0);
   const [pickedSizes, setPickedSizes] = useState<number[][]>([]);
   const [pickedColor, setPickedColor] = useState<string[]>([]);
-  const selectedSeason = useRef<HTMLSelectElement>();
+  const selectedSeason = useRef<HTMLSelectElement>(null);
+  const selectedGender = useRef<HTMLSelectElement>(null);
+  const selectedCategory = useRef<HTMLSelectElement>(null);
+  const selectedSport = useRef<HTMLSelectElement>(null);
   const [numOfColors, setNumOfColors] = useState<any[]>([]);
   const imagesRef = useRef<any>([]);
   const [imgFile, setImgFile] = useState<FileList[] | any[]>([]);
@@ -20,6 +24,10 @@ const useEditProd = (product: Prod) => {
     if (title.current) title.current.value = product.title;
     if (description.current) description.current.value = product.description;
     if (selectedSeason.current) selectedSeason.current.value = product.season;
+    if (selectedGender.current) selectedGender.current.value = product.gender;
+    if (selectedCategory.current)
+      selectedCategory.current.value = product.category;
+    if (selectedSport.current) selectedSport.current.value = product.sport;
 
     const initialPickedPrice: number[] = [];
     const initialPickedQuantity: number[][] = [];
@@ -51,7 +59,7 @@ const useEditProd = (product: Prod) => {
     setPickedColor(initialPickedColor);
     setNumOfColors(initialNumOfColors);
   }, []);
-  
+
   const handleColorVar = () => {
     const newRef = React.createRef();
     imagesRef.current.push(newRef);
@@ -78,10 +86,12 @@ const useEditProd = (product: Prod) => {
   async function HandleRequest() {
     let data = new FormData();
     const numberSetString = JSON.stringify(Array.from(changedIdx));
-    data.append("changedIdx", numberSetString)
+    data.append("changedIdx", numberSetString);
     data.append("productId", product._id);
     data.append("title", title.current!.value);
     data.append("description", description.current!.value);
+    data.append("brand", brand.current!.value);
+
     for (let i: number = 0; i < pickedColor.length; i++) {
       data.append("color", pickedColor[i]);
     }
@@ -108,8 +118,11 @@ const useEditProd = (product: Prod) => {
           data.append(`quantity_${rowIndex}_${colIndex}`, String(value));
       }
     }
-    //@ts-ignore
-    data.append("season", selectedSeason.current.value);
+
+    data.append("season", selectedSeason.current!.value);
+    data.append("gender", selectedGender.current!.value);
+    data.append("category", selectedCategory.current!.value);
+    data.append("sport", selectedSport.current!.value);
 
     for (let i: number = 0; i < imgFile.length; i++) {
       const fileList = imgFile[i];
@@ -148,7 +161,7 @@ const useEditProd = (product: Prod) => {
   };
 
   const handleImageChanges = (idx: number) => {
-    if(!changedIdx.has(idx)) {
+    if (!changedIdx.has(idx)) {
       changedIdx.add(idx);
       setChangedIdx(changedIdx);
     }
@@ -177,13 +190,57 @@ const useEditProd = (product: Prod) => {
     window.location.href = url;
   };
 
+  const handleDeleteColor = (idx: number) => {
+      setPickedColor((prevColors) => {
+        const updatedColors = [...prevColors];
+        updatedColors.splice(idx, 1);
+        return updatedColors;
+      });
+
+      setNumOfColors((prevNums) => {
+        const updatedNums = [...prevNums];
+        updatedNums.splice(idx, 1);
+        return updatedNums;
+      });
+
+      setPickedQuantity((prevQuantities) => {
+        const updatedQuantities = [...prevQuantities];
+        updatedQuantities.splice(idx, 1);
+        return updatedQuantities;
+      });
+
+      setPickedSizes((prevSizes) => {
+        const updatedSizes = [...prevSizes];
+        updatedSizes.splice(idx, 1);
+        return updatedSizes;
+      });
+
+      setPickedPrice((prevPrices) => {
+        const updatedPrices = [...prevPrices];
+        updatedPrices.splice(idx, 1);
+        return updatedPrices;
+      });
+
+      setImgFile((prevImgFiles) => {
+        const updatedImgFiles = [...prevImgFiles];
+        updatedImgFiles.splice(idx, 1);
+        return updatedImgFiles;
+      });
+
+      imagesRef.current.splice(idx, 1);
+  }
+
   return {
     title,
     description,
+    brand,
     pickedColor,
     numOfColors,
     pickedQuantity,
     selectedSeason,
+    selectedGender,
+    selectedCategory,
+    selectedSport,
     imagesRef,
     pickedPrice,
     imgFile,
@@ -194,6 +251,7 @@ const useEditProd = (product: Prod) => {
     handleColorChange,
     handleColorVar,
     handleImageChanges,
+    handleDeleteColor,
   };
 };
 
