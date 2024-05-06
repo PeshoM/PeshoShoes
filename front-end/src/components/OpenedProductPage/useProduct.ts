@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { ColorVariation, Prod } from "../../interfaces/productInterfaces";
 
 const useProduct = () => {
@@ -16,6 +16,7 @@ const useProduct = () => {
   const outOfStockRef = useRef();
   const sizesRef = useRef();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let fetchProduct = async (titleParam: string, colorParam: string) => {
@@ -136,6 +137,13 @@ const useProduct = () => {
     // )
     //   setIsOpen(false);
   };
+
+  const handleDeleteProduct = async (id: string) => {
+    const url: string = `${process.env.REACT_APP_URL}/products/${id}`;
+    fetch(url, {
+      method: "DELETE"
+    }).then(() => navigate("/"));
+  }
   return {
     product,
     editModal,
@@ -156,6 +164,7 @@ const useProduct = () => {
     handleEditModal,
     handleCloseSizesMenu,
     handleZoom,
+    handleDeleteProduct,
   };
 };
 

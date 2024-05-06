@@ -10,4 +10,6 @@ router.get("/products", productsController.Get);
 
 router.patch("/products", upload.any(), productsController.Update);
 
+router.delete("/products/:id", productsController.Delete);
+
 export default router;

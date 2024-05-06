@@ -141,7 +141,7 @@ const useDisplayProd = () => {
     setSearchedProds(response.products);
     setRange((prev) => {
       prev = [...range];
-      prev[0] = response.minVal;
+      prev[0] = response.minVal < 100000 ? response.minVal : 0;
       prev[1] = response.maxVal;
       // console.log(prev[0], prev[1], "datatata");
       return prev;
@@ -151,7 +151,7 @@ const useDisplayProd = () => {
     console.log("i got here");
     // console.log("min and max for range", range);
   };
-
+// asd
   const fetchParamsData = async ( params: string | null ) => {
     const url: string = `${process.env.REACT_APP_URL}/fetchParamsData?searchResults=${params}`;
     const response = await fetch(url, {
@@ -166,7 +166,7 @@ const useDisplayProd = () => {
     setSearchedProds(response.products);
     setRange((prev) => {
       prev = [...range];
-      prev[0] = response.minVal;
+      prev[0] = response.minVal < 100000 ? response.minVal : 0;
       prev[1] = response.maxVal;
       // console.log(prev[0], prev[1], "datatata");
       return prev;
@@ -193,8 +193,9 @@ const useDisplayProd = () => {
     setSearchedProds(response.products);
     setRange((prev) => {
       prev = [...range];
-      prev[0] = response.minVal;
+      prev[0] = response.minVal < 100000 ? response.minVal : 0;
       prev[1] = response.maxVal;
+      console.log("local prev", prev);
       // console.log(prev[0], prev[1], "datatata");
       return prev;
     });

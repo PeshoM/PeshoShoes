@@ -30,6 +30,7 @@ const Product: React.FC = () => {
     handleEditModal,
     handleCloseSizesMenu,
     handleZoom,
+    handleDeleteProduct,
   } = useProduct();
   const { registeredUser } = useContext(ProductContext);
   let leaveForNow: undefined = undefined;
@@ -88,13 +89,13 @@ const Product: React.FC = () => {
           </div>
         </div>
         <div className="product-options">
-          {registeredUser && (
-            <button
-              className="edit-product-option"
-              onClick={() => handleEditModal()}
-            >
-              Edit product
-            </button>
+          {registeredUser && registeredUser.role == "admin" && (
+            <div className="admin-delete-edit-product">
+              <button onClick={() => handleEditModal()}>Edit product</button>
+              <button onClick={() => handleDeleteProduct(product!._id)}>
+                Delete product
+              </button>
+            </div>
           )}
           <div className="product-title">{product?.title}</div>
           <div className="product-color">

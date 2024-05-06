@@ -135,12 +135,12 @@ const DisplayProd = () => {
                 </div>
               </div>
             )}
-            <div className="filtering-options">PRICE</div>
+            <div className="filtering-options price-filt-option">PRICE</div>
             <div className="double-range-slider">
               <input
                 type="range"
-                min={range[0] != Number.MAX_VALUE ? range[0]! : 0}
-                max={range[1] || 0}
+                min={range[0]!}
+                max={range[1]!}
                 step={0.1}
                 value={startValue}
                 onChange={handleStartChange}
@@ -149,14 +149,14 @@ const DisplayProd = () => {
               <input
                 type="range"
                 step={0.1}
-                min={range[0] != Number.MAX_VALUE ? range[0]! : 0}
-                max={range[1] || 0}
+                min={range[0]!}
+                max={range[1]!}
                 value={endValue}
                 onChange={handleEndChange}
                 onMouseUp={handleFiltering}
               />
               <span>
-                Start Value: {startValue} - End Value: {endValue}
+                Start Value: {startValue > 100000 ? 0 : startValue } - End Value: {endValue}
               </span>
             </div>
             <div

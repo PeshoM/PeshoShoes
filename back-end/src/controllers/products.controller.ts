@@ -193,4 +193,25 @@ const Update = async (req: Request, res: Response) => {
   }
 };
 
-export default { Post, Get, Update };
+const Delete = async (req: Request, res: Response) => {
+  const productId = req.params.id;
+  console.log(productId);
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(productId);
+
+    if (!deletedProduct) {
+      return res
+        .status(404)
+        .json({ message: `Product with ID ${productId} not found` });
+    }
+
+    return res
+      .status(200)
+      .json({ message: `Product with ID ${productId} has been deleted` });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export default { Post, Get, Update, Delete };

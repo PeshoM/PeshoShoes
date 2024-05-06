@@ -124,10 +124,14 @@ body {
   margin-bottom: 25px;
   border-top: 1px solid #e6e6e6;
   color: #000;
-  text-transform: var(--text-transform);
+text-transform: var(--text-transform);
   position: relative;
   user-select: none;
   cursor: pointer;
+}
+
+.price-filt-option { 
+  cursor:auto !important;
 }
 
 .double-range-slider {

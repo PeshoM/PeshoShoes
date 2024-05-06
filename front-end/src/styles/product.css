@@ -108,7 +108,7 @@ body {
 
 .sizes-out-of-stock {
   color: gray;
-  padding: 0
+  padding: 0;
 }
 
 .sold-out {
@@ -131,7 +131,6 @@ body {
 
 .paragraph-container-out-of-stock {
   background: white;
-  
 }
 
 .paragraph-container :hover {
@@ -225,20 +224,6 @@ body {
   user-select: none; /* Standard syntax */
 }
 
-.product-sizes-menu {
-  
-}
-
-.edit-product-option {
-  width: 150px;
-  color: #141414;
-  border: black 2px solid;
-}
-
-.edit-product-option:hover {
-  background-color: rgb(151, 151, 151, 0.2);
-}
-
 .edit-product-modal {
   position: absolute;
   width: 1000px;
@@ -247,4 +232,17 @@ body {
   transform: translate(-50%, 0);
   margin-left: 50%;
   margin-top: 10%;
+}
+
+.admin-delete-edit-product {
+  display: flex;
+  gap: 15px;
+  button {
+    width: 150px;
+    color: #141414;
+    border: black 2px solid;
+  }
+  button:hover {
+    background-color: rgb(151, 151, 151, 0.2);
+  }
 }
