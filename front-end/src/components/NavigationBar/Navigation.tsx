@@ -6,6 +6,7 @@ import { ProductContext } from "../Context.tsx";
 import Auth from "../Auth.tsx";
 import { useNavigation } from "./useNavigation.ts";
 import { useTranslation } from "react-i18next";
+import { ColorVariation } from "../../interfaces/productInterfaces.ts";
 
 const Navigation: React.FC = () => {
   // console.log("hereeee");
@@ -24,6 +25,7 @@ const Navigation: React.FC = () => {
     handleLogOut,
     getRegisteredUser,
     handleClickNavUrl,
+    handleNavigateCart,
   } = useNavigation();
   let location = useLocation();
   const [hovered, setHovered] = useState<string[]>([
@@ -56,7 +58,7 @@ const Navigation: React.FC = () => {
   ];
   let navBarOptionsArr: string[] = ["Shoes", "Brands", "Sale"];
   const { t } = useTranslation();
-  
+
   useEffect(() => {
     getRegisteredUser(localStorage.getItem("auth_token"));
   }, []);
@@ -92,7 +94,11 @@ const Navigation: React.FC = () => {
               <img className="icons" src="/icons8-heart-96.png"></img>
             </a>
             <a href="" className="CartIcon_cartIcon">
-              <img className="icons" src="icons8-cart-96.png"></img>
+              <img
+                className="icons"
+                src="icons8-cart-96.png"
+                onClick={() => handleNavigateCart()}
+              ></img>
             </a>
           </div>
         </div>
@@ -205,7 +211,7 @@ const Navigation: React.FC = () => {
                     ? options.map((product, index: number) => (
                         <>
                           {product.colorVariations.map(
-                            (colorVar, idx: number) => (
+                            (colorVar: ColorVariation) => (
                               <div className="product" key={index}>
                                 <img
                                   className="searchBarImages"

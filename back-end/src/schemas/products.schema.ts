@@ -17,7 +17,7 @@ export interface product extends Document {
   season: string;
   gender: string;
   category: string;
-  sport?: string;
+  sport: string;
   _id?: string;
 }
 

@@ -125,6 +125,10 @@ const useNavigation = () => {
     setSearchParams({ title, name });
   };
 
+  const handleNavigateCart = () => {
+    navigate("/Cart")
+  }
+
   return {
     inputText,
     setInputText,
@@ -141,6 +145,7 @@ const useNavigation = () => {
     handleLogOut,
     getRegisteredUser,
     handleClickNavUrl,
+    handleNavigateCart,
   };
 };
 

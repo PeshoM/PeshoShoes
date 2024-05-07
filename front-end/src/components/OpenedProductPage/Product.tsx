@@ -21,6 +21,8 @@ const Product: React.FC = () => {
     zoomed,
     isClicked,
     isOpen,
+    selectedSize,
+    setSelectedSize,
     setIsOpen,
     handleImageClick,
     handleSwitchModalImageLeft,
@@ -31,6 +33,7 @@ const Product: React.FC = () => {
     handleCloseSizesMenu,
     handleZoom,
     handleDeleteProduct,
+    handleAddToCart,
   } = useProduct();
   const { registeredUser } = useContext(ProductContext);
   let leaveForNow: undefined = undefined;
@@ -169,9 +172,14 @@ const Product: React.FC = () => {
                   setIsOpen={setIsOpen}
                   sizesSet={sizesSet}
                   quantityArr={quantityArr}
+                  selectedSize={selectedSize}
+                  setSelectedSize={setSelectedSize}
                 />
               </div>
             </div>
+          </div>
+          <div className="add-to-cart-container" onClick={() => handleAddToCart(product!, selectedSize)}>
+            ADD TO CARD
           </div>
         </div>
       </div>

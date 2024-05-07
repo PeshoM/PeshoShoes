@@ -246,3 +246,18 @@ body {
     background-color: rgb(151, 151, 151, 0.2);
   }
 }
+
+.add-to-cart-container {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #141414;
+  width: 350px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.product-sizes-menu {
+  width: 350px;
+}

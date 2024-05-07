@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { ColorVariation, Prod } from "../../interfaces/productInterfaces";
+import {
+  CartItem,
+  ColorVariation,
+  Prod,
+} from "../../interfaces/productInterfaces";
 
 const useProduct = () => {
   const [product, setProduct] = useState<Prod>();
@@ -17,14 +21,15 @@ const useProduct = () => {
   const sizesRef = useRef();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [selectedSize, setSelectedSize] = useState<number | null>(null);
 
   useEffect(() => {
     let fetchProduct = async (titleParam: string, colorParam: string) => {
       const url: string = `${
-      process.env.REACT_APP_URL
-    }/fetchProduct?title=${encodeURIComponent(
-      titleParam
-    )}&color=${encodeURIComponent(colorParam)}`;
+        process.env.REACT_APP_URL
+      }/fetchProduct?title=${encodeURIComponent(
+        titleParam
+      )}&color=${encodeURIComponent(colorParam)}`;
       console.log(searchParams.toString());
       let response = await fetch(url, {
         method: "GET",
@@ -128,7 +133,7 @@ const useProduct = () => {
   };
 
   const handleCloseSizesMenu = (event) => {
-    console.log(outOfStockRef.current, event.target, "here");
+    // console.log(outOfStockRef.current, event.target, "here");
     // if (!outOfStockRef.current) setIsOpen(false);
     if (
       sizesRef.current &&
@@ -149,9 +154,52 @@ const useProduct = () => {
   const handleDeleteProduct = async (id: string) => {
     const url: string = `${process.env.REACT_APP_URL}/products/${id}`;
     fetch(url, {
-      method: "DELETE"
+      method: "DELETE",
     }).then(() => navigate("/"));
-  }
+  };
+
+  const handleAddToCart = (product: Prod, size: number | null) => {
+    if (!size) {
+      setIsOpen(true);
+      return;
+    }
+    // Step 1: Retrieve existing shopping cart data from local storage
+    const existingCartData =
+      JSON.parse(localStorage.getItem("shoppingCart") as string) || [];
+
+    // Step 2: Check if the product already exists in the cart
+    let found = false;
+    for (let i = 0; i < existingCartData.length; i++) {
+      const existingItem = existingCartData[i];
+      if (existingItem._id === product._id) {
+        // If the product already exists, update its quantity
+        existingItem.quantity++;
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      const newCartItem = {
+        _id: product._id,
+        title: product.title,
+        description: product.description,
+        brand: product.brand,
+        image: product.colorVariations[0].images[0],
+        price: product.colorVariations[0].price,
+        size,
+        quantity: 1,
+        color: product.colorVariations[0].color,
+        season: product.season,
+        gender: product.gender,
+        category: product.category,
+        sport: product.sport,
+      } as CartItem;
+      existingCartData.push(newCartItem);
+    }
+    localStorage.setItem("shoppingCart", JSON.stringify(existingCartData));
+    console.log("cart", existingCartData);
+  };
+
   return {
     product,
     editModal,
@@ -163,6 +211,8 @@ const useProduct = () => {
     zoomed,
     isClicked,
     isOpen,
+    selectedSize,
+    setSelectedSize,
     setIsOpen,
     handleImageClick,
     handleSwitchModalImageLeft,
@@ -173,6 +223,7 @@ const useProduct = () => {
     handleCloseSizesMenu,
     handleZoom,
     handleDeleteProduct,
+    handleAddToCart,
   };
 };
 

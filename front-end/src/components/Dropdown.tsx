@@ -1,17 +1,19 @@
 import React, { MutableRefObject } from "react";
 import { useState, SetStateAction, Dispatch } from "react";
+import "../styles/dropdown.css";
 
 interface Props {
-  outOfStockRef: MutableRefObject<any>
-  sizesRef: MutableRefObject<any>
+  outOfStockRef: MutableRefObject<any>;
+  sizesRef: MutableRefObject<any>;
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   sizesSet: Set<number>;
   quantityArr: number[][];
+  selectedSize: number | null;
+  setSelectedSize: Dispatch<SetStateAction<number | null>>;
 }
 
-const DropDown: React.FC<Props> = ({ outOfStockRef, sizesRef, isOpen, setIsOpen, sizesSet, quantityArr }) => {
-  const [selectedSize, setSelectedSize] = useState<number | null>(null);
+const DropDown: React.FC<Props> = ({ outOfStockRef, sizesRef, isOpen, setIsOpen, sizesSet, quantityArr, selectedSize, setSelectedSize }) => {
   const sizesArr: number[] = Array.from({ length: 31 },(_, index) => 34 + index * 0.5);
   
   const handlePickedSize = (size: number) => {
@@ -23,11 +25,10 @@ const DropDown: React.FC<Props> = ({ outOfStockRef, sizesRef, isOpen, setIsOpen,
     <div>
       <div
         ref={sizesRef}
-        className="flex justify-between"
-        style={{ userSelect: "none", cursor: "pointer" }}
+        className="dropdown-div"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <p style={{ padding: 8, alignSelf: "center" }}>
+        <p className="dropdown-paragraph">
           {selectedSize ? "EUR " + selectedSize : "Sizes"}
         </p>
         <span
