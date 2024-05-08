@@ -16,13 +16,13 @@ const Cart: React.FC = () => {
   }, []);
   useEffect(() => {
     calculateTotal();
-  }, [cartItems])
+  }, [cartItems]);
   const calculateTotal = () => {
     if (cartItems && cartItems.length > 0) {
       const sum = cartItems.reduce((accumulator, currentItem) => {
         return accumulator + currentItem.price * currentItem.quantity;
       }, 0);
-      setTotal(sum);
+      setTotal(parseFloat(sum.toFixed(2)));
     } else {
       setTotal(0);
     }
@@ -32,15 +32,18 @@ const Cart: React.FC = () => {
     setCartItems((prev) => {
       prev = [...cartItems!];
       prev[idx].quantity--;
+      localStorage.setItem("shoppingCart", JSON.stringify(prev));
       calculateTotal();
       return prev;
     });
   };
 
   const handlePlusQuantity = (idx: number) => {
+    if (cartItems![idx].quantity == cartItems![idx].availableQuantity) return;
     setCartItems((prev) => {
       prev = [...cartItems!];
       prev[idx].quantity++;
+      localStorage.setItem("shoppingCart", JSON.stringify(prev));
       calculateTotal();
       return prev;
     });
@@ -59,11 +62,43 @@ const Cart: React.FC = () => {
     navigate("/");
   };
 
-  const handleCheckout = () => {
-    //you need to check how many of each size are available and make a limit for 
-    //the plus option so it doesn't crash. Then make it update the products post
-    //calling the func.
-  }
+  const handleCheckout = async () => {
+    if (cartItems!.length == 0) return;
+    const url: string = process.env.REACT_APP_URL + "/checkout";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cartItems,
+      }),
+    }).then((res) => res.json());
+    console.log(response.cartItems)
+    setCartItems(response.cartItems);
+    localStorage.setItem("shoppingCart", JSON.stringify(response.cartItems));
+    navigate("/PaymentSuccess")
+  };
+
+  const handleChangeQuantity = (e, idx: number) => {
+    setCartItems((prev) => {
+      prev = [...cartItems!];
+      e.target.value <= prev[idx].availableQuantity
+        ? (prev[idx].quantity = e.target.value)
+        : (prev[idx].quantity = prev[idx].availableQuantity);
+      localStorage.setItem("shoppingCart", JSON.stringify(prev));
+      return prev;
+    });
+  };
+
+  const handleClearCart = () => {
+    setCartItems((prev) => {
+      prev = [...cartItems!];
+      prev = [];
+      localStorage.setItem("shoppingCart", JSON.stringify(prev));
+      return prev;
+    });
+  };
 
   return (
     <div className="cart-component">
@@ -85,10 +120,14 @@ const Cart: React.FC = () => {
         </ul>
       </div>
       <div className="cart-items-wrapper">
-        <p className="cart-items-paragraph"> {t("YOUR ORDER")}</p>
+        <div className="cart-items-wrapper-top">
+          <p className="cart-items-paragraph"> {t("YOUR ORDER")}</p>
+          <button className="cart-items-clear" onClick={() => handleClearCart()}>
+            {t("Clear cart")}
+          </button>
+        </div>
         {cartItems && cartItems!.length > 0 ? (
           cartItems?.map((item: CartItem, idx: number) => {
-            console.log(item);
             return (
               <div className="cart-items-content">
                 <div className="cart-item">
@@ -116,7 +155,15 @@ const Cart: React.FC = () => {
                       >
                         -
                       </div>
-                      <div className="cart-item-quantity">{item.quantity}</div>
+                      <div className="cart-item-quantity">
+                        <input
+                          type="number"
+                          step="none"
+                          className="checkout-quantity-input"
+                          value={item.quantity}
+                          onChange={(e) => handleChangeQuantity(e, idx)}
+                        />
+                      </div>
                       <div
                         className="cart-item-plus"
                         onClick={() => handlePlusQuantity(idx)}
@@ -126,7 +173,7 @@ const Cart: React.FC = () => {
                     </div>
                     <div className="cart-item-price-container">
                       <div className="cart-item-price">
-                        {item.price * item.quantity} {t("BGN")}
+                        {parseFloat((item.price * item.quantity) as unknown as string).toFixed(2)} {t("BGN")}
                       </div>
                       <div
                         className="cart-item-remove"
@@ -160,7 +207,9 @@ const Cart: React.FC = () => {
           >
             {t("Go back to shop")}
           </div>
-          <div className="checkout-button" onClick={() => handleCheckout}>{t("Create purchase")}</div>
+          <div className="checkout-button" onClick={() => handleCheckout()}>
+            {t("Create purchase")}
+          </div>
         </div>
       </div>
     </div>

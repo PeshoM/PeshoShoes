@@ -21,6 +21,23 @@ export interface product extends Document {
   _id?: string;
 }
 
+export interface cartItem {
+  _id: string;
+  title: string;
+  brand: string;
+  description: string;
+  image: string;
+  price: number;
+  size: number;
+  quantity: number;
+  availableQuantity: number;
+  color: string;
+  season: string;
+  gender: string;
+  category: string;
+  sport: string;
+}
+
 const productSchema = new Schema<product>({
   title: String,
   description: String,
@@ -38,7 +55,7 @@ const productSchema = new Schema<product>({
   season: String,
   gender: String,
   category: String,
-  sport: String
+  sport: String,
 });
 
 export const Product = model<product>("Product", productSchema);

@@ -1,0 +1,34 @@
+.payment-successful-container {
+  color: #141414;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  text-align: center;
+}
+
+.payment-successful-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.payment-successful-container p {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.back-to-home-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #141414;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.back-to-home-button:hover {
+  background-color: rgb(151, 151, 151);
+}

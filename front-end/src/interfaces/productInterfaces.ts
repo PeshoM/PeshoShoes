@@ -5,6 +5,7 @@ export interface ColorVariation {
   sizes: number[];
   color: string;
   rating?: number[];
+  _id: string;
 }
 export interface Prod {
   _id: string
@@ -26,6 +27,7 @@ export interface CartItem {
   price: number;
   size: number;
   quantity: number;
+  availableQuantity: number;
   color: string;
   season: string;
   gender: string;

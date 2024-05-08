@@ -74,7 +74,7 @@ const useProduct = () => {
       description: "",
       brand: "",
       colorVariations: [
-        { images: [], price: 0, quantity: [], sizes: [], color: "" },
+        { images: [], price: 0, quantity: [], sizes: [], color: "", _id: "" },
       ],
       season: "",
       gender: "",
@@ -133,8 +133,6 @@ const useProduct = () => {
   };
 
   const handleCloseSizesMenu = (event) => {
-    // console.log(outOfStockRef.current, event.target, "here");
-    // if (!outOfStockRef.current) setIsOpen(false);
     if (
       sizesRef.current &&
       !(sizesRef.current as HTMLDivElement).contains(event.target) &&
@@ -143,12 +141,6 @@ const useProduct = () => {
     ) {
       setIsOpen(false);
     }
-    // else if (
-    //   !sizesRef.current
-    //   // &&
-    //   // (sizesRef.current as HTMLDivElement).contains(event.target as HTMLElement)
-    // )
-    //   setIsOpen(false);
   };
 
   const handleDeleteProduct = async (id: string) => {
@@ -163,24 +155,41 @@ const useProduct = () => {
       setIsOpen(true);
       return;
     }
-    // Step 1: Retrieve existing shopping cart data from local storage
     const existingCartData =
       JSON.parse(localStorage.getItem("shoppingCart") as string) || [];
 
-    // Step 2: Check if the product already exists in the cart
     let found = false;
     for (let i = 0; i < existingCartData.length; i++) {
       const existingItem = existingCartData[i];
-      if (existingItem._id === product._id) {
-        // If the product already exists, update its quantity
-        existingItem.quantity++;
+      console.log(
+        existingItem._id,
+        product.colorVariations[0]._id,
+        existingItem.size,
+        size,
+        existingItem.quantity,
+        existingItem.availableQuantity
+      );
+      if (
+        existingItem._id === product.colorVariations[0]._id &&
+        existingItem.size == size
+      ) {
+        if (existingItem.quantity < existingItem.availableQuantity)
+          existingItem.quantity++;
         found = true;
         break;
       }
     }
     if (!found) {
+      let quantityIdx: number;
+      for (
+        let i: number = 0;
+        i < product.colorVariations[0].sizes.length;
+        i++
+      ) {
+        if (size == product.colorVariations[0].sizes[i]) quantityIdx = i;
+      }
       const newCartItem = {
-        _id: product._id,
+        _id: product.colorVariations[0]._id,
         title: product.title,
         description: product.description,
         brand: product.brand,
@@ -188,6 +197,7 @@ const useProduct = () => {
         price: product.colorVariations[0].price,
         size,
         quantity: 1,
+        availableQuantity: product.colorVariations[0].quantity[quantityIdx!],
         color: product.colorVariations[0].color,
         season: product.season,
         gender: product.gender,
