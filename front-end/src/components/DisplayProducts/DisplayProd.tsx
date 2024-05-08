@@ -8,6 +8,7 @@ import { ProductContext } from "../Context.tsx";
 import { useDisplayProd } from "./useDisplayProd.ts";
 import { useSearchParams } from "react-router-dom";
 import { Prod } from "../../interfaces/productInterfaces.ts";
+import { useTranslation } from "react-i18next";
 
 const DisplayProd = () => {
   const {
@@ -53,7 +54,7 @@ const DisplayProd = () => {
   const searchResults: string | null = searchParams.get("searchResults");
   const title: string | null = searchParams.get("title");
   const name: string | null = searchParams.get("name");
-  const gendersArr: string[] = ["man", "woman", "kids"];
+  const gendersArr: string[] = ["men", "women", "kids"];
   const categoriesArr: string[] = [
     "sneakers",
     "low Top",
@@ -64,20 +65,10 @@ const DisplayProd = () => {
     "boots",
     "high top",
   ];
-  // useEffect(() => {
-  //   fetchParamsData(searchResults);
-  //   console.log("searchResults param", searchResults, !searchResults);
-  //   fetchParamsData(searchResults);
-  // }, []);
+  const { t } = useTranslation();
+
   useEffect(() => {
-    if (!searchResults) {
-      console.log("fetchData called");
-      fetchData();
-    } else {
-      console.log("fetchParamsData called");
-      fetchParamsData(searchResults);
-    }
-    // !searchResults ? fetchData() : fetchParamsData(searchResults);
+    !searchResults ? fetchData() : fetchParamsData(searchResults);
   }, [searchResults]);
 
   useEffect(() => {
@@ -87,14 +78,6 @@ const DisplayProd = () => {
   useEffect(() => {
     !title || !name ? fetchData() : handleClickNavigateUrl(title, name);
   }, [name]);
-
-  useEffect(() => {
-    console.log("title params", title, name);
-  }, [title]);
-  useEffect(() => {
-    console.log("range log", range);
-    console.log("log", range[1]);
-  }, [range]);
 
   return (
     <div>
@@ -109,11 +92,11 @@ const DisplayProd = () => {
                 console.log(activeTabs);
               }}
             >
-              SIZE
+              {t('SIZE')}
             </div>
             {activeTabs[0] && (
               <div className="sizes-menu">
-                <p>EUROPEAN</p>
+                <p>{t('EUROPEAN')}</p>
                 <div>
                   {Array.from(
                     { length: 31 },
@@ -135,7 +118,7 @@ const DisplayProd = () => {
                 </div>
               </div>
             )}
-            <div className="filtering-options price-filt-option">PRICE</div>
+            <div className="filtering-options price-filt-option">{t('PRICE')}</div>
             <div className="double-range-slider">
               <input
                 type="range"
@@ -156,7 +139,7 @@ const DisplayProd = () => {
                 onMouseUp={handleFiltering}
               />
               <span>
-                Start Value: {startValue > 100000 ? 0 : startValue } - End Value: {endValue}
+                {t('Start Value')}: {startValue > 100000 ? 0 : startValue } {t('BGN')} {<br />} {t('End Value')}: {endValue} {t('BGN')}
               </span>
             </div>
             <div
@@ -165,12 +148,12 @@ const DisplayProd = () => {
                 handleTabClick(1);
               }}
             >
-              COLOUR
+              {t('COLOUR')}
             </div>
             {activeTabs[1] && (
               <div className="colors-main">
                 <div className="colors-div-display">
-                  <p>Shoe colour</p>
+                  <p>{t('Shoe colour')}</p>
                   <div className="colors-subdiv-display">
                     {colorsArr.map((color) => (
                       <div className="colors-choices-display">
@@ -184,7 +167,7 @@ const DisplayProd = () => {
                             handleFiltering();
                           }}
                         />
-                        {color.color}
+                        {t(color.color)}
                         <div className={color.class}></div>
                       </div>
                     ))}
@@ -198,7 +181,7 @@ const DisplayProd = () => {
                 handleTabClick(2);
               }}
             >
-              SEASON
+              {t('SEASON')}
             </div>
             {activeTabs[2] && (
               <div className="seasons-main">
@@ -215,7 +198,7 @@ const DisplayProd = () => {
                             handleFiltering();
                           }}
                         />
-                        <div>{season}</div>
+                        <div>{t(season)}</div>
                       </div>
                     ))}
                   </div>
@@ -228,16 +211,16 @@ const DisplayProd = () => {
                 handleTabClick(3);
               }}
             >
-              SALE
+              {t('SALE')}
             </div>
-            {activeTabs[3] && <div>salds</div>}
+            {activeTabs[3] && <div>12345</div>}
             <div
               className="filtering-options"
               onClick={() => {
                 handleTabClick(4);
               }}
             >
-              CATEGORIES
+              {t('CATEGORIES')}
             </div>
             {activeTabs[4] && (
               <div className="categories-main">
@@ -255,7 +238,7 @@ const DisplayProd = () => {
                             handleFiltering();
                           }}
                         />
-                        {category}
+                        {t(category)}
                       </div>
                     ))}
                   </div>
@@ -268,7 +251,7 @@ const DisplayProd = () => {
                 handleTabClick(5);
               }}
             >
-              GENDER
+              {t('GENDER')}
             </div>
             {activeTabs[5] && (
               <div className="genders-main">
@@ -286,7 +269,7 @@ const DisplayProd = () => {
                             handleFiltering();
                           }}
                         />
-                        {gender}
+                        {t(gender)}
                       </div>
                     ))}
                   </div>

@@ -172,7 +172,7 @@ const Navigation: React.FC = () => {
                     className="registered-log-out-button"
                     onClick={() => handleLogOut()}
                   >
-                    <p>Log out</p>
+                    <p>{t('Log out')}</p>
                   </div>
                 )}
               </div>

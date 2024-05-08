@@ -107,9 +107,9 @@ const Cart: React.FC = () => {
             );
           })
         ) : (
-          <div className="empty-card">
+          <div className="empty-cart">
             <span onClick={() => handleNavigateShopping()}>
-              {t("Your card is currently empty. Go do some shopping!")}
+              {t("Your cart is currently empty. Go do some shopping!")}
             </span>
           </div>
         )}

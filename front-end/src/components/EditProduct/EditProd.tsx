@@ -2,6 +2,7 @@ import "../../styles/createprod.css";
 import React, { LegacyRef } from "react";
 import { useEditProd } from "./useEditProd.ts";
 import { Prod } from "../../interfaces/productInterfaces.ts";
+import { useTranslation } from "react-i18next";
 
 interface Edit {
   product: Prod;
@@ -52,43 +53,42 @@ const EditProd: React.FC<Edit> = ({ product }) => {
     { color: "Yellow", class: "yellowclass" },
   ];
   const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
+  const { t } = useTranslation();
 
   return (
     <div>
       <div className="card card-compact w-96 bg-base-100 shadow-xl">
         {/* <figure><img src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure> */}
         <div className="card-body">
-          <h2 className="card-title">Fill in the blanks</h2>
+          <h2 className="card-title">{t('Fill in the blanks')}</h2>
           <input
             ref={title as LegacyRef<HTMLInputElement> | undefined}
             type="text"
-            placeholder="Type Title here"
+            placeholder={t("Type Title here")}
             className="input input-bordered w-full max-w-xs"
           />
           <input
             ref={description as LegacyRef<HTMLInputElement> | undefined}
             type="text"
-            placeholder="Type Description here"
+            placeholder={t("Type Description here")}
             className="input input-bordered w-full max-w-xs"
           />
           <input
             ref={brand as LegacyRef<HTMLInputElement> | undefined}
             type="text"
-            placeholder="Type Brand here"
+            placeholder={t("Type Brand here")}
             className="input input-bordered w-full max-w-xs"
           />
           {numOfColors.map((a: number[], idx: number) => {
-            // console.log(imagesRef.current[idx]);
             return (
               <div className="colorVarContainer">
-                {"Color " + (idx + 1)}{" "}
+                {t("Color") +" "+ (idx + 1)}
                 <button
                   className="delete-edit-modal-button"
                   onClick={() => handleDeleteColor(idx)}
                 >
-                  Delete color
+                  {t('Delete color')}
                 </button>
-                <br /> {"Switch any picture"}
                 <div className="shoe-variations-container">
                   {Array.isArray(imgFile[idx])
                     ? imgFile[idx]?.map((image: File) => {
@@ -126,7 +126,7 @@ const EditProd: React.FC<Edit> = ({ product }) => {
                 />
                 <input
                   type="number"
-                  placeholder="Type Price here"
+                  placeholder={t("Type Price here")}
                   value={pickedPrice[idx]}
                   onChange={(e) => {
                     setPickedPrice((prev) => {
@@ -140,12 +140,11 @@ const EditProd: React.FC<Edit> = ({ product }) => {
                   className="input input-bordered w-full max-w-xs"
                 />
                 <div className="sizes-div">
-                  <p>Sizes to put as stocked</p>
+                  <p>{t('Sizes to put as stocked')}</p>
                   <div className="sizes-subdiv">
                     {sizesArr.map((size: number, index: number) => (
                       <div className="sizes-choices">
                         {size}
-                        {/**make the colors work better with the arr state */}
                         <input
                           type="checkbox"
                           defaultChecked={pickedQuantity[idx][index] > 0}
@@ -170,13 +169,13 @@ const EditProd: React.FC<Edit> = ({ product }) => {
                   </div>
                 </div>
                 <div className="sizes-div">
-                  <p>Shoe Colours to put as stocked</p>
-                  <p>{pickedColor[idx]}</p>
+                  <p>{t('Shoe Colours to put as stocked')}</p>
+                  <p>{t(pickedColor[idx])}</p>
                   <div className="sizes-subdiv">
-                    {colorsArr.map((color: Color, index: number) => (
+                    {colorsArr.map((color: Color) => (
                       <div className="colors-choices">
                         <div className={color.class + " squares"}>
-                          {color.color}
+                          {t(color.color)}
                         </div>
                         <input
                           type="radio"
@@ -200,67 +199,67 @@ const EditProd: React.FC<Edit> = ({ product }) => {
               handleColorVar();
             }}
           >
-            Add a color variation
+            {t("Add a color variation")}
           </button>
           <div className="colors-seasons-div">
             <div className="seasons-div">
-              <p>Select a season</p>
+              <p>{t('Select a season')}</p>
               <select ref={selectedSeason}>
                 <option value="" disabled hidden selected>
-                  Seasons
+                  {t('Seasons')}
                 </option>
-                <option value="spring">Spring</option>
-                <option value="summer">Summer</option>
-                <option value="autumn">Autumn</option>
-                <option value="winter">Winter</option>
+                <option value="spring">{t('Spring')}</option>
+                <option value="summer">{t('Summer')}</option>
+                <option value="autumn">{t('Autumn')}</option>
+                <option value="winter">{t('Winter')}</option>
               </select>
             </div>
             <div className="seasons-div">
-              <p>Select a season</p>
+              <p>{t('Select a gender')}</p>
               <select ref={selectedGender}>
                 <option value="" disabled hidden selected>
-                  Genders
+                  {t('Genders')}
                 </option>
-                <option value="man">Man</option>
-                <option value="woman">Woman</option>
-                <option value="kids">Kids</option>
+                <option value="man">{t('Man')}</option>
+                <option value="woman">{t('Woman')}</option>
+                <option value="kids">{t('Kids')}</option>
               </select>
             </div>
             <div className="categories-div">
-              <p>Select a shoe category</p>
+              <p>{t('Select a shoe category')}</p>
               <select ref={selectedCategory}>
                 <option value="" disabled hidden selected>
-                  Categories
+                  {t('Categories')}
                 </option>
-                <option value="sneakers">Sneakers</option>
-                <option value="low Top">Low top</option>
-                <option value="slides">Slides</option>
-                <option value="slip-ons">Slip-ons</option>
+                <option value="sneakers">{t('Sneakers')}</option>
+                <option value="low Top">{t('Low top')}</option>
+                <option value="slides">{t('Slides')}</option>
+                <option value="slip-ons">{t('Slip-ons')}</option>
                 <option value="sustainable sneakers">
-                  Sustainable sneakers
+                  {t('Sustainable sneakers')}
                 </option>
-                <option value="sandals">Sandals</option>
-                <option value="boots">Boots</option>
-                <option value="high top">High top</option>
+                <option value="sandals">{t('Sandals')}</option>
+                <option value="boots">{t('Boots')}</option>
+                <option value="high top">{t('High top')}</option>
               </select>
             </div>
             <div className="seasons-div">
-              <p>Select a sport (optional)</p>
+              <p>{t('Select a sport')} ({t('optional')})</p>
               <select ref={selectedSport}>
                 <option value="" selected>
-                  Sport
+                  {t('Sport')}
                 </option>
-                <option value="running">Running</option>
-                <option value="skate">Skate</option>
-                <option value="basket">Basket</option>
-                <option value="fitness">Fitness</option>
-                <option value="outdoor">Outdoor</option>
+                <option value="running">{t('Running')}</option>
+                <option value="skate">{t('Skate')}</option>
+                <option value="basket">{t('Basket')}</option>
+                <option value="fitness">{t('Fitness')}</option>
+                <option value="outdoor">{t('Outdoor')}</option>
               </select>
             </div>
           </div>
           <div className="card-actions justify-end">
             <button className="btn btn-primary" onClick={() => HandleRequest()}>
-              Create Product
+              {t('Create Product')}
             </button>
           </div>
         </div>

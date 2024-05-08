@@ -1,6 +1,7 @@
 import React, { MutableRefObject } from "react";
 import { useState, SetStateAction, Dispatch } from "react";
 import "../styles/dropdown.css";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   outOfStockRef: MutableRefObject<any>;
@@ -15,6 +16,7 @@ interface Props {
 
 const DropDown: React.FC<Props> = ({ outOfStockRef, sizesRef, isOpen, setIsOpen, sizesSet, quantityArr, selectedSize, setSelectedSize }) => {
   const sizesArr: number[] = Array.from({ length: 31 },(_, index) => 34 + index * 0.5);
+  const { t } = useTranslation();
   
   const handlePickedSize = (size: number) => {
     setSelectedSize(size);
@@ -29,7 +31,7 @@ const DropDown: React.FC<Props> = ({ outOfStockRef, sizesRef, isOpen, setIsOpen,
         onClick={() => setIsOpen(!isOpen)}
       >
         <p className="dropdown-paragraph">
-          {selectedSize ? "EUR " + selectedSize : "Sizes"}
+          {selectedSize ? `EUR ${selectedSize}` : t("Sizes")}
         </p>
         <span
           style={{
@@ -50,7 +52,9 @@ const DropDown: React.FC<Props> = ({ outOfStockRef, sizesRef, isOpen, setIsOpen,
               {sizesSet.has(size) ? (
                 <div
                   className="paragraph-container"
-                  onClick={() => {handlePickedSize(size)}}
+                  onClick={() => {
+                    handlePickedSize(size);
+                  }}
                 >
                   <p className="sizes-paragraph">
                     <div className="sizes-nums">EUR {size}</div>
@@ -63,7 +67,7 @@ const DropDown: React.FC<Props> = ({ outOfStockRef, sizesRef, isOpen, setIsOpen,
                 >
                   <p className="sizes-paragraph sizes-out-of-stock">
                     <div className="sizes-nums">EUR {size}</div>{" "}
-                    <span className="sold-out">Sold out</span>
+                    <span className="sold-out">{t('Sold out')}</span>
                   </p>
                 </div>
               )}

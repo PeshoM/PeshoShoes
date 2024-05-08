@@ -8,6 +8,7 @@ import Dropdown from "../Dropdown.tsx";
 import { ProductContext } from "../Context.tsx";
 import EditProd from "../EditProduct/EditProd.tsx";
 import { ColorVariation } from "../../interfaces/productInterfaces.ts";
+import { useTranslation } from "react-i18next";
 
 const Product: React.FC = () => {
   const {
@@ -38,6 +39,7 @@ const Product: React.FC = () => {
   const { registeredUser } = useContext(ProductContext);
   let leaveForNow: undefined = undefined;
   const imagepath: string = process.env.REACT_APP_URL + "/uploads/";
+  const { t } = useTranslation();
 
   return (
     <div onClick={(event) => handleCloseSizesMenu(event)}>
@@ -94,15 +96,16 @@ const Product: React.FC = () => {
         <div className="product-options">
           {registeredUser && registeredUser.role == "admin" && (
             <div className="admin-delete-edit-product">
-              <button onClick={() => handleEditModal()}>Edit product</button>
+              <button onClick={() => handleEditModal()}>{t('Edit product')}</button>
               <button onClick={() => handleDeleteProduct(product!._id)}>
-                Delete product
+                {t('Delete product')}
               </button>
             </div>
           )}
           <div className="product-title">{product?.title}</div>
           <div className="product-color">
-            {product?.colorVariations[0].color}
+          
+            {t(product?.colorVariations[0].color as string)}
           </div>
           {/* add review displays after the whole this is done */}
           {leaveForNow && (
@@ -135,10 +138,9 @@ const Product: React.FC = () => {
             </div>
           )}
           <div className="product-price">
-            {product?.colorVariations[0].price}лв.
+            {product?.colorVariations[0].price}{t('BGN')}
           </div>
-          <p className="color-options">
-            {product?.colorVariations.length} Color Options
+          <p className="color-options">{t('Color Options')}
           </p>
           <div className="shoe-variations-container">
             {product?.colorVariations.map(
@@ -160,7 +162,7 @@ const Product: React.FC = () => {
           </div>
           <div className="product-sizes">
             <div className="sizes-div">
-              <p className="sizes-titles">Avaiable sizes</p>
+              <p className="sizes-titles">{t('Avaiable sizes')}</p>
               <div
                 tabIndex={0}
                 className="product-sizes-menu collapse collapse-arrow border border-base-250 bg-base-200"
@@ -179,7 +181,7 @@ const Product: React.FC = () => {
             </div>
           </div>
           <div className="add-to-cart-container" onClick={() => handleAddToCart(product!, selectedSize)}>
-            ADD TO CARD
+            {t('ADD TO CART')}
           </div>
         </div>
       </div>
