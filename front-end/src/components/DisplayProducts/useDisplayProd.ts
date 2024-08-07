@@ -1,8 +1,11 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ProductContext } from "../Context.tsx";
+import { FilterContext } from "../Context/FilterContext.tsx";
+import { useSearchParams } from "react-router-dom";
 
 const useDisplayProd = () => {
-  const { products, setProduct, searchedProds, setSearchedProds } = useContext(ProductContext);
+  const { products, setProduct, searchedProds, setSearchedProds } =
+    useContext(ProductContext);
   const [activeTabs, setActiveTabs] = useState<boolean[]>([
     false,
     false,
@@ -19,17 +22,20 @@ const useDisplayProd = () => {
   const pickedSeasons = useRef<string[]>([]);
   const pickedGenders = useRef<string[]>([]);
   const pickedCategories = useRef<string[]>([]);
-  const [range, setRange] = useState([null, null]);
+  const [range, setRange] = useState([0, 300]);
+  const { filter, changeFilter, changeNavFilter } = useContext(FilterContext);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleStartChange = (e) => {
-    const newStartValue = parseFloat(e.target.value);
+    const newStartValue = Math.floor(parseFloat(e.target.value));
     if (newStartValue <= endValue) {
       setStartValue(newStartValue);
     }
+    console.log(e.target.value, newStartValue, "changed");
   };
 
   const handleEndChange = (e) => {
-    const newEndValue = parseFloat(e.target.value);
+    const newEndValue = Math.ceil(parseFloat(e.target.value));
     if (newEndValue >= startValue) {
       setEndValue(newEndValue);
     }
@@ -70,6 +76,7 @@ const useDisplayProd = () => {
     }).then((res) => {
       return res.json();
     });
+    console.log("asd", response.filteredData);
     setProduct(response.filteredData);
   };
 
@@ -112,7 +119,7 @@ const useDisplayProd = () => {
     pickedCategories.current.sort();
     console.log("picked category", pickedCategories.current);
   };
-  
+
   const handleSeasonChange = (season) => {
     for (let i = 0; i < pickedSeasons.current.length; i++) {
       if (pickedSeasons.current[i] == season)
@@ -137,13 +144,13 @@ const useDisplayProd = () => {
     }).then((res) => {
       return res.json();
     });
+    console.log("changed response fetchData", response);
     setProduct(response.products);
     setSearchedProds(response.products);
     setRange((prev) => {
       prev = [...range];
       prev[0] = response.minVal < 100000 ? response.minVal : 0;
       prev[1] = response.maxVal;
-      // console.log(prev[0], prev[1], "datatata");
       return prev;
     });
     setStartValue(response.minVal);
@@ -151,8 +158,8 @@ const useDisplayProd = () => {
     console.log("i got here");
     // console.log("min and max for range", range);
   };
-// asd
-  const fetchParamsData = async ( params: string | null ) => {
+  // asd
+  const fetchParamsData = async (params: string | null) => {
     const url: string = `${process.env.REACT_APP_URL}/fetchParamsData?searchResults=${params}`;
     const response = await fetch(url, {
       method: "GET",
@@ -162,46 +169,57 @@ const useDisplayProd = () => {
     }).then((res) => {
       return res.json();
     });
+    console.log("changed response fetchParamsData1", response);
     setProduct(response.products);
     setSearchedProds(response.products);
     setRange((prev) => {
+      console.log("changed response fetchParamsData2", response)
       prev = [...range];
       prev[0] = response.minVal < 100000 ? response.minVal : 0;
       prev[1] = response.maxVal;
-      // console.log(prev[0], prev[1], "datatata");
-      return prev;
-    });
-    setStartValue(response.minVal);
-    setEndValue(response.maxVal);
-  }
-
-  const handleClickNavigateUrl = async (titleParam: string, nameParam: string) => {
-    const url: string = `${
-      process.env.REACT_APP_URL
-    }/clickedNavigationUrl?title=${encodeURIComponent(
-      titleParam
-    )}&name=${encodeURIComponent(nameParam)}`;
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      return res.json();
-    });
-    setProduct(response.products);
-    setSearchedProds(response.products);
-    setRange((prev) => {
-      prev = [...range];
-      prev[0] = response.minVal < 100000 ? response.minVal : 0;
-      prev[1] = response.maxVal;
-      console.log("local prev", prev);
       // console.log(prev[0], prev[1], "datatata");
       return prev;
     });
     setStartValue(response.minVal);
     setEndValue(response.maxVal);
   };
+  // useHistory i na back() obj da polzvam po nego vreme stoinostite im ako sa available
+  useEffect(() => {
+    const fetchParamsProducts = async () => {
+      const url: string =
+        `${process.env.REACT_APP_URL}/fetchParamsProducts?` + searchParams;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        return res.json();
+      });
+      console.log("params", response);
+      setProduct(response.products);
+      setSearchedProds(response.products);
+      console.log("changed response fetchParamsProducts1", response);
+      if (!isNaN(response?.minVal)) {
+        console.log("changed response fetchParamsProducts2", response);
+        setRange((prev) => {
+          prev = [...range];
+          prev[0] = response.minVal < 100000 ? response.minVal : 0;
+          prev[1] = response.maxVal;
+          console.log("changed ", prev);
+          console.log(prev[0], prev[1], "changed");
+          return prev;
+        });
+        setStartValue(response.minVal);
+        setEndValue(response.maxVal);
+      }
+    };
+    fetchParamsProducts();
+  }, [searchParams]);
+
+  useEffect(() => {
+    console.log("useEffect changed", range);
+  }, [range]);
 
   return {
     range,
@@ -223,7 +241,6 @@ const useDisplayProd = () => {
     fetchParamsData,
     handleGenderChange,
     handleCategoryChange,
-    handleClickNavigateUrl,
   };
 };
 

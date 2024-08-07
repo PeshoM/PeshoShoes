@@ -1,5 +1,6 @@
 import React, { useState, createContext, useEffect } from "react";
 import { user } from "../../../back-end/src/schemas/users.schema";
+import { set } from "mongoose";
 
 //@ts-ignore
 const ProductContext = createContext({} as any);
@@ -40,6 +41,7 @@ const Context = ({ children }) => {
   const [searchedProds, setSearchedProds] = useState<Product[]>([]);
   const [loginOrRegister, setLoginOrRegister] = useState<boolean>();
   const [authModal, setAuthModal] = useState<boolean>(false);
+  const [passwordModal, setPasswordModal] = useState<boolean>(false);
   const [registeredUser, setRegisteredUser] = useState<user | null>();
   // ("children", children);
   return (
@@ -57,7 +59,9 @@ const Context = ({ children }) => {
         authModal,
         setAuthModal,
         registeredUser,
-        setRegisteredUser
+        setRegisteredUser,
+        passwordModal,
+        setPasswordModal
       }}
     >
       {children}

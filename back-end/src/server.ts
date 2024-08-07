@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import cors from 'cors';
+import cors from "cors";
 import registerRouter from "./routers/authentication/register.router";
 import loginRouter from "./routers/authentication/login.router";
 import productsRouter from "./routers/products.router";
@@ -12,12 +12,29 @@ import getRegisteredUserRouter from "./routers/getRegisteredUser.router";
 import fetchParamsDataRouter from "./routers/fetchParamsData.router";
 import clickedNavigationUrlRouter from "./routers/clickedNavigationUrl.router";
 import checkoutRouter from "./routers/checkout.router";
-import bodyParser from 'body-parser';
+import fetchParamsProductsRouter from "./routers/fetchParamsProducts.router";
+import forgottenPasswordRouter from "./routers/authentication/forgottenPassword.router";
+import passwordResetRouter from "./routers/passwordReset.router";
+import bodyParser from "body-parser";
 import env from "dotenv";
-
+import { matchPrices, matchField } from "./utils/filter.utils";
+import { Product } from "./schemas/products.schema";
 const server = express();
 
 env.config();
+
+// (async () => {
+//   console.log("server-side log",
+//     JSON.stringify(
+//       await Product.aggregate(
+//         matchField([], {
+//           field: "season",
+//           value: "spring"
+//         })
+//       ).exec()
+//     )
+//   );
+// })();
 
 // server.use(bodyParser.json()); // get the body in the request
 server.use(express.json());
@@ -35,6 +52,9 @@ server.use(getRegisteredUserRouter);
 server.use(fetchParamsDataRouter);
 server.use(clickedNavigationUrlRouter);
 server.use(checkoutRouter);
+server.use(fetchParamsProductsRouter);
+server.use(forgottenPasswordRouter);
+server.use(passwordResetRouter);
 
 server.use("/uploads", express.static("uploads"));
 process.env.DATABASE_CONNECTION &&

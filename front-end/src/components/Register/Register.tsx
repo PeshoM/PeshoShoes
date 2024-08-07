@@ -14,7 +14,7 @@ const Register: React.FC = () => {
     isTooLong,
     isValidEmail,
     passwordTooShort,
-    HandleSubmit,
+    handleSubmit,
     handleIncorrectField,
     handleLogIn,
   } = useRegister();
@@ -42,7 +42,12 @@ const Register: React.FC = () => {
     setIncorrectField((prev) => {
       const updatedIncorrectField = [...prev];
       for (let i = 0; i < isEmpty.length; i++) {
-        if (isEmpty[i] || isTooLong[i] || (i == 2 && !isValidEmail) || (i >= 3 && passwordTooShort[i-3])) {
+        if (
+          isEmpty[i] ||
+          isTooLong[i] ||
+          (i == 2 && !isValidEmail) ||
+          (i >= 3 && passwordTooShort[i - 3])
+        ) {
           updatedIncorrectField[i] = "invalid";
         } else {
           updatedIncorrectField[i] = "valid";
@@ -56,7 +61,7 @@ const Register: React.FC = () => {
     <div>
       <form
         onSubmit={(event) => {
-          HandleSubmit(event);
+          handleSubmit(event);
           return event.preventDefault();
         }}
       >
@@ -123,7 +128,7 @@ const Register: React.FC = () => {
                 className="already-member-button"
                 onClick={() => handleLogIn()}
               >
-                {t('Log in')}
+                {t("Log in")}
               </button>
             </div>
           </div>

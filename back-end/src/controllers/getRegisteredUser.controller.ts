@@ -4,9 +4,9 @@ import Jwt from "jsonwebtoken"
 
 const Post = async (req: Request, res: Response) => {
   const { key } = req.body;
-  const secretKey = process.env.SECRET_KEY || "";
+  const secretKey: string = process.env.SECRET_KEY || "";
 
-  console.log("Start of request");
+  // console.log("Start of request");
 
   if (!key || key == "" || !secretKey) {
     // console.error("Token or secret key not provided");

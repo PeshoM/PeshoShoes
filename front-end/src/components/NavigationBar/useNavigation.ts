@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ProductContext } from "../Context.tsx";
+import { FilterContext } from "../Context/FilterContext.tsx";
 const useNavigation = () => {
   let location = useLocation();
   const [inputText, setInputText] = useState<string>("");
@@ -15,9 +16,11 @@ const useNavigation = () => {
     setAuthModal,
     setRegisteredUser,
   } = useContext(ProductContext);
+  const { changeFilter, changeNavFilter } = useContext(FilterContext);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchResults = searchParams.get("searchResults");
+
 
   const getRegisteredUser = async (token: string | null) => {
     const url: string = process.env.REACT_APP_URL + "/getRegisteredUser";
@@ -75,9 +78,10 @@ const useNavigation = () => {
   let handleSearch = async () => {
     console.log("curr options", options);
     if (options.length <= 0 || !options) return;
-    setSearchParams({ searchResults: inputText.toLowerCase() });
+    changeNavFilter({searchInput : inputText.toLowerCase()})
+    console.log("productsuseeffect handleSearch");
     setProduct(options);
-    setSearchedProds(options);
+    setSearchedProds(options)
   };
 
   const handleKeyDown = async (event) => {
@@ -122,7 +126,8 @@ const useNavigation = () => {
   };
 
   const handleClickNavUrl = (title: string, name: string) => {
-    setSearchParams({ title, name });
+    // setSearchParams({ title, name });
+    changeNavFilter({ categoryTag: title.toLowerCase(), categoryItem: name.toLowerCase() })
   };
 
   const handleNavigateCart = () => {

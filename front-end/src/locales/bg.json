@@ -16,11 +16,11 @@
   "Log in": "Вход",
   "CREATE ACCOUNT": "Създай акаунт",
   "What are you looking for": "Какво търсите",
-  "Email": "Имейл",
+  "Email": "Ел. поща",
   "Password": "Парола",
   "Forgotten your password": "Забравихте паролата си",
   "Minimum is 5 characters": "Трябва да има поне 5 символа",
-  "Please enter a valid email address": "Моля въведете валиден имейл адрес",
+  "Please enter a valid email address": "Моля въведете валидна ел. поща",
   "Field is required": "Полето е задължително",
   "First Name": "Име",
   "Last Name": "Фамилия",
@@ -136,5 +136,9 @@
   "Start Value": "Начална Стойност",
   "End Value": "Крайна Стойност",
   "SALE": "РАЗПРОДАЖБА",
-  "COLOUR": "ЦВЯТ"
+  "COLOUR": "ЦВЯТ",
+  "FORGOT PASSWORD": "ЗАБРАВЕНА ПАРОЛА",
+  "Enter your email and we'll send you a reset link": "Въведете ел. си пощата и ще ви пратим връзка за смяна на паролата",
+  "SUBMIT": "ИЗПРАТИ",
+  "Back to Log in": "Обратно към влизане"
 }

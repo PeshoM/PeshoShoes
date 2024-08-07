@@ -7,5 +7,5 @@
     "skipLibCheck": true,
     "moduleResolution": "node"
   },
-  "include": ["**/*.ts", "routers/products.router.ts",]
+  "include": ["**/*.ts", "routers/products.router.ts"]
 }

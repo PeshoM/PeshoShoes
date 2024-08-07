@@ -17,6 +17,26 @@
   border: solid #141414 1px;
 }
 
+.forgotten-wrapper {
+  user-select: none;
+  background-color: #fff;
+  width: 650px;
+  min-height: 45vh;
+  z-index: 3;
+  top: 150px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  position: absolute;
+  padding: 60px;
+  max-height: -webkit-fill-available;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+  border: solid #141414 1px;
+}
+
 .authentication-wrapper::-webkit-scrollbar {
   display: none;
   /* Safari and Chrome */
@@ -61,4 +81,22 @@
 .authentication-option-underlined {
   border-bottom: #141414 2px solid;
   color: #141414;
+}
+
+.forgotten-password-text {
+  text-align: center;
+  margin-bottom: 10px;
+  p {
+    color: #141414;
+    font-size: 2.3rem;
+    font-weight:500;
+  }
+}
+.send-email-to-reset {
+  text-align: center;
+  margin-bottom: 15px;
+  p {
+    color: #5A5A5A;
+    font-size: 1.2rem;
+  }
 }

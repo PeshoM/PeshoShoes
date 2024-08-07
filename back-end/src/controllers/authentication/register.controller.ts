@@ -22,7 +22,7 @@ const Post = async (req: Request, res: Response) => {
     { expiresIn: process.env.EXPIRATION }
   );
   await user.save();
-  res.json({ token });
+  res.json({ message: "successfully registered", token });
 };
 
 export default { Post };

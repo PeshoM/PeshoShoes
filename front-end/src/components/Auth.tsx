@@ -48,7 +48,7 @@ const Auth: React.FC = () => {
                 setLoginOrRegister(true);
               }}
             >
-              {t('LOG IN')}
+              {t("LOG IN")}
             </div>
             <div
               className={"authentication-option " + underline[1]}
@@ -56,7 +56,7 @@ const Auth: React.FC = () => {
                 setLoginOrRegister(false);
               }}
             >
-             {t('CREATE ACCOUNT')}
+              {t("CREATE ACCOUNT")}
             </div>
           </div>
           {loginOrRegister ? <Login /> : <Register />}

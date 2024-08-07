@@ -27,7 +27,7 @@ const useRegister = () => {
     token?: string;
   }
 
-  async function HandleSubmit(event) {
+  async function handleSubmit(event) {
     for (let i: number = 0; i < 4; i++) {
       if (
         isEmpty[i] ||
@@ -95,7 +95,7 @@ const useRegister = () => {
 
   const handleLogIn = () => {
     setLoginOrRegister(true);
-  }
+  };
 
   return {
     isEmpty,
@@ -107,9 +107,9 @@ const useRegister = () => {
     password,
     confirmPassword,
     email,
-    HandleSubmit,
+    handleSubmit,
     handleIncorrectField,
-    handleLogIn
+    handleLogIn,
   };
 };
 

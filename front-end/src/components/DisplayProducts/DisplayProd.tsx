@@ -9,15 +9,14 @@ import { useDisplayProd } from "./useDisplayProd.ts";
 import { useSearchParams } from "react-router-dom";
 import { Prod } from "../../interfaces/productInterfaces.ts";
 import { useTranslation } from "react-i18next";
+import { FilterContext } from "../Context/FilterContext.tsx";
 
 const DisplayProd = () => {
   const {
     range,
     activeTabs,
     startValue,
-    setStartValue,
     endValue,
-    setEndValue,
     handleStartChange,
     handleEndChange,
     handleTabClick,
@@ -30,7 +29,6 @@ const DisplayProd = () => {
     fetchParamsData,
     handleGenderChange,
     handleCategoryChange,
-    handleClickNavigateUrl,
   } = useDisplayProd();
   const { products, setProduct, searchedProds, setSearchedProds } =
     useContext(ProductContext);
@@ -66,18 +64,7 @@ const DisplayProd = () => {
     "high top",
   ];
   const { t } = useTranslation();
-
-  useEffect(() => {
-    !searchResults ? fetchData() : fetchParamsData(searchResults);
-  }, [searchResults]);
-
-  useEffect(() => {
-    (!title || !name) ? fetchData() : handleClickNavigateUrl(title, name);
-  }, [title]);
-
-  useEffect(() => {
-    !title || !name ? fetchData() : handleClickNavigateUrl(title, name);
-  }, [name]);
+  const { changeFilter } = useContext(FilterContext);
 
   return (
     <div>
@@ -92,11 +79,11 @@ const DisplayProd = () => {
                 console.log(activeTabs);
               }}
             >
-              {t('SIZE')}
+              {t("SIZE")}
             </div>
             {activeTabs[0] && (
               <div className="sizes-menu">
-                <p>{t('EUROPEAN')}</p>
+                <p>{t("EUROPEAN")}</p>
                 <div>
                   {Array.from(
                     { length: 31 },
@@ -118,7 +105,9 @@ const DisplayProd = () => {
                 </div>
               </div>
             )}
-            <div className="filtering-options price-filt-option">{t('PRICE')}</div>
+            <div className="filtering-options price-filt-option">
+              {t("PRICE")}
+            </div>
             <div className="double-range-slider">
               <input
                 type="range"
@@ -127,7 +116,11 @@ const DisplayProd = () => {
                 step={0.1}
                 value={startValue}
                 onChange={handleStartChange}
-                onMouseUp={handleFiltering}
+                onMouseUp={() => {
+                  console.log("minPrice", startValue);
+                  changeFilter({ minPrice: startValue, maxPrice: endValue });
+                  handleFiltering();
+                }}
               />
               <input
                 type="range"
@@ -136,10 +129,14 @@ const DisplayProd = () => {
                 max={range[1]!}
                 value={endValue}
                 onChange={handleEndChange}
-                onMouseUp={handleFiltering}
+                onMouseUp={() => {
+                  changeFilter({ minPrice: startValue, maxPrice: endValue });
+                  handleFiltering();
+                }}
               />
               <span>
-                {t('Start Value')}: {startValue > 100000 ? 0 : startValue } {t('BGN')} {<br />} {t('End Value')}: {endValue} {t('BGN')}
+                {t("Start Value")}: {startValue > 100000 ? 0 : startValue}{" "}
+                {t("BGN")} {<br />} {t("End Value")}: {endValue} {t("BGN")}
               </span>
             </div>
             <div
@@ -148,12 +145,12 @@ const DisplayProd = () => {
                 handleTabClick(1);
               }}
             >
-              {t('COLOUR')}
+              {t("COLOUR")}
             </div>
             {activeTabs[1] && (
               <div className="colors-main">
                 <div className="colors-div-display">
-                  <p>{t('Shoe colour')}</p>
+                  <p>{t("Shoe colour")}</p>
                   <div className="colors-subdiv-display">
                     {colorsArr.map((color) => (
                       <div className="colors-choices-display">
@@ -181,7 +178,7 @@ const DisplayProd = () => {
                 handleTabClick(2);
               }}
             >
-              {t('SEASON')}
+              {t("SEASON")}
             </div>
             {activeTabs[2] && (
               <div className="seasons-main">
@@ -211,7 +208,7 @@ const DisplayProd = () => {
                 handleTabClick(3);
               }}
             >
-              {t('SALE')}
+              {t("SALE")}
             </div>
             {activeTabs[3] && <div>12345</div>}
             <div
@@ -220,7 +217,7 @@ const DisplayProd = () => {
                 handleTabClick(4);
               }}
             >
-              {t('CATEGORIES')}
+              {t("CATEGORIES")}
             </div>
             {activeTabs[4] && (
               <div className="categories-main">
@@ -251,7 +248,7 @@ const DisplayProd = () => {
                 handleTabClick(5);
               }}
             >
-              {t('GENDER')}
+              {t("GENDER")}
             </div>
             {activeTabs[5] && (
               <div className="genders-main">

@@ -20,9 +20,6 @@ const Get = async (req: Request, res: Response) => {
     $regex: `^${name}`,
     $options: "i",
   };
-  // kato cukam navbar urls ot edin searchTag ne iska 2 consecutive a trqq
-  // da cukna drug tag che da call-ne functiona povtorno
-  //fix it
   const doc = await Product.find(query);
   console.log(doc.length, "documents have been found with tag:",searchTag,"and name:", name);
   let prods: product[] = [],

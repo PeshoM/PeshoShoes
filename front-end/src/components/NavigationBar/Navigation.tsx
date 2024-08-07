@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import categories from "../../categories.js";
 import { ProductContext } from "../Context.tsx";
 import Auth from "../Auth.tsx";
+import ForgottenPassword from "../ForgottenPassword.tsx";
 import { useNavigation } from "./useNavigation.ts";
 import { useTranslation } from "react-i18next";
 import { ColorVariation } from "../../interfaces/productInterfaces.ts";
@@ -44,7 +45,8 @@ const Navigation: React.FC = () => {
     authModal,
     setAuthModal,
     registeredUser,
-    setRegisteredUser,
+    passwordModal,
+    setPasswordModal,
   } = useContext(ProductContext);
   const navigate = useNavigate();
   const [userIconHovered, setUserIconHovered] = useState<boolean>(false);
@@ -172,7 +174,7 @@ const Navigation: React.FC = () => {
                     className="registered-log-out-button"
                     onClick={() => handleLogOut()}
                   >
-                    <p>{t('Log out')}</p>
+                    <p>{t("Log out")}</p>
                   </div>
                 )}
               </div>
@@ -305,6 +307,17 @@ const Navigation: React.FC = () => {
             onClick={() => {
               setAuthModal(false);
               closeModal();
+            }}
+          ></div>
+        </>
+      )}
+      {passwordModal && (
+        <>
+          <ForgottenPassword />
+          <div
+            className="authentication-modal-container"
+            onClick={() => {
+              setPasswordModal(false);
             }}
           ></div>
         </>

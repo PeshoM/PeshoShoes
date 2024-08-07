@@ -11,8 +11,9 @@ const Login: React.FC = () => {
     isValidEmail,
     passwordTooShort,
     handleIncorrectField,
-    HandleSubmit,
+    handleSubmit,
     handleRegister,
+    handleClickedForgottenPassword,
   } = useLogin();
   const [incorrectField, setIncorrectField] = useState<string[]>([
     "valid",
@@ -51,11 +52,11 @@ const Login: React.FC = () => {
     <div>
       <form
         onSubmit={(event) => {
-          HandleSubmit(event);
+          handleSubmit(event);
           return event.preventDefault();
         }}
       >
-        <div className="">
+        <div>
           <div className="register-container">
             {loginData.map(
               (
@@ -105,14 +106,17 @@ const Login: React.FC = () => {
                 value={t("LOG IN")}
               ></input>
             </div>
-            <div className="forgotten-password">
+            <div
+              onClick={handleClickedForgottenPassword}
+              className="forgotten-password"
+            >
               <span>{t("Forgotten your password")}?</span>
             </div>
             <div className="already-member-paragraph">
               <span>{t("New customer")}?</span>
               <button
                 className="already-member-button"
-                onClick={() => handleRegister()}
+                onClick={handleRegister}
               >
                 {t("Register")}
               </button>

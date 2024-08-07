@@ -8,13 +8,13 @@ const useLogin = () => {
   const [isEmpty, setIsEmpty] = useState<boolean[]>([false, false]);
   const [passwordTooShort, setPasswordTooShort] = useState<boolean>();
   const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
-  const { setAuthModal, setLoginOrRegister } = useContext(ProductContext);
+  const { setAuthModal, setLoginOrRegister, setPasswordModal } = useContext(ProductContext);
   const { getRegisteredUser } = useNavigation();
   interface token extends Response {
     token: string;
   }
 
-  async function HandleSubmit(event) {
+  async function handleSubmit(event) {
     for (let i: number = 0; i < 1; i++) {
       if (isEmpty[i] || passwordTooShort || !isValidEmail) return;
     }
@@ -38,7 +38,7 @@ const useLogin = () => {
         setAuthModal(false);
 
         localStorage.setItem("auth_token", response.token);
-        getRegisteredUser(localStorage.getItem("auth_token"))
+        getRegisteredUser(localStorage.getItem("auth_token"));
       })();
   }
 
@@ -59,6 +59,15 @@ const useLogin = () => {
 
   const handleRegister = () => {
     setLoginOrRegister(false);
+  };
+
+  const handleClickedForgottenPassword = () => {
+    setAuthModal(false);
+    setPasswordModal(true);
+  };
+
+  const handleForgottenPassword = () => {
+
   }
 
   return {
@@ -68,8 +77,9 @@ const useLogin = () => {
     isValidEmail,
     passwordTooShort,
     handleIncorrectField,
-    HandleSubmit,
-    handleRegister
+    handleSubmit,
+    handleRegister,
+    handleClickedForgottenPassword,
   };
 };
 
